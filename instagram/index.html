@@ -4,120 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>奄美Instagram まとめ</title>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Segoe UI', sans-serif;
-  background: #f0f2f5;
-  color: #1a1a1a;
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-text-size-adjust: 100%;
-}
-.container { max-width: 640px; margin: 0 auto; padding: 12px; }
-header {
-  background: linear-gradient(135deg, #405de6, #833ab4, #c13584, #e1306c, #fd1d1d);
-  color: #fff;
-  padding: 20px 16px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-header h1 { font-size: 20px; font-weight: 700; }
-header .timestamp { font-size: 13px; opacity: 0.85; margin-top: 4px; }
-header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
-.section-title {
-  font-size: 17px;
-  font-weight: 700;
-  padding: 10px 14px;
-  background: #fff;
-  border-radius: 10px 10px 0 0;
-  border-bottom: 2px solid #e9ecef;
-  margin-top: 16px;
-}
-.section-title sub {
-  font-size: 13px;
-  color: #6c757d;
-  font-weight: normal;
-}
-.card {
-  background: #fff;
-  border-radius: 0 0 10px 10px;
-  padding: 0;
-  margin-bottom: 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.post {
-  padding: 12px 14px;
-  border-bottom: 1px solid #f0f0f0;
-}
-.post:last-child { border-bottom: none; border-radius: 0 0 10px 10px; }
-.post-title { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.post-title a {
-  color: #1a73e8;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 15px;
-}
-.post-title a:active { color: #1557b0; }
-.badge {
-  display: inline-block;
-  font-size: 11px;
-  padding: 1px 7px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-.badge-event { background: #e8f4fd; color: #1a73e8; }
-.badge-product { background: #e6f9e6; color: #1a8a1a; }
-.badge-season { background: #fff3e0; color: #e65100; }
-.badge-area { background: #f3e8fd; color: #7b1fa2; }
-.badge-food { background: #fce4ec; color: #c62828; }
-.post-meta {
-  display: flex;
-  gap: 10px;
-  font-size: 13px;
-  color: #6c757d;
-  margin: 3px 0;
-  flex-wrap: wrap;
-}
-.post-meta .account { color: #444; font-weight: 500; }
-.post-summary {
-  font-size: 14px;
-  color: #555;
-  margin-top: 4px;
-}
-.no-posts {
-  padding: 14px;
-  color: #aaa;
-  font-size: 14px;
-  text-align: center;
-}
-.skipped-section {
-  background: #fff;
-  border-radius: 10px;
-  padding: 14px;
-  margin-top: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.skipped-section h2 {
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 8px;
-}
-.skipped-list {
-  font-size: 13px;
-  color: #aaa;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-}
-</style>
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <div class="container">
 
-<header>
+<div class="breadcrumb"><a href="../">Okishima Open</a> &gt; Instagram</div>
+
+<header class="header-instagram">
   <h1>奄美Instagram まとめ</h1>
   <div class="timestamp">2026-02-05 09:17</div>
   <div class="stats">14アカウント中14アカウント取得</div>
@@ -291,9 +185,9 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 </div>
 
 <!-- 投稿なしアカウント -->
-<div class="skipped-section">
+<div class="muted-section">
   <h2>直近2日間の新規投稿なし</h2>
-  <ul class="skipped-list">
+  <ul class="muted-list">
     <li>なぜまち商店街</li>
     <li>Meet My Amami</li>
     <li>AMAMI NOW</li>
