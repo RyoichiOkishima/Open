@@ -19,7 +19,16 @@ header {
   text-align: center;
 }
 header h1 { font-size: 22px; font-weight: 800; }
-header .timestamp { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+header .timestamp {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 8px;
+  display: inline-block;
+  background: rgba(255,255,255,0.25);
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
 header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .header-instagram { background: linear-gradient(135deg, #405de6, #833ab4, #c13584, #e1306c, #fd1d1d); }
 .header-trend { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
