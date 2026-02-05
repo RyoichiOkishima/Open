@@ -31,8 +31,8 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 
 <header class="{{ヘッダークラス}}">
   <h1>{{ページタイトル}}</h1>
-  <div class="timestamp">🕐 {{YYYY-MM-DD HH:MM}} 更新</div>
 </header>
+<div class="timestamp">🕐 {{YYYY-MM-DD HH:MM}} 更新</div>
 
 <!-- ここにコンテンツセクションを配置 -->
 
@@ -54,7 +54,8 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 ## 更新日時（timestamp）
 
 - テキスト形式: `🕐 YYYY-MM-DD HH:MM 更新`（時刻がない場合は `🕐 YYYY-MM-DD 更新`）
-- CSSクラス: `.timestamp`（ピル型バッジスタイル、style.css で定義済み）
+- **headerタグの外、直下に配置**（ヘッダーとコンテンツの間）
+- CSSクラス: `.timestamp`（右寄せ、グレー小文字、style.css で定義済み）
 
 ## コンテンツセクション
 
