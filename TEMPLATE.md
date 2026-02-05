@@ -45,7 +45,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 
 | クラス名 | 用途 | グラデーション |
 |---------|------|--------------|
-| `header-instagram` | Instagram まとめ | #405de6 → #833ab4 → #c13584 → #e1306c → #fd1d1d |
+| `header-instagram` | 奄美Instagram まとめ | #405de6 → #833ab4 → #c13584 → #e1306c → #fd1d1d |
 | `header-trend` | ITネタトレンド | #0f2027 → #203a43 → #2c5364 |
 | `header-top` | トップページ | #232526 → #414345 |
 
