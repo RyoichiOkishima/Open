@@ -32,7 +32,6 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 <header class="{{ヘッダークラス}}">
   <h1>{{ページタイトル}}</h1>
   <div class="timestamp">🕐 {{YYYY-MM-DD HH:MM}} 更新</div>
-  <div class="stats">{{サマリー情報}}</div>
 </header>
 
 <!-- ここにコンテンツセクションを配置 -->
