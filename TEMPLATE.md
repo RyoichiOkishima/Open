@@ -48,6 +48,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `header-instagram` | 奄美Instagram まとめ | #405de6 → #833ab4 → #c13584 → #e1306c → #fd1d1d |
 | `header-trend` | ITネタトレンド | #0f2027 → #203a43 → #2c5364 |
 | `header-top` | トップページ | #232526 → #414345 |
+| `header-ferry` | フェリー運行状況 | #0077b6 → #0096c7 → #00b4d8 |
 
 新しいページを追加する場合は `style.css` に `header-{name}` クラスを追加する。
 
@@ -94,6 +95,12 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `badge-dev` | 開発 | 緑 (#e6f9e6 / #1a8a1a) |
 | `badge-career` | キャリア | オレンジ (#fff3e0 / #e65100) |
 | `badge-oss` | OSS | 紫 (#f3e8fd / #7b1fa2) |
+
+| `badge-normal` | 通常運航 | 緑 (#e6f9e6 / #1a8a1a) |
+| `badge-conditional` | 条件付運航 | オレンジ (#fff3e0 / #e65100) |
+| `badge-delay` | 遅延 | オレンジ (#fff3e0 / #e65100) |
+| `badge-cancelled` | 欠航 | 赤 (#fce4ec / #c62828) |
+| `badge-info` | お知らせ | 青 (#e8f4fd / #1a73e8) |
 
 新しいバッジが必要な場合は `style.css` に追加する。
 

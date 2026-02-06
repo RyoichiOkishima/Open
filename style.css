@@ -30,6 +30,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .header-instagram { background: linear-gradient(135deg, #405de6, #833ab4, #c13584, #e1306c, #fd1d1d); }
 .header-trend { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
 .header-top { background: linear-gradient(135deg, #232526, #414345); }
+.header-ferry { background: linear-gradient(135deg, #0077b6, #0096c7, #00b4d8); }
 
 /* Section headings */
 .section-title {
@@ -112,6 +113,11 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-dev { background: #e6f9e6; color: #1a8a1a; }
 .badge-career { background: #fff3e0; color: #e65100; }
 .badge-oss { background: #f3e8fd; color: #7b1fa2; }
+.badge-normal { background: #e6f9e6; color: #1a8a1a; }
+.badge-conditional { background: #fff3e0; color: #e65100; }
+.badge-delay { background: #fff3e0; color: #e65100; }
+.badge-cancelled { background: #fce4ec; color: #c62828; }
+.badge-info { background: #e8f4fd; color: #1a73e8; }
 
 /* Interest stars */
 .stars { color: #f5a623; font-size: 13px; }
