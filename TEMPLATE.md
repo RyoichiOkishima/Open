@@ -95,6 +95,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `badge-dev` | 開発 | 緑 (#e6f9e6 / #1a8a1a) |
 | `badge-career` | キャリア | オレンジ (#fff3e0 / #e65100) |
 | `badge-oss` | OSS | 紫 (#f3e8fd / #7b1fa2) |
+| `badge-account` | アカウント名 | 紫 (#f3e8fd / #6a1b9a) |
 
 | `badge-normal` | 通常運航 | 緑 (#e6f9e6 / #1a8a1a) |
 | `badge-conditional` | 条件付運航 | オレンジ (#fff3e0 / #e65100) |

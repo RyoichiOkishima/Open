@@ -174,3 +174,29 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   margin-bottom: 8px;
 }
 .breadcrumb a { color: #1a73e8; text-decoration: none; }
+
+/* Ferry two-column layout */
+.ferry-columns { display: flex; gap: 8px; padding: 10px; }
+.ferry-col { flex: 1; min-width: 0; }
+.ferry-col-header {
+  font-size: 14px; font-weight: 700; color: #555;
+  padding: 6px 8px; margin-bottom: 6px;
+  border-bottom: 2px solid #e9ecef;
+  text-align: center;
+}
+.ferry-item {
+  padding: 8px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.ferry-item:last-child { border-bottom: none; }
+.ferry-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+.badge-marix { background: #e0f0ff; color: #0055a4; }
+.badge-aline { background: #fff0e0; color: #c45500; }
+.badge-ship { background: #e8eaf6; color: #283593; }
+.badge-account { background: #f3e8fd; color: #6a1b9a; }
+@media (max-width: 480px) {
+  .ferry-columns { flex-direction: column; }
+}
