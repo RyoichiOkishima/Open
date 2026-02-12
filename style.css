@@ -97,8 +97,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 /* Badges */
 .badge {
   display: inline-block;
-  font-size: 11px;
-  padding: 1px 7px;
+  font-size: 13px;
+  padding: 2px 8px;
   border-radius: 8px;
   font-weight: 500;
   white-space: nowrap;
