@@ -196,7 +196,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-marix { background: #e0f0ff; color: #0055a4; }
 .badge-aline { background: #fff0e0; color: #c45500; }
 .badge-ship { background: #e8eaf6; color: #283593; }
-.badge-account { background: #f3e8fd; color: #6a1b9a; }
+.badge-account { background: #e9ecef; color: #495057; }
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
 }
