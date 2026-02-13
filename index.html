@@ -40,7 +40,9 @@ document.querySelectorAll('.page-link[data-updated]').forEach(function(link) {
   var updated = new Date(link.dataset.updated).getTime();
   var key = 'visited_' + link.getAttribute('href');
   var lastVisit = localStorage.getItem(key);
-  if (!lastVisit || updated > parseInt(lastVisit)) {
+  var oneDayMs = 24 * 60 * 60 * 1000;
+  var isRecent = (Date.now() - updated) < oneDayMs;
+  if (isRecent && (!lastVisit || updated > parseInt(lastVisit))) {
     var badge = document.createElement('span');
     badge.className = 'badge-new';
     badge.textContent = 'NEW';
