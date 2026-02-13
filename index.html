@@ -13,24 +13,43 @@
   <h1>Okishima Open</h1>
 </header>
 
-<a href="instagram/" class="page-link">
+<a href="instagram/" class="page-link" data-updated="2026-02-12T13:52">
   <span class="arrow">&#8250;</span>
   <h2>奄美Instagram まとめ</h2>
-  <p>奄美大島の14アカウントから最新投稿を収集</p>
+  <p>奄美大島の18アカウントから最新投稿を収集</p>
+  <div class="updated">🕐 2026-02-12 13:52 更新</div>
 </a>
 
-<a href="trend/" class="page-link">
+<a href="trend/" class="page-link" data-updated="2026-02-06T00:00">
   <span class="arrow">&#8250;</span>
   <h2>ITネタトレンド</h2>
   <p>はてブIT・Hacker News・Reddit・セキュリティブログのトレンド</p>
+  <div class="updated">🕐 2026-02-06 更新</div>
 </a>
 
-<a href="ferry/" class="page-link">
+<a href="ferry/" class="page-link" data-updated="2026-02-11T22:31">
   <span class="arrow">&#8250;</span>
   <h2>奄美フェリー運行状況</h2>
   <p>マリックスライン・A-LINEフェリーの最新運行状況</p>
+  <div class="updated">🕐 2026-02-11 22:31 更新</div>
 </a>
 
 </div>
+<script>
+document.querySelectorAll('.page-link[data-updated]').forEach(function(link) {
+  var updated = new Date(link.dataset.updated).getTime();
+  var key = 'visited_' + link.getAttribute('href');
+  var lastVisit = localStorage.getItem(key);
+  if (!lastVisit || updated > parseInt(lastVisit)) {
+    var badge = document.createElement('span');
+    badge.className = 'badge-new';
+    badge.textContent = 'NEW';
+    link.querySelector('h2').appendChild(badge);
+  }
+  link.addEventListener('click', function() {
+    localStorage.setItem(key, Date.now().toString());
+  });
+});
+</script>
 </body>
 </html>

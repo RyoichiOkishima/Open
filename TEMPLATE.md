@@ -68,10 +68,10 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
   <div class="post">
     <div class="post-title">
       <a href="{{URL}}" target="_blank">{{タイトル}}</a>
-      <span class="badge badge-{{カテゴリ}}">{{ラベル}}</span>
     </div>
     <div class="post-meta">
-      <span class="account">{{アカウント名}}</span>
+      <span class="badge badge-account">{{アカウント名}}</span>
+      <span class="badge badge-{{カテゴリ}}">{{ラベル}}</span>
       <span>{{エンゲージメント}}</span>
       <span>{{日付}}</span>
     </div>
@@ -95,7 +95,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `badge-dev` | 開発 | 緑 (#e6f9e6 / #1a8a1a) |
 | `badge-career` | キャリア | オレンジ (#fff3e0 / #e65100) |
 | `badge-oss` | OSS | 紫 (#f3e8fd / #7b1fa2) |
-| `badge-account` | アカウント名 | 紫 (#f3e8fd / #6a1b9a) |
+| `badge-account` | アカウント名 | グレー (#e9ecef / #495057) |
 
 | `badge-normal` | 通常運航 | 緑 (#e6f9e6 / #1a8a1a) |
 | `badge-conditional` | 条件付運航 | オレンジ (#fff3e0 / #e65100) |
@@ -117,10 +117,15 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 <div class="muted-section">
   <h2>{{見出し}}</h2>
   <ul class="muted-list">
-    <li>{{項目}}</li>
+    <li>{{項目}} <sub>最終投稿: {{YYYY-MM-DD}}</sub></li>
+    <li><span class="badge badge-cancelled">非アクティブ</span> {{項目}}</li>
   </ul>
 </div>
 ```
+
+- `last_post_date` がある場合は `<sub>最終投稿: YYYY-MM-DD</sub>` を項目の後に表示
+- `last_post_date` が null の場合は省略
+- 非アクティブ条件を満たす場合は `badge-cancelled` バッジを項目の前に表示
 
 ## 新しいページを追加する手順
 
@@ -128,10 +133,23 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 2. 必要なら `style.css` にヘッダークラス `header-{name}` と新しいバッジクラスを追加
 3. `C:\Okishima\Open\index.html`（トップページ）にナビゲーションカードを追加:
    ```html
-   <a href="{name}/" class="page-link">
+   <a href="{name}/" class="page-link" data-updated="{{YYYY-MM-DDTHH:MM}}">
      <span class="arrow">&#8250;</span>
      <h2>{{ページ名}}</h2>
      <p>{{説明}}</p>
+     <div class="updated">🕐 {{YYYY-MM-DD HH:MM}} 更新</div>
    </a>
    ```
 4. スキルの出力仕様では「`TEMPLATE.md` に従ってHTMLを生成」と記載する
+
+## トップページ更新ルール
+
+各スキルがHTMLを出力する際、**トップページ（`C:\Okishima\Open\index.html`）の該当カードも更新**する:
+
+1. `data-updated` 属性を実行日時（ISO形式 `YYYY-MM-DDTHH:MM`）に更新
+2. `.updated` 要素のテキストを `🕐 YYYY-MM-DD HH:MM 更新` に更新
+
+これにより:
+- 各ページの最終更新日時がトップページに表示される
+- 未確認の更新に `NEW` バッジが自動表示される（JavaScript + localStorage）
+- ユーザーがページを訪問すると `NEW` バッジが消える
