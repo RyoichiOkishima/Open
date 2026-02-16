@@ -276,6 +276,36 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-ship-good { background: #e8f4fd; color: #1a73e8; }
 .badge-ship-worst { background: #fce4ec; color: #c62828; }
 .badge-ship-dock { background: #e9ecef; color: #888; }
+.schedule-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 4px 4px;
+}
+.schedule-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border: 1.5px solid #dee2e6;
+  border-radius: 20px;
+  background: #fff;
+  color: #888;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.schedule-filter-btn.active {
+  border-color: #0096c7;
+  color: #1a1a1a;
+  background: #e0f7fa;
+}
+.schedule-filter-btn .schedule-legend-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
 .schedule-legend {
   display: flex;
   flex-wrap: wrap;
