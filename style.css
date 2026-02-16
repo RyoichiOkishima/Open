@@ -212,3 +212,90 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
 }
+
+/* Ferry Schedule Calendar */
+.schedule-calendar {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.schedule-month-title {
+  font-size: 18px;
+  font-weight: 700;
+  padding: 8px 4px;
+  color: #333;
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.schedule-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  padding: 4px 0;
+}
+.schedule-weekday.sun { color: #c62828; }
+.schedule-weekday.sat { color: #1a73e8; }
+.schedule-day {
+  min-height: 60px;
+  padding: 3px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.schedule-day.empty { background: transparent; min-height: auto; }
+.schedule-day.today { outline: 2px solid #0096c7; background: #e0f7fa; }
+.schedule-day.weekend-sun { background: #fff5f5; }
+.schedule-day.weekend-sat { background: #f0f4ff; }
+.schedule-day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  padding: 1px 3px;
+}
+.schedule-day.weekend-sun .schedule-day-num { color: #c62828; }
+.schedule-day.weekend-sat .schedule-day-num { color: #1a73e8; }
+.schedule-ship {
+  font-size: 10px;
+  padding: 1px 3px;
+  border-radius: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+.badge-ship-best { background: #e6f9e6; color: #1a8a1a; }
+.badge-ship-good { background: #e8f4fd; color: #1a73e8; }
+.badge-ship-worst { background: #fce4ec; color: #c62828; }
+.badge-ship-dock { background: #e9ecef; color: #888; }
+.schedule-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 4px;
+  font-size: 13px;
+}
+.schedule-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.schedule-legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: inline-block;
+}
+@media (max-width: 480px) {
+  .schedule-day { min-height: 48px; }
+  .schedule-ship { font-size: 9px; }
+  .schedule-day-num { font-size: 11px; }
+}
