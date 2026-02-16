@@ -255,8 +255,6 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .schedule-day.day-good { background: #eff6ff; }
 .schedule-day.day-worst { background: #f5f5f5; }
 .schedule-day.today { outline: 2px solid #0096c7; }
-.schedule-day.weekend-sun:not(.day-best):not(.day-good):not(.day-worst) { background: #fff5f5; }
-.schedule-day.weekend-sat:not(.day-best):not(.day-good):not(.day-worst) { background: #f0f4ff; }
 .schedule-day-num {
   font-size: 12px;
   font-weight: 600;
