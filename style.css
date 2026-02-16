@@ -272,9 +272,9 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   text-overflow: ellipsis;
   line-height: 1.4;
 }
-.badge-ship-best { background: #e6f9e6; color: #1a8a1a; }
-.badge-ship-good { background: #e8f4fd; color: #1a73e8; }
-.badge-ship-worst { background: #fce4ec; color: #c62828; }
+.badge-ship-best { background: #15803d; color: #fff; font-weight: 600; }
+.badge-ship-good { background: #dbeafe; color: #1e40af; }
+.badge-ship-worst { background: #f0f0f0; color: #aaa; }
 .badge-ship-dock { background: #e9ecef; color: #888; }
 .schedule-filter {
   display: flex;
