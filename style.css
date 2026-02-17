@@ -209,6 +209,12 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-aline { background: #fff0e0; color: #c45500; }
 .badge-ship { background: #e8eaf6; color: #283593; }
 .badge-account { background: #e9ecef; color: #495057; }
+
+/* Backnumber list */
+.backnumber-list { list-style: none; padding: 8px 14px; }
+.backnumber-list li { padding: 4px 0; }
+.backnumber-list a { color: #405de6; }
+
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
 }
