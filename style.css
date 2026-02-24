@@ -221,6 +221,37 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .backnumber-list li { padding: 4px 0; }
 .backnumber-list a { color: #405de6; }
 
+/* Municipal calendar pager */
+.muni-cal-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 0 4px;
+}
+.muni-pager-title {
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 100px;
+  text-align: center;
+}
+.muni-pager-btn {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #dee2e6;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 20px;
+  line-height: 1;
+  color: #333;
+  cursor: pointer;
+}
+.muni-pager-btn:disabled {
+  color: #ccc;
+  border-color: #eee;
+  cursor: default;
+}
+
 /* Municipal calendar dots */
 .muni-dots {
   display: flex;

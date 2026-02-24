@@ -24,8 +24,12 @@
 <div class="schedule-legend-item"><span class="schedule-legend-color" style="background:#e65100"></span>瀬戸内町</div>
 <div class="schedule-legend-item"><span class="schedule-legend-color" style="background:#c62828"></span>宇検村</div>
 </div>
-<div class="schedule-calendar">
-<div class="schedule-month-title">2026年2月</div>
+<div class="muni-cal-pager">
+<button class="muni-pager-btn" id="prev-month" disabled>&#8249;</button>
+<span class="muni-pager-title" id="pager-title">2026年2月</span>
+<button class="muni-pager-btn" id="next-month">&#8250;</button>
+</div>
+<div class="schedule-calendar" data-month="0">
 <div class="schedule-grid">
 <div class="schedule-weekday sun">日</div>
 <div class="schedule-weekday">月</div>
@@ -227,8 +231,7 @@
 </div>
 </div>
 </div>
-<div class="schedule-calendar">
-<div class="schedule-month-title">2026年3月</div>
+<div class="schedule-calendar" data-month="1" style="display:none;">
 <div class="schedule-grid">
 <div class="schedule-weekday sun">日</div>
 <div class="schedule-weekday">月</div>
@@ -1461,6 +1464,28 @@
 
 <script>
 (function() {
+  /* --- Month paging --- */
+  var months = document.querySelectorAll('.schedule-calendar[data-month]');
+  var titles = ['2026年2月', '2026年3月'];
+  var prefixes = ['2026-02', '2026-03'];
+  var cur = 0;
+  var prevBtn = document.getElementById('prev-month');
+  var nextBtn = document.getElementById('next-month');
+  var titleEl = document.getElementById('pager-title');
+
+  function showMonth(idx) {
+    cur = idx;
+    months.forEach(function(m) { m.style.display = 'none'; });
+    months[cur].style.display = '';
+    titleEl.textContent = titles[cur];
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === months.length - 1;
+    resetFilter();
+  }
+  prevBtn.addEventListener('click', function() { if (cur > 0) showMonth(cur - 1); });
+  nextBtn.addEventListener('click', function() { if (cur < months.length - 1) showMonth(cur + 1); });
+
+  /* --- Date filter --- */
   var selected = null;
   var listEl = document.getElementById('event-list');
   var groups = listEl.querySelectorAll('[data-date]');
