@@ -275,7 +275,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 15vh;
+  padding-top: 30vh;
 }
 .muni-popup {
   background: #fff;
