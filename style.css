@@ -459,3 +459,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   .schedule-ship { font-size: 9px; }
   .schedule-day-num { font-size: 12px; }
 }
+
+/* Travel catalog */
+.header-travel { background: linear-gradient(135deg, #0077b6, #00b4d8, #48cae4); }
+.badge-sightseeing { background: #e8f4fd; color: #1a73e8; }
+.badge-park { background: #f3e8fd; color: #7b1fa2; }
+.badge-onsen { background: #fff3e0; color: #e65100; }
+.badge-scenery { background: #e0f7fa; color: #00838f; }
