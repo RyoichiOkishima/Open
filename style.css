@@ -221,8 +221,32 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .backnumber-list li { padding: 4px 0; }
 .backnumber-list a { color: #405de6; }
 
+/* Municipal calendar dots */
+.muni-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 2px;
+}
+.muni-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.schedule-day.has-events { cursor: default; }
+.muni-date-sep {
+  padding: 8px 14px 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #555;
+  border-top: 1px solid #e9ecef;
+}
+.muni-date-sep.muni-date-first { border-top: none; }
+
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
+  .muni-dot { width: 6px; height: 6px; }
 }
 
 /* Ferry Schedule Calendar */
