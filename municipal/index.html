@@ -373,7 +373,9 @@
 <div id="date-popup" class="muni-popup-overlay" style="display:none;">
 <div class="muni-popup">
 <div class="muni-popup-header">
+<button class="muni-popup-nav" id="popup-prev">&#8249;</button>
 <span id="popup-title"></span>
+<button class="muni-popup-nav" id="popup-next">&#8250;</button>
 <button class="muni-popup-close" id="popup-close">&times;</button>
 </div>
 <div id="popup-content"></div>
@@ -1489,20 +1491,45 @@
   var popupTitle = document.getElementById('popup-title');
   var popupContent = document.getElementById('popup-content');
   var popupClose = document.getElementById('popup-close');
+  var popupPrev = document.getElementById('popup-prev');
+  var popupNext = document.getElementById('popup-next');
   var listEl = document.getElementById('event-list');
+
+  var eventDates = [];
+  listEl.querySelectorAll('[data-date]').forEach(function(g) {
+    eventDates.push(g.dataset.date);
+  });
+  var currentDateIdx = -1;
+
+  function showPopupDate(idx) {
+    currentDateIdx = idx;
+    var d = eventDates[idx];
+    var group = listEl.querySelector('[data-date="' + d + '"]');
+    if (!group) return;
+    var title = group.querySelector('.section-title');
+    var card = group.querySelector('.card');
+    popupTitle.textContent = title ? title.textContent : d;
+    popupContent.innerHTML = card ? card.innerHTML : '';
+    popupPrev.disabled = idx === 0;
+    popupNext.disabled = idx === eventDates.length - 1;
+    overlay.style.display = '';
+    document.body.style.overflow = 'hidden';
+  }
 
   document.querySelectorAll('.schedule-day.has-events').forEach(function(day) {
     day.addEventListener('click', function() {
       var d = this.dataset.date;
-      var group = listEl.querySelector('[data-date="' + d + '"]');
-      if (!group) return;
-      var title = group.querySelector('.section-title');
-      var card = group.querySelector('.card');
-      popupTitle.textContent = title ? title.textContent : d;
-      popupContent.innerHTML = card ? card.innerHTML : '';
-      overlay.style.display = '';
-      document.body.style.overflow = 'hidden';
+      var idx = eventDates.indexOf(d);
+      if (idx === -1) return;
+      showPopupDate(idx);
     });
+  });
+
+  popupPrev.addEventListener('click', function() {
+    if (currentDateIdx > 0) showPopupDate(currentDateIdx - 1);
+  });
+  popupNext.addEventListener('click', function() {
+    if (currentDateIdx < eventDates.length - 1) showPopupDate(currentDateIdx + 1);
   });
 
   function closePopup() {
