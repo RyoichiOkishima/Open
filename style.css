@@ -223,11 +223,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
 /* Municipal calendar pager */
 .muni-cal-pager {
-  display: flex;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 12px 0 4px;
+  padding: 16px 0 8px;
 }
 .muni-pager-title {
   font-size: 22px;
