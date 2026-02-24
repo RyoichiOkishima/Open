@@ -259,8 +259,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   margin-top: 2px;
 }
 .muni-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
 }
@@ -338,7 +338,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
-  .muni-dot { width: 6px; height: 6px; }
+  .muni-dot { width: 8px; height: 8px; }
 }
 
 /* Ferry Schedule Calendar */
@@ -370,8 +370,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .schedule-weekday.sun { color: #c62828; }
 .schedule-weekday.sat { color: #1a73e8; }
 .schedule-day {
-  min-height: 60px;
-  padding: 3px;
+  min-height: 76px;
+  padding: 4px;
   border-radius: 6px;
   background: #f8f9fa;
   display: flex;
@@ -455,7 +455,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   display: inline-block;
 }
 @media (max-width: 480px) {
-  .schedule-day { min-height: 48px; }
+  .schedule-day { min-height: 60px; }
   .schedule-ship { font-size: 9px; }
   .schedule-day-num { font-size: 11px; }
 }
