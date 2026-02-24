@@ -273,8 +273,9 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   background: rgba(0,0,0,0.45);
   z-index: 1000;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: 15vh;
 }
 .muni-popup {
   background: #fff;
