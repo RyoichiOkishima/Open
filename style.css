@@ -466,3 +466,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-park { background: #f3e8fd; color: #7b1fa2; }
 .badge-onsen { background: #fff3e0; color: #e65100; }
 .badge-scenery { background: #e0f7fa; color: #00838f; }
+.cat-label {
+  font-size: 12px;
+  color: #888;
+  font-weight: 600;
+  margin-right: 2px;
+  white-space: nowrap;
+}
