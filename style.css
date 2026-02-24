@@ -370,8 +370,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .schedule-weekday.sun { color: #c62828; }
 .schedule-weekday.sat { color: #1a73e8; }
 .schedule-day {
-  min-height: 104px;
-  padding: 6px;
+  min-height: 76px;
+  padding: 4px;
   border-radius: 6px;
   background: #f8f9fa;
   display: flex;
@@ -385,10 +385,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .schedule-day.holiday { background: #fff5f5; }
 .schedule-day.holiday .schedule-day-num { color: #c62828; }
 .schedule-day-num {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #555;
-  padding: 2px 3px;
+  padding: 1px 3px;
 }
 .schedule-day.weekend-sun .schedule-day-num { color: #c62828; }
 .schedule-day.weekend-sat .schedule-day-num { color: #1a73e8; }
@@ -455,7 +455,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   display: inline-block;
 }
 @media (max-width: 480px) {
-  .schedule-day { min-height: 84px; }
+  .schedule-day { min-height: 60px; }
   .schedule-ship { font-size: 9px; }
-  .schedule-day-num { font-size: 13px; }
+  .schedule-day-num { font-size: 12px; }
 }
