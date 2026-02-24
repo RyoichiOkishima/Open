@@ -234,15 +234,25 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   border-radius: 50%;
   display: inline-block;
 }
-.schedule-day.has-events { cursor: default; }
-.muni-date-sep {
-  padding: 8px 14px 4px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #555;
-  border-top: 1px solid #e9ecef;
+.schedule-day.has-events { cursor: pointer; }
+.schedule-day.selected {
+  outline: 2px solid #1a73e8;
+  background: #e3f2fd !important;
 }
-.muni-date-sep.muni-date-first { border-top: none; }
+.muni-reset-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0 4px;
+  border: 1.5px solid #1a73e8;
+  border-radius: 10px;
+  background: #e8f4fd;
+  color: #1a73e8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
 
 @media (max-width: 480px) {
   .ferry-columns { flex-direction: column; }
