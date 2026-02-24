@@ -370,8 +370,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .schedule-weekday.sun { color: #c62828; }
 .schedule-weekday.sat { color: #1a73e8; }
 .schedule-day {
-  min-height: 76px;
-  padding: 4px;
+  min-height: 90px;
+  padding: 5px;
   border-radius: 6px;
   background: #f8f9fa;
   display: flex;
@@ -455,7 +455,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   display: inline-block;
 }
 @media (max-width: 480px) {
-  .schedule-day { min-height: 60px; }
+  .schedule-day { min-height: 72px; }
   .schedule-ship { font-size: 9px; }
   .schedule-day-num { font-size: 11px; }
 }
