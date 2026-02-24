@@ -467,9 +467,9 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-onsen { background: #fff3e0; color: #e65100; }
 .badge-scenery { background: #e0f7fa; color: #00838f; }
 .cat-label {
-  font-size: 12px;
-  color: #888;
-  font-weight: 600;
-  margin-right: 2px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 700;
+  margin-right: 4px;
   white-space: nowrap;
 }
