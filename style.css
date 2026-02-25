@@ -37,9 +37,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   margin-bottom: 0;
 }
 .header-top h1 {
-  font-size: 40px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 44px;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   line-height: 1.08;
 }
 .header-ferry { background: linear-gradient(135deg, #0077b6, #0096c7, #00b4d8); }
