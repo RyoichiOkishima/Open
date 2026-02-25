@@ -467,6 +467,15 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-onsen { background: #fff3e0; color: #e65100; }
 .badge-scenery { background: #e0f7fa; color: #00838f; }
 .badge-heritage { background: #fff8e1; color: #f57f17; }
+
+/* Credit card campaign */
+.header-creditcard { background: linear-gradient(135deg, #1a237e, #283593, #3949ab); }
+.badge-cc-points { background: #e8f4fd; color: #1a73e8; }
+.badge-cc-cashback { background: #e6f9e6; color: #1a8a1a; }
+.badge-cc-fee { background: #f3e8fd; color: #7b1fa2; }
+.badge-cc-bonus { background: #fff3e0; color: #e65100; }
+.badge-cc-other { background: #e9ecef; color: #495057; }
+.badge-cc-urgent { background: #fce4ec; color: #c62828; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
 .cat-label {
   font-size: 14px;

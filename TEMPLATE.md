@@ -49,6 +49,8 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `header-trend` | ITネタトレンド | #0f2027 → #203a43 → #2c5364 |
 | `header-top` | トップページ | #232526 → #414345 |
 | `header-ferry` | フェリー運行状況 | #0077b6 → #0096c7 → #00b4d8 |
+| `header-municipal` | 自治体イベント | #2d6a4f → #40916c → #52b788 |
+| `header-creditcard` | クレジットカード キャンペーン | #1a237e → #283593 → #3949ab |
 
 新しいページを追加する場合は `style.css` に `header-{name}` クラスを追加する。
 
@@ -102,6 +104,19 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `badge-delay` | 遅延 | オレンジ (#fff3e0 / #e65100) |
 | `badge-cancelled` | 欠航 | 赤 (#fce4ec / #c62828) |
 | `badge-info` | お知らせ | 青 (#e8f4fd / #1a73e8) |
+
+| `badge-amami` | 奄美市 | 青 (#e8f4fd / #1a73e8) |
+| `badge-tatsugo` | 龍郷町 | 緑 (#e6f9e6 / #1a8a1a) |
+| `badge-yamato` | 大和村 | 紫 (#f3e8fd / #7b1fa2) |
+| `badge-setouchi` | 瀬戸内町 | オレンジ (#fff3e0 / #e65100) |
+| `badge-uken` | 宇検村 | 赤 (#fce4ec / #c62828) |
+
+| `badge-cc-points` | ポイント特典 | 青 (#e8f4fd / #1a73e8) |
+| `badge-cc-cashback` | キャッシュバック | 緑 (#e6f9e6 / #1a8a1a) |
+| `badge-cc-fee` | 年会費無料 | 紫 (#f3e8fd / #7b1fa2) |
+| `badge-cc-bonus` | 利用ボーナス | オレンジ (#fff3e0 / #e65100) |
+| `badge-cc-other` | その他 | グレー (#e9ecef / #495057) |
+| `badge-cc-urgent` | 終了間近 | 赤 (#fce4ec / #c62828) |
 
 新しいバッジが必要な場合は `style.css` に追加する。
 
