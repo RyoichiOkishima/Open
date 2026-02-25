@@ -503,6 +503,6 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   border-radius: 8px;
   padding: 8px 10px;
 }
-.cat-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.cat-items { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 12px; color: #888; padding-left: 8px; }
