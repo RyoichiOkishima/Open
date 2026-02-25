@@ -498,6 +498,78 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .region-accordion > .section-title::-webkit-details-marker { display: none; }
 .pref-link { color: #1a73e8; text-decoration: none; font-weight: normal; }
 .pref-link:active { color: #1557b0; }
+/* Travel popup */
+.travel-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 25vh;
+}
+.travel-popup {
+  background: #fff;
+  border-radius: 16px;
+  width: calc(100% - 32px);
+  max-width: 480px;
+  animation: muni-popup-in 0.2s ease-out;
+}
+.travel-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+.travel-popup-header span {
+  font-size: 18px;
+  font-weight: 700;
+}
+.travel-popup-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f0f2f5;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+}
+.travel-popup-body { padding: 14px 16px; }
+.travel-popup-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.travel-popup-pref { font-size: 13px; color: #888; }
+.travel-popup-desc {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.travel-popup-actions {
+  display: flex;
+  gap: 8px;
+}
+.travel-popup-btn {
+  flex: 1;
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  background: #f0f2f5;
+  color: #1a73e8;
+}
+.item-popup-link { cursor: pointer; }
+
 .fab-close {
   position: fixed;
   bottom: 24px;
