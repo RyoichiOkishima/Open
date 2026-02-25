@@ -475,5 +475,5 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 }
 .cat-group { margin: 6px 0; }
 .cat-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
-.cat-item { display: flex; align-items: baseline; gap: 4px; }
+.cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 12px; color: #888; }
