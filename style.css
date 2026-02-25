@@ -29,7 +29,13 @@ header h1 { font-size: 22px; font-weight: 800; }
 header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .header-instagram { background: linear-gradient(135deg, #405de6, #833ab4, #c13584, #e1306c, #fd1d1d); }
 .header-trend { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
-.header-top { background: linear-gradient(135deg, #232526, #414345); }
+.header-top {
+  background: linear-gradient(135deg, #232526, #414345);
+  padding: 44px 24px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+}
+.header-top h1 { font-size: 28px; letter-spacing: -0.02em; }
 .header-ferry { background: linear-gradient(135deg, #0077b6, #0096c7, #00b4d8); }
 .header-municipal { background: linear-gradient(135deg, #0d3320, #1b4332, #2d6a4f); }
 
@@ -159,30 +165,40 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 /* Top page cards */
 /* Top page section labels */
 .top-section {
-  font-size: 13px;
-  font-weight: 700;
-  color: #999;
-  letter-spacing: 0.5px;
-  padding: 18px 4px 6px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  padding: 36px 4px 12px;
 }
-.top-section:first-of-type { padding-top: 8px; }
+.top-section:first-of-type { padding-top: 20px; }
 
 .page-link {
   display: block;
   background: #fff;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 18px;
+  padding: 24px 28px;
+  margin-bottom: 10px;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.15s;
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
-.page-link:active { box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
-.page-link h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-.page-link p { font-size: 14px; color: #666; }
-.page-link .updated { font-size: 12px; color: #aaa; margin-top: 4px; }
-.page-link .arrow { float: right; font-size: 20px; color: #ccc; }
+.page-link:hover {
+  transform: scale(1.015);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.page-link:active { transform: scale(0.985); }
+.page-link h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.page-link p { font-size: 15px; color: #666; line-height: 1.47; }
+.page-link .updated { font-size: 12px; color: #aaa; margin-top: 8px; }
+.page-link .arrow { display: none; }
 .badge-new {
   display: inline-block;
   background: #ff3b30;
