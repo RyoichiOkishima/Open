@@ -30,12 +30,18 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .header-instagram { background: linear-gradient(135deg, #405de6, #833ab4, #c13584, #e1306c, #fd1d1d); }
 .header-trend { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
 .header-top {
-  background: linear-gradient(135deg, #232526, #414345);
-  padding: 44px 24px;
-  border-radius: 20px;
-  margin-bottom: 4px;
+  background: transparent;
+  color: #1a1a1a;
+  padding: 48px 16px 16px;
+  border-radius: 0;
+  margin-bottom: 0;
 }
-.header-top h1 { font-size: 28px; letter-spacing: -0.02em; }
+.header-top h1 {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
 .header-ferry { background: linear-gradient(135deg, #0077b6, #0096c7, #00b4d8); }
 .header-municipal { background: linear-gradient(135deg, #0d3320, #1b4332, #2d6a4f); }
 
