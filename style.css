@@ -473,6 +473,30 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   margin-right: 4px;
   white-space: nowrap;
 }
+/* Travel accordion */
+.region-accordion { margin-top: 18px; }
+.region-accordion > .section-title {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+}
+.region-accordion[open] > .section-title {
+  border-radius: 12px 12px 0 0;
+}
+.region-accordion > .section-title::after {
+  content: '▸';
+  font-size: 18px;
+  color: #aaa;
+  transition: transform 0.2s;
+}
+.region-accordion[open] > .section-title::after {
+  transform: rotate(90deg);
+}
+.region-accordion > .section-title::-webkit-details-marker { display: none; }
+
 .cat-group {
   margin: 6px 0;
   background: #f8f9fa;
