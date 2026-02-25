@@ -180,6 +180,27 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   padding: 36px 4px 12px;
 }
 .top-section:first-of-type { padding-top: 20px; }
+.top-section[id] { scroll-margin-top: 8px; }
+
+/* Top page nav */
+.top-nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 4px;
+}
+.top-nav-item {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: #fff;
+  transition: background 0.2s, color 0.2s;
+}
+.top-nav-item:hover { background: #e8e8ed; }
+.top-nav-item:active { background: #d1d1d6; }
 
 .page-link {
   display: block;
