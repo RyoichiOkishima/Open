@@ -476,6 +476,14 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-cc-bonus { background: #fff3e0; color: #e65100; }
 .badge-cc-other { background: #e9ecef; color: #495057; }
 .badge-cc-urgent { background: #fce4ec; color: #c62828; }
+
+/* Credit card catalog */
+.cc-spec-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+.cc-spec-table th { text-align: left; color: #888; font-weight: 500; padding: 4px 8px; width: 30%; }
+.cc-spec-table td { padding: 4px 8px; }
+.cc-card-header { display: flex; justify-content: space-between; align-items: center; }
+.cc-annual-fee { font-size: 14px; font-weight: 700; color: #1a8a1a; }
+.cc-return-rate { font-size: 14px; font-weight: 700; color: #1a73e8; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
 .cat-label {
   font-size: 14px;
