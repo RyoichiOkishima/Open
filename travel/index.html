@@ -12,7 +12,7 @@
 <header class="header-travel">
   <h1>47都道府県 観光カタログ</h1>
 </header>
-<div class="timestamp">更新: 2026-02-25 11:09</div>
+<div class="timestamp">更新: 2026-02-25 11:12</div>
 <details class="region-accordion">
 <summary class="section-title">北海道<sub><a href="#pref-北海道" class="pref-link">北海道</a></sub></summary>
 <div class="card">
@@ -2307,7 +2307,21 @@
 </div>
 </details>
 </div>
+<a href="#" class="fab-close" id="fabClose" style="display:none">&#x2715; 閉じる</a>
 <script>
+var fab = document.getElementById('fabClose');
+function updateFab() {
+  var anyOpen = document.querySelector('.region-accordion[open]');
+  fab.style.display = anyOpen ? 'flex' : 'none';
+}
+fab.addEventListener('click', function(e) {
+  e.preventDefault();
+  document.querySelectorAll('.region-accordion[open]').forEach(function(d) { d.open = false; });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+document.querySelectorAll('.region-accordion').forEach(function(d) {
+  d.addEventListener('toggle', updateFab);
+});
 document.querySelectorAll('.pref-link').forEach(function(a) {
   a.addEventListener('click', function(e) {
     e.preventDefault();

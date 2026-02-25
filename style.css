@@ -498,6 +498,23 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .region-accordion > .section-title::-webkit-details-marker { display: none; }
 .pref-link { color: #1a73e8; text-decoration: none; font-weight: normal; }
 .pref-link:active { color: #1557b0; }
+.fab-close {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #333;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 24px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 100;
+}
 
 .cat-group {
   margin: 6px 0;
