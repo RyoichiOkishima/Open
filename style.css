@@ -496,6 +496,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   transform: rotate(90deg);
 }
 .region-accordion > .section-title::-webkit-details-marker { display: none; }
+.pref-link { color: #1a73e8; text-decoration: none; font-weight: normal; }
+.pref-link:active { color: #1557b0; }
 
 .cat-group {
   margin: 6px 0;
