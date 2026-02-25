@@ -157,6 +157,16 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 }
 
 /* Top page cards */
+/* Top page section labels */
+.top-section {
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+  letter-spacing: 0.5px;
+  padding: 18px 4px 6px;
+}
+.top-section:first-of-type { padding-top: 8px; }
+
 .page-link {
   display: block;
   background: #fff;
