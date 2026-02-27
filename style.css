@@ -316,7 +316,14 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .badge-marix { background: #e0f0ff; color: #0055a4; }
 .badge-aline { background: #fff0e0; color: #c45500; }
 .badge-ship { background: #e8eaf6; color: #283593; }
-.badge-account { background: #e9ecef; color: #495057; }
+.badge-account {
+  background: #e9ecef;
+  color: #495057;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
 
 /* Backnumber list */
 .backnumber-list { list-style: none; padding: 8px 14px; }
