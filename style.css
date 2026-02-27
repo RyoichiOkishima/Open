@@ -38,7 +38,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 }
 .header-top h1 {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 44px;
+  font-size: clamp(24px, 7vw, 44px);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.08;
