@@ -821,8 +821,9 @@ html.popup-open, body.popup-open { overflow: hidden; }
   background: #fafafa;
   border-radius: 10px;
 }
-.rating-row { display: flex; align-items: center; gap: 8px; }
+.rating-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 .rating-label { font-size: 13px; color: #666; min-width: 5em; }
+.rating-desc { font-size: 12px; color: #888; flex-basis: 100%; padding-left: 5em; margin-top: -2px; }
 .rating-stars { font-size: 16px; color: #f5a623; letter-spacing: 1px; white-space: nowrap; }
 .rating-stars .star { display: inline-block; }
 .rating-stars .star.full { color: #f5a623; }
