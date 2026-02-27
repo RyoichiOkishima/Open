@@ -2329,6 +2329,7 @@ function openPopup(name, desc, cat, pref, access) {
       }
     })
     .catch(function() {});
+  document.querySelectorAll('.top-nav-group.open').forEach(function(g) { g.classList.remove('open'); });
   overlay.style.display = 'flex';
   document.body.classList.add('popup-open');
 }

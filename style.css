@@ -192,6 +192,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   background: rgba(255,255,255,0.72);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
+  position: relative;
+  z-index: 50;
 }
 .top-nav-home {
   display: flex;
@@ -237,12 +239,14 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
-/* Disable nav hover while popup is open */
-body.popup-open .top-nav-group:hover .top-nav-dropdown {
+/* Disable nav dropdown while popup is open */
+body.popup-open .top-nav-group:hover .top-nav-dropdown,
+body.popup-open .top-nav-group.open .top-nav-dropdown {
   opacity: 0;
   visibility: hidden;
   transform: translateX(-50%) translateY(4px);
 }
+body.popup-open .top-nav { z-index: auto; }
 body.popup-open { overflow: hidden; }
 .top-nav-dropdown a {
   display: block;
