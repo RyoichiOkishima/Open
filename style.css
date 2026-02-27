@@ -821,10 +821,16 @@ body.popup-open { overflow: hidden; }
 .rating-stars .star.empty { color: #ddd; }
 .rating-stars .star.half-star {
   display: inline-block;
-  background: linear-gradient(90deg, #f5a623 50%, #ddd 50%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  position: relative;
+  color: #ddd;
+}
+.rating-stars .star.half-star::before {
+  content: '\2605';
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+  width: 0.5em;
+  color: #f5a623;
 }
 
 /* Footer nav — Apple-style sitemap */

@@ -12,7 +12,7 @@
 <header class="header-travel">
   <h1>47都道府県 観光カタログ</h1>
 </header>
-<div class="timestamp">更新: 2026-02-27 17:00</div>
+<div class="timestamp">更新: 2026-02-27 17:02</div>
 <details class="region-accordion">
 <summary class="section-title"><span class="region-name">北海道</span><sub><a href="#pref-北海道" class="pref-link">北海道</a></sub></summary>
 <div class="card">
@@ -2817,7 +2817,7 @@ function renderStars(n) {
   var half = n % 2;
   var empty = 5 - full - half;
   var html = '<span class="star full">★</span>'.repeat(full);
-  if (half) html += '<span class="star half-star">★</span>';  empty = Math.max(0, empty);
+  if (half) html += '<span class="star half-star">☆</span>';
   html += '<span class="star empty">☆</span>'.repeat(empty);
   return html;
 }
