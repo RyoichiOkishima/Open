@@ -626,6 +626,12 @@ body.popup-open { overflow: hidden; }
 .region-accordion[open] > .section-title {
   border-radius: 12px 12px 0 0;
 }
+.region-name {
+  display: inline-block;
+  min-width: 5em;
+  text-align: justify;
+  text-align-last: justify;
+}
 .region-accordion > .section-title sub {
   display: block;
   margin-top: 4px;
