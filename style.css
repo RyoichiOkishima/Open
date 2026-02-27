@@ -784,7 +784,7 @@ body.popup-open { overflow: hidden; }
 }
 
 .cat-group {
-  margin: 6px 0;
+  margin: 6px -4px;
   background: #e9ecef;
   border-radius: 8px;
   padding: 8px 10px;
