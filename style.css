@@ -792,7 +792,6 @@ body.popup-open { overflow: hidden; }
 .cat-items { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 4px; }
 .cat-item-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-.cat-item-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .item-desc { font-size: 16px; color: #888; padding-left: 1em; }
 .badge-star5 {
   background: #37474f;
