@@ -239,8 +239,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
-/* Disable nav completely while popup is open */
-body.popup-open .top-nav { pointer-events: none; }
+/* Disable nav dropdown while popup is open */
+body.popup-open .top-nav-dropdown { display: none; }
 html.popup-open, body.popup-open { overflow: hidden; }
 .top-nav-dropdown a {
   display: block;
@@ -599,6 +599,11 @@ html.popup-open, body.popup-open { overflow: hidden; }
 .cc-return-rate { font-size: 14px; font-weight: 700; color: #1a73e8; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
 .badge-kids { background: #fff9c4; color: #f57f17; }
+.badge-restaurant { background: #fbe9e7; color: #bf360c; }
+.badge-activity { background: #e8f5e9; color: #2e7d32; }
+.badge-festival { background: #fce4ec; color: #ad1457; }
+.badge-museum { background: #ede7f6; color: #4527a0; }
+.badge-stay { background: #e3f2fd; color: #0d47a1; }
 .cat-label {
   display: inline-block;
   font-size: 21px;
