@@ -594,9 +594,13 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .cc-return-rate { font-size: 14px; font-weight: 700; color: #1a73e8; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
 .cat-label {
-  font-size: 14px;
-  color: #666;
+  display: inline-block;
+  font-size: 13px;
+  color: #1d1d1f;
   font-weight: 700;
+  background: #e9ecef;
+  padding: 2px 10px;
+  border-radius: 6px;
   margin-right: 4px;
   white-space: nowrap;
 }
@@ -638,9 +642,6 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   letter-spacing: 0.02em;
   border-left: 4px solid #1a73e8;
   padding-left: 10px;
-}
-.cat-label {
-  font-size: 12px;
 }
 /* Travel popup */
 .travel-popup-overlay {
