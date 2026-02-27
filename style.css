@@ -796,8 +796,11 @@ body.popup-open { overflow: hidden; }
   display: inline;
   font-size: 11px;
   font-weight: 600;
+  background: #fff8e1;
   color: #f57f17;
-  margin-left: 4px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-left: 2px;
 }
 /* Popup ratings */
 .travel-popup-ratings {
