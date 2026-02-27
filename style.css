@@ -111,7 +111,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 /* Badges */
 .badge {
   display: inline-block;
-  font-size: 13px;
+  font-size: 17px;
   padding: 2px 8px;
   border-radius: 8px;
   font-weight: 500;
@@ -794,8 +794,9 @@ body.popup-open { overflow: hidden; }
 .cat-item-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .item-desc { font-size: 16px; color: #888; padding-left: 1em; }
 .badge-star5 {
-  background: #e8eaf6;
-  color: #283593;
+  background: #37474f;
+  color: #ffd54f;
+  font-size: 13px;
   margin-left: 2px;
 }
 /* Popup ratings */
