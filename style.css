@@ -625,6 +625,23 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .region-accordion > .section-title::-webkit-details-marker { display: none; }
 .pref-link { color: #1a73e8; text-decoration: none; font-weight: normal; }
 .pref-link:active { color: #1557b0; }
+/* Travel — prefecture heading & separation */
+.region-accordion .post {
+  border-bottom: 2px solid #e0e0e0;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.region-accordion .post:last-child { border-bottom: none; }
+.region-accordion .post-title strong {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  border-left: 4px solid #1a73e8;
+  padding-left: 10px;
+}
+.cat-label {
+  font-size: 12px;
+}
 /* Travel popup */
 .travel-popup-overlay {
   position: fixed;
