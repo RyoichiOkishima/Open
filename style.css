@@ -48,7 +48,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
 /* Section headings */
 .section-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   padding: 12px 14px;
   background: #fff;
@@ -111,7 +111,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 /* Badges */
 .badge {
   display: inline-block;
-  font-size: 15px;
+  font-size: 17px;
   padding: 2px 8px;
   border-radius: 8px;
   font-weight: 500;
@@ -600,7 +600,7 @@ body.popup-open { overflow: hidden; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
 .cat-label {
   display: inline-block;
-  font-size: 17px;
+  font-size: 19px;
   color: #1d1d1f;
   font-weight: 700;
   background: none;
@@ -643,7 +643,7 @@ body.popup-open { overflow: hidden; }
 }
 .region-accordion .post:last-child { border-bottom: none; }
 .region-accordion .post-title strong {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: 0.02em;
   border-left: 4px solid #1a73e8;
@@ -771,7 +771,7 @@ body.popup-open { overflow: hidden; }
 }
 .cat-items { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
-.item-desc { font-size: 14px; color: #888; padding-left: 8px; }
+.item-desc { font-size: 16px; color: #888; padding-left: 8px; }
 
 /* Footer nav — Apple-style sitemap */
 .site-footer {
