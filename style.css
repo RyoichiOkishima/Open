@@ -789,6 +789,30 @@ body.popup-open { overflow: hidden; }
 .cat-items { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 16px; color: #888; padding-left: 1em; }
+.star5-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  background: #fff8e1;
+  color: #f57f17;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+/* Popup ratings */
+.travel-popup-ratings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  margin: 12px 0;
+  padding: 10px 12px;
+  background: #fafafa;
+  border-radius: 10px;
+}
+.rating-row { display: flex; align-items: center; gap: 8px; }
+.rating-label { font-size: 13px; color: #666; min-width: 5em; }
+.rating-stars { font-size: 16px; color: #f5a623; letter-spacing: 1px; }
 
 /* Footer nav — Apple-style sitemap */
 .site-footer {
