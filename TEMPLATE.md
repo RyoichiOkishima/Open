@@ -41,7 +41,9 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
     <div class="top-nav-dropdown">
       <a href="../instagram/">Instagram まとめ</a>
       <a href="../municipal/">自治体イベント</a>
+      <a href="../municipal/list.html">イベント一覧</a>
       <a href="../ferry/">フェリー運行状況</a>
+      <a href="../ferry/schedule.html">配船スケジュール</a>
     </div>
   </div>
   <div class="top-nav-group">
@@ -49,6 +51,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
     <div class="top-nav-dropdown">
       <a href="../travel/">観光カタログ</a>
       <a href="../credit-card/">クレジットカード</a>
+      <a href="../credit-card/catalog.html">カードスペック一覧</a>
     </div>
   </div>
   <div class="top-nav-group">
