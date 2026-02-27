@@ -675,7 +675,7 @@ body.popup-open { overflow: hidden; }
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 25vh;
+  padding: 10vh 16px;
 }
 .travel-popup {
   background: #fff;
