@@ -2337,6 +2337,8 @@ overlay.addEventListener('click', function(e) { if (e.target === overlay) closeP
 document.querySelectorAll('.item-popup-link').forEach(function(a) {
   a.addEventListener('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
+    document.querySelectorAll('.top-nav-group.open').forEach(function(g) { g.classList.remove('open'); });
     openPopup(a.dataset.name, a.dataset.desc, a.dataset.cat, a.dataset.pref, a.dataset.access);
   });
 });
