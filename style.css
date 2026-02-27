@@ -824,6 +824,7 @@ body.popup-open { overflow: hidden; }
   overflow: hidden;
   width: 0.5em;
   color: #f5a623;
+  vertical-align: top;
 }
 
 /* Footer nav — Apple-style sitemap */
