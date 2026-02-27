@@ -598,6 +598,7 @@ body.popup-open { overflow: hidden; }
 .cc-annual-fee { font-size: 14px; font-weight: 700; color: #1a8a1a; }
 .cc-return-rate { font-size: 14px; font-weight: 700; color: #1a73e8; }
 .badge-culture { background: #fce4ec; color: #880e4f; }
+.badge-kids { background: #fff9c4; color: #f57f17; }
 .cat-label {
   display: inline-block;
   font-size: 19px;
