@@ -784,10 +784,10 @@ body.popup-open { overflow: hidden; }
 }
 
 .cat-group {
-  margin: 6px -10px;
+  margin: 6px 0;
   background: #e9ecef;
   border-radius: 8px;
-  padding: 8px 6px;
+  padding: 8px 10px;
 }
 .cat-items { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 4px; background: #fff; border-radius: 8px; padding: 8px 10px; }
