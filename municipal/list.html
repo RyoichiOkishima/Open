@@ -1875,21 +1875,27 @@
   <div class="footer-nav">
     <div class="footer-nav-group">
       <h3>奄美大島</h3>
-      <a href="../instagram/">Instagram まとめ</a>
-      <a href="../municipal/">自治体イベント</a>
-      <a href="../municipal/list.html">イベント一覧</a>
-      <a href="../ferry/">フェリー運行状況</a>
-      <a href="../ferry/schedule.html">配船スケジュール</a>
+      <div class="footer-links">
+        <a href="../instagram/">Instagram まとめ</a>
+        <a href="../municipal/">自治体イベント</a>
+        <a href="../municipal/list.html">イベント一覧</a>
+        <a href="../ferry/">フェリー運行状況</a>
+        <a href="../ferry/schedule.html">配船スケジュール</a>
+      </div>
     </div>
     <div class="footer-nav-group">
       <h3>旅行・マネー</h3>
-      <a href="../travel/">観光カタログ</a>
-      <a href="../credit-card/">クレジットカード</a>
-      <a href="../credit-card/catalog.html">カードスペック一覧</a>
+      <div class="footer-links">
+        <a href="../travel/">観光カタログ</a>
+        <a href="../credit-card/">クレジットカード</a>
+        <a href="../credit-card/catalog.html">カードスペック一覧</a>
+      </div>
     </div>
     <div class="footer-nav-group">
       <h3>テクノロジー</h3>
-      <a href="../trend/">ITネタトレンド</a>
+      <div class="footer-links">
+        <a href="../trend/">ITネタトレンド</a>
+      </div>
     </div>
   </div>
   <div class="footer-copyright">Copyright &copy; 2026 Okishima. All rights reserved.</div>
@@ -1910,6 +1916,13 @@ document.querySelectorAll('.top-nav-group').forEach(function(group) {
 document.addEventListener('click', function() {
   document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
     g.classList.remove('open');
+  });
+});
+
+// Footer accordion
+document.querySelectorAll('.footer-nav-group h3').forEach(function(h3) {
+  h3.addEventListener('click', function() {
+    h3.parentElement.classList.toggle('open');
   });
 });
 </script>

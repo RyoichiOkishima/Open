@@ -751,33 +751,81 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
 /* Footer nav — Apple-style sitemap */
 .site-footer {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  margin-top: 32px;
-  padding: 24px 0 16px;
+  background: #f5f5f7;
+  margin: 32px -12px 0;
+  padding: 28px 24px 20px;
 }
 .footer-nav {
   display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 20px;
+  gap: 40px;
+  padding-bottom: 24px;
 }
+.footer-nav-group { flex: 1; }
 .footer-nav-group h3 {
   font-size: 12px;
   font-weight: 600;
   color: #1d1d1f;
-  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
 }
-.footer-nav-group a {
+.footer-nav-group .footer-links a {
   display: block;
   font-size: 12px;
-  color: #6e6e73;
+  color: #424245;
   text-decoration: none;
-  line-height: 2;
+  line-height: 2.2;
+  transition: color 0.2s;
 }
-.footer-nav-group a:hover { color: #06c; }
+.footer-nav-group .footer-links a:hover { color: #06c; }
 .footer-copyright {
-  border-top: 1px solid rgba(0,0,0,0.08);
-  padding-top: 12px;
+  border-top: 1px solid #d2d2d7;
+  padding-top: 14px;
   font-size: 11px;
   color: #86868b;
+}
+/* Footer accordion chevron — hidden on desktop */
+.footer-nav-group h3::after { display: none; }
+
+/* Mobile footer accordion */
+@media (max-width: 640px) {
+  .footer-nav {
+    flex-direction: column;
+    gap: 0;
+    padding-bottom: 0;
+  }
+  .footer-nav-group {
+    border-bottom: 1px solid #d2d2d7;
+  }
+  .footer-nav-group h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 14px 0;
+    margin-bottom: 0;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .footer-nav-group h3::after {
+    display: block;
+    content: '+';
+    font-size: 18px;
+    font-weight: 300;
+    color: #86868b;
+    transition: transform 0.3s;
+  }
+  .footer-nav-group.open h3::after {
+    content: '\2212';
+  }
+  .footer-nav-group .footer-links {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .footer-nav-group.open .footer-links {
+    max-height: 300px;
+  }
+  .footer-nav-group .footer-links a {
+    padding-left: 4px;
+  }
 }
