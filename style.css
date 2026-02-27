@@ -202,7 +202,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   opacity: 0.8;
   transition: opacity 0.3s;
 }
-.top-nav-group:hover .top-nav-item { opacity: 1; }
+.top-nav-group:hover .top-nav-item,
+.top-nav-group.open .top-nav-item { opacity: 1; }
 .top-nav-dropdown {
   position: absolute;
   top: calc(100% + 12px);
@@ -222,7 +223,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   box-shadow: 0 4px 24px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06);
   z-index: 100;
 }
-.top-nav-group:hover .top-nav-dropdown {
+.top-nav-group:hover .top-nav-dropdown,
+.top-nav-group.open .top-nav-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);

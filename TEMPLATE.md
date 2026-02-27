@@ -29,6 +29,30 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 
 <div class="breadcrumb"><a href="../">Okishima Open</a> &gt; {{セクション名}}</div>
 
+<nav class="top-nav">
+  <div class="top-nav-group">
+    <span class="top-nav-item">奄美大島</span>
+    <div class="top-nav-dropdown">
+      <a href="../instagram/">Instagram まとめ</a>
+      <a href="../municipal/">自治体イベント</a>
+      <a href="../ferry/">フェリー運行状況</a>
+    </div>
+  </div>
+  <div class="top-nav-group">
+    <span class="top-nav-item">旅行・マネー</span>
+    <div class="top-nav-dropdown">
+      <a href="../travel/">観光カタログ</a>
+      <a href="../credit-card/">クレジットカード</a>
+    </div>
+  </div>
+  <div class="top-nav-group">
+    <span class="top-nav-item">テクノロジー</span>
+    <div class="top-nav-dropdown">
+      <a href="../trend/">ITネタトレンド</a>
+    </div>
+  </div>
+</nav>
+
 <header class="{{ヘッダークラス}}">
   <h1>{{ページタイトル}}</h1>
 </header>
@@ -37,6 +61,23 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 <!-- ここにコンテンツセクションを配置 -->
 
 </div>
+<script>
+document.querySelectorAll('.top-nav-group').forEach(function(group) {
+  group.querySelector('.top-nav-item').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var wasOpen = group.classList.contains('open');
+    document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+      g.classList.remove('open');
+    });
+    if (!wasOpen) group.classList.add('open');
+  });
+});
+document.addEventListener('click', function() {
+  document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+    g.classList.remove('open');
+  });
+});
+</script>
 </body>
 </html>
 ```
@@ -117,6 +158,10 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 | `badge-cc-bonus` | 利用ボーナス | オレンジ (#fff3e0 / #e65100) |
 | `badge-cc-other` | その他 | グレー (#e9ecef / #495057) |
 | `badge-cc-urgent` | 終了間近 | 赤 (#fce4ec / #c62828) |
+
+| `cc-spec-table` | カタログ用スペックテーブル | - |
+| `cc-return-rate` | カタログ用還元率表示 | 青太字 (#1a73e8) |
+| `cc-annual-fee` | カタログ用年会費表示 | 緑太字 (#1a8a1a) |
 
 新しいバッジが必要な場合は `style.css` に追加する。
 

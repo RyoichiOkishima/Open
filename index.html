@@ -90,6 +90,23 @@
 
 </div>
 <script>
+// Mobile nav: toggle dropdown on tap
+document.querySelectorAll('.top-nav-group').forEach(function(group) {
+  group.querySelector('.top-nav-item').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var wasOpen = group.classList.contains('open');
+    document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+      g.classList.remove('open');
+    });
+    if (!wasOpen) group.classList.add('open');
+  });
+});
+document.addEventListener('click', function() {
+  document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+    g.classList.remove('open');
+  });
+});
+
 document.querySelectorAll('.page-link[data-updated]').forEach(function(link) {
   var updated = new Date(link.dataset.updated).getTime();
   var key = 'visited_' + link.getAttribute('href');

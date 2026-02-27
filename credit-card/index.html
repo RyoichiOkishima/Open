@@ -11,6 +11,30 @@
 
 <div class="breadcrumb"><a href="../">Okishima Open</a> &gt; クレジットカード</div>
 
+<nav class="top-nav">
+  <div class="top-nav-group">
+    <span class="top-nav-item">奄美大島</span>
+    <div class="top-nav-dropdown">
+      <a href="../instagram/">Instagram まとめ</a>
+      <a href="../municipal/">自治体イベント</a>
+      <a href="../ferry/">フェリー運行状況</a>
+    </div>
+  </div>
+  <div class="top-nav-group">
+    <span class="top-nav-item">旅行・マネー</span>
+    <div class="top-nav-dropdown">
+      <a href="../travel/">観光カタログ</a>
+      <a href="../credit-card/">クレジットカード</a>
+    </div>
+  </div>
+  <div class="top-nav-group">
+    <span class="top-nav-item">テクノロジー</span>
+    <div class="top-nav-dropdown">
+      <a href="../trend/">ITネタトレンド</a>
+    </div>
+  </div>
+</nav>
+
 <header class="header-creditcard">
   <h1>クレジットカード キャンペーン</h1>
 </header>
@@ -254,5 +278,22 @@
 </div>
 
 </div>
+<script>
+document.querySelectorAll('.top-nav-group').forEach(function(group) {
+  group.querySelector('.top-nav-item').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var wasOpen = group.classList.contains('open');
+    document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+      g.classList.remove('open');
+    });
+    if (!wasOpen) group.classList.add('open');
+  });
+});
+document.addEventListener('click', function() {
+  document.querySelectorAll('.top-nav-group.open').forEach(function(g) {
+    g.classList.remove('open');
+  });
+});
+</script>
 </body>
 </html>
