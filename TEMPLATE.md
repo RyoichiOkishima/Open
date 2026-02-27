@@ -22,10 +22,17 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ページタイトル}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <div class="container">
+
+<header class="header-top">
+  <h1>{{ページタイトル}}</h1>
+</header>
 
 <nav class="top-nav">
   <a href="../" class="top-nav-home"><svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg></a>
@@ -52,9 +59,6 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
   </div>
 </nav>
 
-<header class="{{ヘッダークラス}}">
-  <h1>{{ページタイトル}}</h1>
-</header>
 <div class="timestamp">🕐 {{YYYY-MM-DD HH:MM}} 更新</div>
 
 <!-- ここにコンテンツセクションを配置 -->
@@ -81,18 +85,10 @@ document.addEventListener('click', function() {
 </html>
 ```
 
-## ヘッダークラス一覧
+## ヘッダー
 
-| クラス名 | 用途 | グラデーション |
-|---------|------|--------------|
-| `header-instagram` | 奄美Instagram まとめ | #405de6 → #833ab4 → #c13584 → #e1306c → #fd1d1d |
-| `header-trend` | ITネタトレンド | #0f2027 → #203a43 → #2c5364 |
-| `header-top` | トップページ | #232526 → #414345 |
-| `header-ferry` | フェリー運行状況 | #0077b6 → #0096c7 → #00b4d8 |
-| `header-municipal` | 自治体イベント | #2d6a4f → #40916c → #52b788 |
-| `header-creditcard` | クレジットカード キャンペーン | #1a237e → #283593 → #3949ab |
-
-新しいページを追加する場合は `style.css` に `header-{name}` クラスを追加する。
+すべてのページで `header-top` クラスを使用する（透明背景・Inter 800・大きな黒文字）。
+ページ固有のカラーヘッダーは使用しない。
 
 ## 更新日時（timestamp）
 
