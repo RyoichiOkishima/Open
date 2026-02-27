@@ -596,10 +596,10 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .cat-label {
   display: inline-block;
   font-size: 13px;
-  color: #1a73e8;
+  color: #1d1d1f;
   font-weight: 700;
   background: none;
-  border-bottom: 2px solid #1a73e8;
+  border-bottom: 2px solid #ccc;
   padding: 0 0 2px;
   margin-right: 4px;
   margin-bottom: 4px;
