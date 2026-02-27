@@ -239,9 +239,8 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
-/* Hide nav dropdown and footer while popup is open */
-body.popup-open .top-nav-dropdown { display: none; }
-body.popup-open .site-footer { display: none; }
+/* Disable nav completely while popup is open */
+body.popup-open .top-nav { pointer-events: none; }
 body.popup-open { overflow: hidden; }
 .top-nav-dropdown a {
   display: block;
