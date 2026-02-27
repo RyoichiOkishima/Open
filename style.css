@@ -663,10 +663,10 @@ html.popup-open, body.popup-open { overflow: hidden; }
 .region-accordion .post:last-child { border-bottom: none; }
 .region-accordion .post-title {
   position: sticky;
-  top: 80px;
+  top: 64px;
   background: #fff;
   z-index: 10;
-  padding: 8px 0;
+  padding: 24px 0 8px;
 }
 .region-accordion .post-title strong {
   font-size: 26px;
