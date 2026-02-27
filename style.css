@@ -185,8 +185,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 /* Top page nav — Apple mega-menu style */
 .top-nav {
   display: flex;
-  justify-content: center;
-  gap: 28px;
+  justify-content: space-evenly;
   padding: 12px 0;
   margin: 0 -12px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
