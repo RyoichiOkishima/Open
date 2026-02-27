@@ -748,3 +748,36 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 .cat-items { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 12px; color: #888; padding-left: 8px; }
+
+/* Footer nav — Apple-style sitemap */
+.site-footer {
+  border-top: 1px solid rgba(0,0,0,0.08);
+  margin-top: 32px;
+  padding: 24px 0 16px;
+}
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 20px;
+}
+.footer-nav-group h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 8px;
+}
+.footer-nav-group a {
+  display: block;
+  font-size: 12px;
+  color: #6e6e73;
+  text-decoration: none;
+  line-height: 2;
+}
+.footer-nav-group a:hover { color: #06c; }
+.footer-copyright {
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 12px;
+  font-size: 11px;
+  color: #86868b;
+}
