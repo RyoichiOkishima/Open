@@ -663,7 +663,7 @@ html.popup-open, body.popup-open { overflow: hidden; }
 .region-accordion .post:last-child { border-bottom: none; }
 .region-accordion .post-title {
   position: sticky;
-  top: 80px;
+  top: 95px;
   background: #fff;
   z-index: 10;
   padding: 8px 0;
