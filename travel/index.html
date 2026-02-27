@@ -12,7 +12,7 @@
 <header class="header-travel">
   <h1>47都道府県 観光カタログ</h1>
 </header>
-<div class="timestamp">更新: 2026-02-27 20:14</div>
+<div class="timestamp">更新: 2026-02-27 20:15</div>
 <details class="region-accordion">
 <summary class="section-title"><span class="region-name">北海道</span><sub><a href="#pref-北海道" class="pref-link">北海道</a></sub></summary>
 <div class="card">
@@ -2869,7 +2869,9 @@ document.querySelectorAll('.pref-link').forEach(function(a) {
     if (details && !details.open) details.open = true;
     var target = document.querySelector(a.getAttribute('href'));
     if (target) setTimeout(function() {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var stickyOffset = document.querySelector('.section-title') ? document.querySelector('.section-title').offsetHeight + 4 : 0;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }, 100);
   });
 });
