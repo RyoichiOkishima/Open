@@ -241,7 +241,7 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 }
 /* Disable nav completely while popup is open */
 body.popup-open .top-nav { pointer-events: none; }
-body.popup-open { overflow: hidden; }
+html.popup-open, body.popup-open { overflow: hidden; }
 .top-nav-dropdown a {
   display: block;
   padding: 10px 16px;
