@@ -823,6 +823,7 @@ body.popup-open { overflow: hidden; }
   display: inline-block;
   overflow: hidden;
   width: 0.5em;
+  margin-right: 0.5em;
   color: #f5a623;
   vertical-align: top;
 }
