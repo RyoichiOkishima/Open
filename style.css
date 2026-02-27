@@ -793,13 +793,14 @@ body.popup-open { overflow: hidden; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 16px; color: #888; padding-left: 1em; }
 .star5-badge {
-  display: inline;
-  font-size: 11px;
-  font-weight: 600;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
   background: #fff8e1;
   color: #f57f17;
-  padding: 1px 4px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
   margin-left: 2px;
 }
 /* Popup ratings */
