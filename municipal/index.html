@@ -3657,6 +3657,7 @@
     popupNext.disabled = idx === eventDates.length - 1;
     overlay.style.display = '';
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('popup-open');
   }
 
   document.querySelectorAll('.schedule-day.has-events').forEach(function(day) {
@@ -3678,6 +3679,7 @@
   function closePopup() {
     overlay.style.display = 'none';
     document.body.style.overflow = '';
+    document.body.classList.remove('popup-open');
   }
   popupClose.addEventListener('click', closePopup);
   overlay.addEventListener('click', function(e) {

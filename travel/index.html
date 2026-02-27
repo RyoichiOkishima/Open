@@ -2330,8 +2330,9 @@ function openPopup(name, desc, cat, pref, access) {
     })
     .catch(function() {});
   overlay.style.display = 'flex';
+  document.body.classList.add('popup-open');
 }
-function closePopup() { overlay.style.display = 'none'; }
+function closePopup() { overlay.style.display = 'none'; document.body.classList.remove('popup-open'); }
 document.getElementById('popupClose').addEventListener('click', closePopup);
 overlay.addEventListener('click', function(e) { if (e.target === overlay) closePopup(); });
 document.querySelectorAll('.item-popup-link').forEach(function(a) {
