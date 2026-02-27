@@ -8,8 +8,7 @@ body {
   line-height: 1.7;
   -webkit-text-size-adjust: 100%;
 }
-.container { max-width: 640px; margin: 0 auto; padding: 12px; overflow-x: hidden; }
-html, body { overflow-x: hidden; }
+.container { max-width: 640px; margin: 0 auto; padding: 12px; }
 
 /* Header */
 header {
