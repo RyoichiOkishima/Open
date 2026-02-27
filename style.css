@@ -621,7 +621,9 @@ html.popup-open, body.popup-open { overflow: hidden; }
   align-items: center;
   text-align: center;
   border-radius: 12px;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 .region-accordion[open] > .section-title {
   border-radius: 12px 12px 0 0;
@@ -661,7 +663,7 @@ html.popup-open, body.popup-open { overflow: hidden; }
 .region-accordion .post:last-child { border-bottom: none; }
 .region-accordion .post-title {
   position: sticky;
-  top: 0;
+  top: 70px;
   background: #fff;
   z-index: 10;
   padding: 8px 0;
