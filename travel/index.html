@@ -12,7 +12,7 @@
 <header class="header-travel">
   <h1>47都道府県 観光カタログ</h1>
 </header>
-<div class="timestamp">更新: 2026-02-27 16:49</div>
+<div class="timestamp">更新: 2026-02-27 16:51</div>
 <details class="region-accordion">
 <summary class="section-title"><span class="region-name">北海道</span><sub><a href="#pref-北海道" class="pref-link">北海道</a></sub></summary>
 <div class="card">
@@ -2813,8 +2813,12 @@ var catBadgeMap = {
   '子ども向け': 'badge-kids'
 };
 function renderStars(n) {
-  var s = '';
-  for (var i = 0; i < 5; i++) s += i < n ? '★' : '☆';
+  var full = Math.floor(n / 2);
+  var half = n % 2;
+  var empty = 5 - full - half;
+  var s = '★'.repeat(full);
+  if (half) s += '½';
+  s += '☆'.repeat(empty);
   return s;
 }
 function openPopup(name, desc, cat, pref, access, rPop, rAcc, rCos, rKid, rBaby) {
