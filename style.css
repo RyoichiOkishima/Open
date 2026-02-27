@@ -680,6 +680,9 @@ body.popup-open { overflow: hidden; }
 .travel-popup {
   background: #fff;
   border-radius: 16px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
   width: calc(100% - 32px);
   max-width: 480px;
   animation: muni-popup-in 0.2s ease-out;
@@ -706,7 +709,7 @@ body.popup-open { overflow: hidden; }
   color: #666;
   cursor: pointer;
 }
-.travel-popup-body { padding: 14px 16px; }
+.travel-popup-body { padding: 14px 16px; overflow-y: auto; flex: 1; }
 .travel-popup-meta {
   display: flex;
   align-items: center;
