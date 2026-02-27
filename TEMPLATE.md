@@ -30,6 +30,7 @@ CSSの変更は `C:\Okishima\Open\style.css` のみで行う。
 <div class="breadcrumb"><a href="../">Okishima Open</a> &gt; {{セクション名}}</div>
 
 <nav class="top-nav">
+  <a href="../" class="top-nav-home"><svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg></a>
   <div class="top-nav-group">
     <span class="top-nav-item">奄美大島</span>
     <div class="top-nav-dropdown">

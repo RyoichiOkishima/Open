@@ -194,6 +194,15 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
+.top-nav-home {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.top-nav-home:hover { opacity: 1; }
+.top-nav-home svg { width: 16px; height: 16px; fill: #1d1d1f; }
 .top-nav-group { position: relative; }
 .top-nav-item {
   font-size: 12px;
