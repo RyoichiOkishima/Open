@@ -240,7 +240,11 @@ header .stats { font-size: 13px; opacity: 0.85; margin-top: 2px; }
   transform: translateX(-50%) translateY(0);
 }
 /* Disable nav dropdown while popup is open */
-body.popup-open .top-nav-dropdown { display: none; }
+body.popup-open .top-nav-dropdown { display: none !important; }
+body.popup-open .top-nav-group:hover .top-nav-dropdown,
+body.popup-open .top-nav-group.open .top-nav-dropdown {
+  opacity: 0; visibility: hidden; display: none;
+}
 body.popup-open { overflow: hidden; }
 .top-nav-dropdown a {
   display: block;
