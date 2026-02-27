@@ -12,7 +12,7 @@
 <header class="header-travel">
   <h1>47都道府県 観光カタログ</h1>
 </header>
-<div class="timestamp">更新: 2026-02-27 16:52</div>
+<div class="timestamp">更新: 2026-02-27 16:54</div>
 <details class="region-accordion">
 <summary class="section-title"><span class="region-name">北海道</span><sub><a href="#pref-北海道" class="pref-link">北海道</a></sub></summary>
 <div class="card">
@@ -2816,20 +2816,20 @@ function renderStars(n) {
   var full = Math.floor(n / 2);
   var half = n % 2;
   var empty = 5 - full - half;
-  var s = '★'.repeat(full);
-  if (half) s += '½';
-  s += '☆'.repeat(empty);
-  return s;
+  var html = '<span class="star full">★</span>'.repeat(full);
+  if (half) html += '<span class="star half-star">★</span>';
+  html += '<span class="star empty">☆</span>'.repeat(empty);
+  return html;
 }
 function openPopup(name, desc, cat, pref, access, rPop, rAcc, rCos, rKid, rBaby) {
   document.getElementById('popupTitle').textContent = name;
   document.getElementById('popupDesc').textContent = desc || '';
   document.getElementById('popupPref').textContent = pref;
-  document.getElementById('ratePopularity').textContent = renderStars(rPop);
-  document.getElementById('rateAccessibility').textContent = renderStars(rAcc);
-  document.getElementById('rateCospa').textContent = renderStars(rCos);
-  document.getElementById('rateKids').textContent = renderStars(rKid);
-  document.getElementById('rateBaby').textContent = renderStars(rBaby);
+  document.getElementById('ratePopularity').innerHTML = renderStars(rPop);
+  document.getElementById('rateAccessibility').innerHTML = renderStars(rAcc);
+  document.getElementById('rateCospa').innerHTML = renderStars(rCos);
+  document.getElementById('rateKids').innerHTML = renderStars(rKid);
+  document.getElementById('rateBaby').innerHTML = renderStars(rBaby);
   var catBadge = document.getElementById('popupCatBadge');
   catBadge.textContent = cat;
   catBadge.className = 'badge ' + (catBadgeMap[cat] || '');
