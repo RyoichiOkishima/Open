@@ -793,15 +793,11 @@ body.popup-open { overflow: hidden; }
 .cat-item { display: flex; flex-direction: column; gap: 1px; }
 .item-desc { font-size: 16px; color: #888; padding-left: 1em; }
 .star5-badge {
-  display: inline-block;
+  display: inline;
   font-size: 11px;
   font-weight: 600;
-  background: #fff8e1;
   color: #f57f17;
-  padding: 1px 6px;
-  border-radius: 8px;
   margin-left: 4px;
-  vertical-align: middle;
 }
 /* Popup ratings */
 .travel-popup-ratings {
