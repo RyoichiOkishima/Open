@@ -657,8 +657,8 @@ html.popup-open, body.popup-open { overflow: hidden; }
 /* Travel — prefecture heading & separation */
 .region-accordion .post {
   border-bottom: 2px solid #e0e0e0;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 .region-accordion .post:last-child { border-bottom: none; }
 .region-accordion .post-title {
