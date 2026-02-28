@@ -411,7 +411,13 @@ function clearCache() {
       names.forEach(function(name) { caches.delete(name); });
     });
   }
-  location.reload(true);
+  var btn = document.querySelector('.cache-clear-btn');
+  btn.textContent = 'クリア完了';
+  btn.style.color = 'rgba(46,204,113,0.8)';
+  setTimeout(function() {
+    btn.textContent = 'キャッシュクリア';
+    btn.style.color = '';
+  }, 2000);
 }
 
 function toggleSound() {
