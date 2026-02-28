@@ -1303,6 +1303,7 @@ function resetGame() {
   if (mode === 'cpu') {
     playerMark = Math.random() < 0.5 ? 'X' : 'O';
     cpuMark = playerMark === 'X' ? 'O' : 'X';
+    showScreen('screen-game');
     showCoinToss(playerMark, function() {
       setupBoard();
     });
@@ -1434,6 +1435,5 @@ document.querySelectorAll('.card-btn').forEach(function(btn) {
     showCardInfo(btn.dataset.card);
   });
 });
-updateCardSelector();
 
 initHaptic();
