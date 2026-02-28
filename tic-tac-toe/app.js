@@ -392,6 +392,25 @@ function showBossIntro(callback) {
 }
 
 // === Coin toss ===
+function sfxCoinSpin() {
+  if (!soundOn) return;
+  var ctx = getAudioCtx();
+  // Metallic clinks that decelerate with the coin
+  var ticks = 12;
+  for (var i = 0; i < ticks; i++) {
+    // Interval grows as coin slows: starts fast, ends slow
+    var t = (i * (i + 1)) / (ticks * 2.5);
+    var freq = 2800 + Math.random() * 1200 - i * 80;
+    var vol = 0.08 - i * 0.004;
+    playTone(freq, t, 0.04, 'sine', Math.max(vol, 0.01));
+    // Subtle lower harmonic
+    playTone(freq * 0.5, t, 0.03, 'triangle', Math.max(vol * 0.4, 0.005));
+  }
+  // Final landing clink
+  playTone(3200, 1.9, 0.08, 'sine', 0.1);
+  playTone(1600, 1.92, 0.12, 'triangle', 0.06);
+}
+
 function showCoinToss(mark, callback) {
   var overlay = document.getElementById('coin-toss-overlay');
   var inner = document.getElementById('coin-inner');
@@ -405,6 +424,7 @@ function showCoinToss(mark, callback) {
   inner.style.transform = 'rotateY(0deg)';
 
   overlay.classList.add('show');
+  sfxCoinSpin();
 
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
