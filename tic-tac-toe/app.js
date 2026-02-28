@@ -462,7 +462,7 @@ function onCellClick(e) {
   if (mode === 'cpu' && current === cpuMark) return;
   makeMove(idx);
   if (mode === 'cpu' && !gameOver && current === cpuMark) {
-    setTimeout(cpuMove, 300);
+    setTimeout(cpuMove, 500);
   }
 }
 
@@ -819,7 +819,7 @@ function setupBoard() {
       var opp = getOpponentLabel();
       setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
       if (current === cpuMark) {
-        setTimeout(cpuMove, 300);
+        setTimeout(cpuMove, 500);
       }
     });
   } else {
@@ -829,7 +829,7 @@ function setupBoard() {
       var opp = getOpponentLabel();
       setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
       if (current === cpuMark) {
-        setTimeout(cpuMove, 300);
+        setTimeout(cpuMove, 500);
       }
     } else {
       setStatus('<span class="mark-x">X</span> の番です');
