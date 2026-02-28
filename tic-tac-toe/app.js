@@ -538,28 +538,34 @@ function updateCardSelector() {
   }
 }
 
-function showCardPopup(idx, options) {
+function showCardPopup(idx) {
   pendingCellIdx = idx;
   var mark = current;
   var container = document.getElementById('card-popup-options');
   container.innerHTML = '';
+  var types = ['normal', 'super', 'ultra'];
   var info = {
     normal: { icon: '🃏', name: 'ノーマル', desc: '残り ' + cards[mark].normal + ' 枚' },
     super:  { icon: '⚡', name: 'スーパー', desc: '残り ' + cards[mark].super + ' 枚' },
     ultra:  { icon: '🔥', name: 'ウルトラ', desc: '残り ' + cards[mark].ultra + ' 枚' }
   };
-  for (var i = 0; i < options.length; i++) {
-    var type = options[i];
+  var anyAvailable = false;
+  for (var i = 0; i < types.length; i++) {
+    var type = types[i];
     var d = info[type];
+    var available = canPlace(idx, mark, type) && cards[mark][type] > 0;
+    if (available) anyAvailable = true;
     var btn = document.createElement('button');
-    btn.className = 'card-popup-opt';
+    btn.className = 'card-popup-opt' + (available ? '' : ' disabled');
     btn.dataset.card = type;
+    btn.disabled = !available;
     btn.innerHTML = '<span class="cp-icon">' + d.icon + '</span>' +
       '<span class="cp-info"><span class="cp-name">' + d.name + '</span>' +
       '<span class="cp-desc">' + d.desc + '</span></span>';
-    btn.addEventListener('click', onCardPopupSelect);
+    if (available) btn.addEventListener('click', onCardPopupSelect);
     container.appendChild(btn);
   }
+  if (!anyAvailable) return;
   document.getElementById('card-popup-overlay').classList.add('open');
 }
 
@@ -583,23 +589,7 @@ function onCellClick(e) {
   var idx = parseInt(e.target.dataset.index);
   if (gameOver) return;
   if (mode === 'cpu' && current === cpuMark) return;
-
-  var mark = current;
-  var options = [];
-  if (canPlace(idx, mark, 'normal')) options.push('normal');
-  if (cards[mark].super > 0 && canPlace(idx, mark, 'super')) options.push('super');
-  if (cards[mark].ultra > 0 && canPlace(idx, mark, 'ultra')) options.push('ultra');
-
-  if (options.length === 0) return;
-  if (options.length === 1) {
-    makeMove(idx, options[0]);
-    updateCardSelector();
-    if (mode === 'cpu' && !gameOver && current === cpuMark) {
-      setTimeout(cpuMove, 500);
-    }
-    return;
-  }
-  showCardPopup(idx, options);
+  showCardPopup(idx);
 }
 
 function makeMove(idx, cardType) {

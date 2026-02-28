@@ -756,8 +756,16 @@ body {
   background: #f0f0f0;
   border-color: #ccc;
 }
-.card-popup-opt:active {
+.card-popup-opt:active:not(.disabled) {
   transform: scale(0.97);
+}
+.card-popup-opt.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.card-popup-opt.disabled:hover {
+  background: #fafafa;
+  border-color: #e8e8e8;
 }
 .card-popup-opt .cp-icon {
   font-size: 1.4rem;
