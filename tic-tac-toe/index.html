@@ -18,7 +18,7 @@ body {
   align-items: center;
 }
 
-/* === Shared full-screen === */
+/* === Shared === */
 .screen {
   width: 100%;
   min-height: 100vh;
@@ -32,10 +32,7 @@ body {
 }
 .screen.active { display: flex; animation: fadeIn 0.3s ease; }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* === Start screen === */
 #screen-start .preview-board {
@@ -85,7 +82,6 @@ body {
   transform: translateY(-2px);
 }
 .start-play-btn:active { transform: translateY(0); }
-
 .nav-link {
   color: rgba(255,255,255,0.5);
   text-decoration: none;
@@ -94,20 +90,20 @@ body {
 }
 .nav-link:hover { color: rgba(255,255,255,0.8); }
 
-/* === Mode select screen === */
-#screen-mode .mode-title {
+/* === Mode / menu buttons === */
+.menu-title {
   font-family: 'Inter', sans-serif;
   font-size: 1.5rem;
   font-weight: 800;
   color: #fff;
 }
-.mode-menu {
+.menu-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 280px;
 }
-.mode-btn {
+.menu-btn {
   padding: 18px 24px;
   border: 2px solid rgba(255,255,255,0.3);
   border-radius: 14px;
@@ -122,20 +118,24 @@ body {
   gap: 16px;
   text-align: left;
 }
-.mode-btn:hover {
+.menu-btn:hover {
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.6);
   transform: translateY(-2px);
 }
-.mode-btn:active { transform: translateY(0); }
-.mode-btn .icon {
+.menu-btn:active { transform: translateY(0); }
+.menu-btn.selected {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
+}
+.menu-btn .icon {
   font-size: 1.6rem;
   width: 36px;
   text-align: center;
   flex-shrink: 0;
 }
-.mode-btn .label-main { display: block; font-size: 1.1rem; }
-.mode-btn .label-sub {
+.menu-btn .label-main { display: block; font-size: 1.1rem; }
+.menu-btn .label-sub {
   display: block;
   font-size: 0.78rem;
   font-weight: 400;
@@ -194,13 +194,11 @@ body {
   align-items: center;
   gap: 16px;
 }
-
 .mode-label {
   font-size: 0.85rem;
   color: #888;
   font-weight: 500;
 }
-
 .status {
   font-size: 1.2rem;
   font-weight: bold;
@@ -222,7 +220,6 @@ body {
   border-radius: 12px;
   padding: 6px;
 }
-
 .cell {
   background: #fff;
   border: none;
@@ -249,7 +246,6 @@ body {
   animation: pulse 0.6s ease-in-out;
   background: #fff9c4;
 }
-
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.08); }
@@ -261,7 +257,6 @@ body {
   flex-wrap: wrap;
   justify-content: center;
 }
-
 .btn {
   padding: 10px 24px;
   border: none;
@@ -287,11 +282,105 @@ body {
 .score-x { color: #e74c3c; }
 .score-o { color: #3498db; }
 .score-draw { color: #888; }
+
+/* === Result screen === */
+.result-icon {
+  font-size: 4rem;
+}
+.result-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+}
+.result-score {
+  display: flex;
+  gap: 24px;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.8);
+}
+.result-score .rx { color: #e74c3c; }
+.result-score .ro { color: #3498db; }
+.result-score .rd { color: rgba(255,255,255,0.5); }
+.result-score span { font-weight: 700; }
+
+.difficulty-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 280px;
+}
+.difficulty-section.visible { display: flex; }
+.difficulty-label {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 4px;
+}
+.difficulty-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.diff-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.diff-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.5);
+}
+.diff-btn.selected {
+  background: rgba(255,255,255,0.15);
+  border-color: #fff;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 280px;
+}
+.result-btn {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.result-btn:hover { transform: translateY(-2px); }
+.result-btn:active { transform: translateY(0); }
+.result-btn-continue {
+  background: #fff;
+  color: #0f3460;
+  border: none;
+}
+.result-btn-continue:hover { background: #e8e8e8; }
+.result-btn-quit {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 2px solid rgba(255,255,255,0.3);
+}
+.result-btn-quit:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
+}
 </style>
 </head>
 <body>
 
-<!-- 1. Start screen -->
+<!-- 1. Start -->
 <div class="screen active" id="screen-start">
   <div class="preview-board">
     <div class="preview-cell">X</div>
@@ -310,18 +399,18 @@ body {
   <a href="../" class="nav-link">&larr; トップに戻る</a>
 </div>
 
-<!-- 2. Mode select screen -->
+<!-- 2. Mode select -->
 <div class="screen" id="screen-mode">
-  <div class="mode-title">モードをえらぶ</div>
-  <div class="mode-menu">
-    <button class="mode-btn" onclick="startGame('cpu')">
+  <div class="menu-title">モードをえらぶ</div>
+  <div class="menu-list">
+    <button class="menu-btn" onclick="startGame('cpu')">
       <span class="icon">🤖</span>
       <span>
         <span class="label-main">ひとりで遊ぶ</span>
         <span class="label-sub">CPUと対戦</span>
       </span>
     </button>
-    <button class="mode-btn" onclick="startGame('human')">
+    <button class="menu-btn" onclick="startGame('human')">
       <span class="icon">👥</span>
       <span>
         <span class="label-main">ふたりで遊ぶ</span>
@@ -332,32 +421,46 @@ body {
   <button class="back-btn" onclick="showScreen('screen-start')">&larr; もどる</button>
 </div>
 
-<!-- 3. Game screen -->
+<!-- 3. Game -->
 <div class="screen" id="screen-game">
   <div class="header">
     <button class="header-btn left" onclick="showScreen('screen-mode')">&larr; モード選択</button>
     <h1>Tic-Tac-Toe</h1>
   </div>
-
   <div class="game-body">
-    <div class="mode-label" id="mode-label">vs CPU</div>
-
+    <div class="mode-label" id="mode-label">vs CPU（ふつう）</div>
     <div class="score-board">
       <div class="score-x">X: <span id="score-x">0</span></div>
       <div class="score-draw">引分: <span id="score-draw">0</span></div>
       <div class="score-o">O: <span id="score-o">0</span></div>
     </div>
-
     <div class="status" id="status">
       <span class="mark-x">X</span> の番です
     </div>
-
     <div class="board" id="board"></div>
+  </div>
+</div>
 
-    <div class="controls">
-      <button class="btn btn-primary" onclick="resetGame()">もう一度</button>
-      <button class="btn btn-secondary" onclick="resetAll()">スコアリセット</button>
+<!-- 4. Result -->
+<div class="screen" id="screen-result">
+  <div class="result-icon" id="result-icon"></div>
+  <div class="result-text" id="result-text"></div>
+  <div class="result-score">
+    <div class="rx">X: <span id="rs-x">0</span></div>
+    <div class="rd">引分: <span id="rs-draw">0</span></div>
+    <div class="ro">O: <span id="rs-o">0</span></div>
+  </div>
+  <div class="difficulty-section" id="difficulty-section">
+    <div class="difficulty-label">CPU の強さ</div>
+    <div class="difficulty-group">
+      <button class="diff-btn" onclick="setDifficulty('easy')">かんたん</button>
+      <button class="diff-btn selected" onclick="setDifficulty('normal')">ふつう</button>
+      <button class="diff-btn" onclick="setDifficulty('hard')">つよい</button>
     </div>
+  </div>
+  <div class="result-actions">
+    <button class="result-btn result-btn-continue" onclick="continueGame()">つづける</button>
+    <button class="result-btn result-btn-quit" onclick="quitGame()">おわる</button>
   </div>
 </div>
 
@@ -366,6 +469,7 @@ var board = Array(9).fill('');
 var current = 'X';
 var gameOver = false;
 var mode = 'cpu';
+var difficulty = 'normal'; // easy, normal, hard
 var scores = { X: 0, O: 0, draw: 0 };
 
 var WIN_LINES = [
@@ -383,9 +487,24 @@ function showScreen(id) {
 
 function startGame(m) {
   mode = m;
-  document.getElementById('mode-label').textContent = m === 'cpu' ? 'vs CPU' : '2人対戦';
-  resetAll();
+  difficulty = 'normal';
+  scores = { X: 0, O: 0, draw: 0 };
+  updateScores();
+  updateModeLabel();
+  updateDifficultyButtons();
+  resetGame();
   showScreen('screen-game');
+}
+
+function updateModeLabel() {
+  var label = '';
+  if (mode === 'cpu') {
+    var diffNames = { easy: 'かんたん', normal: 'ふつう', hard: 'つよい' };
+    label = 'vs CPU（' + diffNames[difficulty] + '）';
+  } else {
+    label = '2人対戦';
+  }
+  document.getElementById('mode-label').textContent = label;
 }
 
 function initBoard() {
@@ -423,6 +542,7 @@ function makeMove(idx) {
     scores[current]++;
     updateScores();
     setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の勝ち!');
+    setTimeout(function() { showResult(current); }, 800);
     return;
   }
 
@@ -431,11 +551,60 @@ function makeMove(idx) {
     scores.draw++;
     updateScores();
     setStatus('引き分け!');
+    setTimeout(function() { showResult(null); }, 800);
     return;
   }
 
   current = current === 'X' ? 'O' : 'X';
   setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の番です');
+}
+
+function showResult(winner) {
+  var icon = document.getElementById('result-icon');
+  var text = document.getElementById('result-text');
+  if (winner === 'X') {
+    icon.textContent = '🎉';
+    text.innerHTML = '<span style="color:#e74c3c">X</span> の勝ち!';
+  } else if (winner === 'O') {
+    icon.textContent = '🎉';
+    text.innerHTML = '<span style="color:#3498db">O</span> の勝ち!';
+  } else {
+    icon.textContent = '🤝';
+    text.textContent = '引き分け!';
+  }
+  document.getElementById('rs-x').textContent = scores.X;
+  document.getElementById('rs-o').textContent = scores.O;
+  document.getElementById('rs-draw').textContent = scores.draw;
+  var diffSection = document.getElementById('difficulty-section');
+  if (mode === 'cpu') {
+    diffSection.classList.add('visible');
+  } else {
+    diffSection.classList.remove('visible');
+  }
+  showScreen('screen-result');
+}
+
+function continueGame() {
+  updateModeLabel();
+  resetGame();
+  showScreen('screen-game');
+}
+
+function quitGame() {
+  showScreen('screen-start');
+}
+
+function setDifficulty(d) {
+  difficulty = d;
+  updateDifficultyButtons();
+}
+
+function updateDifficultyButtons() {
+  var btns = document.querySelectorAll('.diff-btn');
+  var levels = ['easy', 'normal', 'hard'];
+  btns.forEach(function(btn, i) {
+    btn.classList.toggle('selected', levels[i] === difficulty);
+  });
 }
 
 function checkWin(mark) {
@@ -448,7 +617,27 @@ function checkWin(mark) {
   return null;
 }
 
+// === CPU AI ===
 function cpuMove() {
+  var move;
+  if (difficulty === 'easy') {
+    move = cpuEasy();
+  } else if (difficulty === 'hard') {
+    move = cpuHard();
+  } else {
+    move = cpuNormal();
+  }
+  makeMove(move);
+}
+
+// かんたん: ランダム
+function cpuEasy() {
+  var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
+  return empty[Math.floor(Math.random() * empty.length)];
+}
+
+// ふつう: 勝利手→防御手→中央→角→ランダム
+function cpuNormal() {
   var move = findWinningMove('O');
   if (move === -1) move = findWinningMove('X');
   if (move === -1 && !board[4]) move = 4;
@@ -460,7 +649,47 @@ function cpuMove() {
     var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
     move = empty[Math.floor(Math.random() * empty.length)];
   }
-  makeMove(move);
+  return move;
+}
+
+// つよい: minimax
+function cpuHard() {
+  var bestScore = -Infinity;
+  var bestMove = -1;
+  for (var i = 0; i < 9; i++) {
+    if (board[i]) continue;
+    board[i] = 'O';
+    var s = minimax(board, 0, false);
+    board[i] = '';
+    if (s > bestScore) { bestScore = s; bestMove = i; }
+  }
+  return bestMove;
+}
+
+function minimax(b, depth, isMax) {
+  if (checkWin('O')) return 10 - depth;
+  if (checkWin('X')) return depth - 10;
+  if (b.every(function(c) { return c; })) return 0;
+
+  if (isMax) {
+    var best = -Infinity;
+    for (var i = 0; i < 9; i++) {
+      if (b[i]) continue;
+      b[i] = 'O';
+      best = Math.max(best, minimax(b, depth + 1, false));
+      b[i] = '';
+    }
+    return best;
+  } else {
+    var best = Infinity;
+    for (var i = 0; i < 9; i++) {
+      if (b[i]) continue;
+      b[i] = 'X';
+      best = Math.min(best, minimax(b, depth + 1, true));
+      b[i] = '';
+    }
+    return best;
+  }
 }
 
 function findWinningMove(mark) {
@@ -489,12 +718,6 @@ function resetGame() {
   gameOver = false;
   initBoard();
   setStatus('<span class="mark-x">X</span> の番です');
-}
-
-function resetAll() {
-  scores = { X: 0, O: 0, draw: 0 };
-  updateScores();
-  resetGame();
 }
 </script>
 </body>
