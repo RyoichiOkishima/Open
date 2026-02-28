@@ -18,39 +18,34 @@ body {
   align-items: center;
 }
 
-/* === Start screen === */
-.start-screen {
+/* === Shared full-screen === */
+.screen {
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 32px;
   padding: 24px 16px;
-  animation: fadeIn 0.5s ease;
 }
-.start-screen .logo {
-  font-family: 'Inter', sans-serif;
-  font-size: 3rem;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 2px;
+.screen.active { display: flex; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-.start-screen .logo-sub {
-  font-size: 1rem;
-  color: rgba(255,255,255,0.6);
-  margin-top: -20px;
-}
-.start-screen .preview-board {
+
+/* === Start screen === */
+#screen-start .preview-board {
   display: grid;
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(3, 60px);
   gap: 4px;
   opacity: 0.3;
 }
-.start-screen .preview-cell {
+#screen-start .preview-cell {
   background: rgba(255,255,255,0.15);
   border-radius: 6px;
   display: flex;
@@ -60,16 +55,62 @@ body {
   font-weight: 800;
   color: #fff;
 }
-.start-menu {
+.logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+}
+.logo-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: -20px;
+}
+.start-play-btn {
+  padding: 16px 64px;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  background: transparent;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.start-play-btn:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+.start-play-btn:active { transform: translateY(0); }
+
+.nav-link {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+.nav-link:hover { color: rgba(255,255,255,0.8); }
+
+/* === Mode select screen === */
+#screen-mode .mode-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+.mode-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 260px;
+  gap: 16px;
+  width: 280px;
 }
-.start-btn {
-  padding: 14px 24px;
+.mode-btn {
+  padding: 18px 24px;
   border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 12px;
+  border-radius: 14px;
   background: transparent;
   color: #fff;
   font-size: 1.1rem;
@@ -78,50 +119,44 @@ body {
   transition: all 0.2s;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  text-align: left;
 }
-.start-btn:hover {
+.mode-btn:hover {
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.6);
   transform: translateY(-2px);
 }
-.start-btn:active { transform: translateY(0); }
-.start-btn .icon {
-  font-size: 1.4rem;
-  width: 32px;
+.mode-btn:active { transform: translateY(0); }
+.mode-btn .icon {
+  font-size: 1.6rem;
+  width: 36px;
   text-align: center;
+  flex-shrink: 0;
 }
-.start-btn .label-main { display: block; }
-.start-btn .label-sub {
+.mode-btn .label-main { display: block; font-size: 1.1rem; }
+.mode-btn .label-sub {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 400;
   opacity: 0.6;
-  margin-top: 2px;
+  margin-top: 3px;
 }
-.start-back {
+.back-btn {
+  background: none;
+  border: none;
   color: rgba(255,255,255,0.5);
-  text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  cursor: pointer;
   margin-top: 8px;
 }
-.start-back:hover { color: rgba(255,255,255,0.8); }
+.back-btn:hover { color: rgba(255,255,255,0.8); }
 
 /* === Game screen === */
-.game-screen {
-  display: none;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  animation: fadeIn 0.3s ease;
+#screen-game {
+  min-height: 100vh;
+  background: #f5f5f5;
 }
-.game-screen.active { display: flex; }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 .header {
   width: 100%;
   background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
@@ -140,7 +175,6 @@ body {
   top: 50%;
   transform: translateY(-50%);
   color: #fff;
-  text-decoration: none;
   font-size: 0.85rem;
   opacity: 0.8;
   background: none;
@@ -149,11 +183,11 @@ body {
 }
 .header-btn:hover { opacity: 1; }
 .header-btn.left { left: 12px; }
-.header-btn.right { right: 12px; }
 
-.container {
+.game-body {
   max-width: 400px;
   width: 100%;
+  margin: 0 auto;
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
@@ -257,8 +291,8 @@ body {
 </head>
 <body>
 
-<!-- Start screen -->
-<div class="start-screen" id="screen-start">
+<!-- 1. Start screen -->
+<div class="screen active" id="screen-start">
   <div class="preview-board">
     <div class="preview-cell">X</div>
     <div class="preview-cell"></div>
@@ -272,15 +306,22 @@ body {
   </div>
   <div class="logo">三目並べ</div>
   <div class="logo-sub">3つ並べたら勝ち</div>
-  <div class="start-menu">
-    <button class="start-btn" onclick="startGame('cpu')">
+  <button class="start-play-btn" onclick="showScreen('screen-mode')">START</button>
+  <a href="../" class="nav-link">&larr; トップに戻る</a>
+</div>
+
+<!-- 2. Mode select screen -->
+<div class="screen" id="screen-mode">
+  <div class="mode-title">モードをえらぶ</div>
+  <div class="mode-menu">
+    <button class="mode-btn" onclick="startGame('cpu')">
       <span class="icon">🤖</span>
       <span>
         <span class="label-main">ひとりで遊ぶ</span>
         <span class="label-sub">CPUと対戦</span>
       </span>
     </button>
-    <button class="start-btn" onclick="startGame('human')">
+    <button class="mode-btn" onclick="startGame('human')">
       <span class="icon">👥</span>
       <span>
         <span class="label-main">ふたりで遊ぶ</span>
@@ -288,17 +329,17 @@ body {
       </span>
     </button>
   </div>
-  <a href="../" class="start-back">&larr; トップに戻る</a>
+  <button class="back-btn" onclick="showScreen('screen-start')">&larr; もどる</button>
 </div>
 
-<!-- Game screen -->
-<div class="game-screen" id="screen-game">
+<!-- 3. Game screen -->
+<div class="screen" id="screen-game">
   <div class="header">
-    <button class="header-btn left" onclick="backToStart()">&larr; 戻る</button>
+    <button class="header-btn left" onclick="showScreen('screen-mode')">&larr; モード選択</button>
     <h1>三目並べ</h1>
   </div>
 
-  <div class="container">
+  <div class="game-body">
     <div class="mode-label" id="mode-label">vs CPU</div>
 
     <div class="score-board">
@@ -333,17 +374,18 @@ var WIN_LINES = [
   [0,4,8],[2,4,6]
 ];
 
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
 function startGame(m) {
   mode = m;
   document.getElementById('mode-label').textContent = m === 'cpu' ? 'vs CPU' : '2人対戦';
-  document.getElementById('screen-start').style.display = 'none';
-  document.getElementById('screen-game').classList.add('active');
   resetAll();
-}
-
-function backToStart() {
-  document.getElementById('screen-game').classList.remove('active');
-  document.getElementById('screen-start').style.display = '';
+  showScreen('screen-game');
 }
 
 function initBoard() {
