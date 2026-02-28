@@ -13,8 +13,8 @@ var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
 var boardCard = Array(9).fill('');
 var cards = {
-  X: { super: 2, ultra: 1 },
-  O: { super: 2, ultra: 1 }
+  X: { normal: 4, super: 2, ultra: 1 },
+  O: { normal: 4, super: 2, ultra: 1 }
 };
 var pendingCellIdx = -1;
 
@@ -485,7 +485,7 @@ function initBoard() {
 
 function canPlace(idx, mark, cardType) {
   if (gameOver) return false;
-  if (cardType === 'normal') return !board[idx];
+  if (cardType === 'normal') return !board[idx] && cards[mark].normal > 0;
   if (cardType === 'super') return boardCard[idx] !== 'ultra';
   if (cardType === 'ultra') return board[idx] !== '';
   return false;
@@ -517,13 +517,14 @@ function findCardWinningMove(mark, cardType) {
 
 function updateCardSelector() {
   var mark = (mode === 'cpu') ? playerMark : current;
+  document.getElementById('card-normal').textContent = cards[mark].normal;
   document.getElementById('card-super').textContent = cards[mark].super;
   document.getElementById('card-ultra').textContent = cards[mark].ultra;
   var btns = document.querySelectorAll('.card-btn');
   for (var i = 0; i < btns.length; i++) {
     var btn = btns[i];
     var type = btn.dataset.card;
-    if (type !== 'normal' && cards[mark][type] <= 0) {
+    if (cards[mark][type] <= 0) {
       btn.classList.add('disabled');
     } else {
       btn.classList.remove('disabled');
@@ -543,7 +544,7 @@ function showCardPopup(idx, options) {
   var container = document.getElementById('card-popup-options');
   container.innerHTML = '';
   var info = {
-    normal: { icon: '🃏', name: 'ノーマル', desc: '空きマスに配置' },
+    normal: { icon: '🃏', name: 'ノーマル', desc: '残り ' + cards[mark].normal + ' 枚' },
     super:  { icon: '⚡', name: 'スーパー', desc: '残り ' + cards[mark].super + ' 枚' },
     ultra:  { icon: '🔥', name: 'ウルトラ', desc: '残り ' + cards[mark].ultra + ' 枚' }
   };
@@ -604,9 +605,7 @@ function onCellClick(e) {
 function makeMove(idx, cardType) {
   cardType = cardType || 'normal';
 
-  if (cardType !== 'normal') {
-    cards[current][cardType]--;
-  }
+  cards[current][cardType]--;
 
   board[idx] = current;
   boardCard[idx] = cardType;
@@ -1006,8 +1005,8 @@ function setupBoard() {
   board = Array(9).fill('');
   boardCard = Array(9).fill('');
   cards = {
-    X: { super: 2, ultra: 1 },
-    O: { super: 2, ultra: 1 }
+    X: { normal: 4, super: 2, ultra: 1 },
+    O: { normal: 4, super: 2, ultra: 1 }
   };
   current = 'X';
   gameOver = false;
