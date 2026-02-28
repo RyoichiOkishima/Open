@@ -311,8 +311,10 @@ function togglePause() {
   if (opening) {
     pauseTimer();
     var inGame = document.getElementById('screen-game').classList.contains('active');
-    document.getElementById('pause-close-icon').textContent = inGame ? '▶' : '✕';
-    document.getElementById('pause-close-label').textContent = inGame ? 'つづける' : '閉じる';
+    var gameOnly = document.querySelectorAll('.game-only');
+    for (var i = 0; i < gameOnly.length; i++) {
+      gameOnly[i].style.display = inGame ? '' : 'none';
+    }
   } else {
     if (!gameOver) resumeTimer();
   }

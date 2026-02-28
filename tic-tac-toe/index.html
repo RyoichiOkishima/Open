@@ -92,17 +92,17 @@
 </div>
 
 <!-- Pause overlay -->
-<div class="pause-overlay" id="pause-overlay">
-  <div class="pause-menu">
+<div class="pause-overlay" id="pause-overlay" onclick="togglePause()">
+  <div class="pause-menu" onclick="event.stopPropagation()">
     <div class="pause-menu-title">メニュー</div>
-    <button class="pause-item" id="pause-close-btn" onclick="togglePause()">
-      <span class="p-icon" id="pause-close-icon">▶</span><span id="pause-close-label">つづける</span>
+    <button class="pause-item game-only" id="pause-close-btn" onclick="togglePause()">
+      <span class="p-icon">▶</span>つづける
     </button>
-    <div class="pause-divider"></div>
-    <button class="pause-item" onclick="pauseRestart()">
+    <div class="pause-divider game-only"></div>
+    <button class="pause-item game-only" onclick="pauseRestart()">
       <span class="p-icon">🔄</span>最初から
     </button>
-    <button class="pause-item" onclick="pauseModeSelect()">
+    <button class="pause-item game-only" onclick="pauseModeSelect()">
       <span class="p-icon">🎮</span>モード選択
     </button>
     <button class="pause-item" onclick="toggleSound()">
