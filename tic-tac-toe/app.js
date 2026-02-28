@@ -1,6 +1,6 @@
 var BOARD_SIZE = 5;
 var BOARD_CELLS = BOARD_SIZE * BOARD_SIZE;
-var WIN_LENGTH = 3;
+var WIN_LENGTH = 4;
 
 function generateWinLines() {
   var lines = [];
@@ -42,8 +42,8 @@ var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
 var boardCard = Array(BOARD_CELLS).fill('');
 var cards = {
-  X: { normal: 7, super: 1, ultra: 1 },
-  O: { normal: 7, super: 1, ultra: 1 }
+  X: { normal: 10, super: 1, ultra: 1 },
+  O: { normal: 10, super: 1, ultra: 1 }
 };
 var pendingCellIdx = -1;
 
@@ -836,9 +836,11 @@ function continueGame() {
 function checkWin(mark) {
   for (var i = 0; i < WIN_LINES.length; i++) {
     var l = WIN_LINES[i];
-    if (board[l[0]] === mark && board[l[1]] === mark && board[l[2]] === mark) {
-      return l;
+    var won = true;
+    for (var j = 0; j < l.length; j++) {
+      if (board[l[j]] !== mark) { won = false; break; }
     }
+    if (won) return l;
   }
   return null;
 }
@@ -1186,10 +1188,12 @@ function evaluate(b) {
       else if (b[line[j]] === playerMark) player++;
     }
     if (cpu > 0 && player > 0) continue;
-    if (cpu === 2) score += 10;
-    else if (cpu === 1) score += 1;
-    if (player === 2) score -= 10;
-    else if (player === 1) score -= 1;
+    if (cpu === WIN_LENGTH - 1) score += 100;
+    else if (cpu === WIN_LENGTH - 2) score += 10;
+    else if (cpu > 0) score += 1;
+    if (player === WIN_LENGTH - 1) score -= 100;
+    else if (player === WIN_LENGTH - 2) score -= 10;
+    else if (player > 0) score -= 1;
   }
   return score;
 }
@@ -1241,8 +1245,8 @@ function setupBoard() {
   board = Array(BOARD_CELLS).fill('');
   boardCard = Array(BOARD_CELLS).fill('');
   cards = {
-    X: { normal: 7, super: 1, ultra: 1 },
-    O: { normal: 7, super: 1, ultra: 1 }
+    X: { normal: 10, super: 1, ultra: 1 },
+    O: { normal: 10, super: 1, ultra: 1 }
   };
   current = 'X';
   gameOver = false;
