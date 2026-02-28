@@ -13,8 +13,8 @@ var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
 var boardCard = Array(9).fill('');
 var cards = {
-  X: { normal: 4, super: 2, ultra: 1 },
-  O: { normal: 4, super: 2, ultra: 1 }
+  X: { normal: 3, super: 1, ultra: 1 },
+  O: { normal: 3, super: 1, ultra: 1 }
 };
 var pendingCellIdx = -1;
 
@@ -1116,8 +1116,8 @@ function setupBoard() {
   board = Array(9).fill('');
   boardCard = Array(9).fill('');
   cards = {
-    X: { normal: 4, super: 2, ultra: 1 },
-    O: { normal: 4, super: 2, ultra: 1 }
+    X: { normal: 3, super: 1, ultra: 1 },
+    O: { normal: 3, super: 1, ultra: 1 }
   };
   current = 'X';
   gameOver = false;
