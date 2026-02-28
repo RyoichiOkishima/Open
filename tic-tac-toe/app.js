@@ -13,6 +13,55 @@ var WIN_LINES = [
 ];
 
 var LEVEL_THRESHOLDS = [0, 2, 5, 10, 15, 25, 35, 50, 70, 100];
+var audioCtx = null;
+
+// === Sound effects (Web Audio API) ===
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playTone(freq, start, duration, type, vol) {
+  var ctx = getAudioCtx();
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, ctx.currentTime + start);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + duration);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + duration);
+}
+
+function sfxPlace(mark) {
+  if (!soundOn) return;
+  playTone(mark === 'X' ? 660 : 520, 0, 0.08, 'sine', 0.15);
+}
+
+function sfxWin() {
+  if (!soundOn) return;
+  playTone(523, 0, 0.15, 'sine', 0.25);
+  playTone(659, 0.12, 0.15, 'sine', 0.25);
+  playTone(784, 0.24, 0.25, 'sine', 0.25);
+  playTone(1047, 0.44, 0.35, 'triangle', 0.2);
+}
+
+function sfxLose() {
+  if (!soundOn) return;
+  playTone(440, 0, 0.2, 'sine', 0.2);
+  playTone(349, 0.18, 0.2, 'sine', 0.2);
+  playTone(294, 0.36, 0.35, 'sine', 0.2);
+}
+
+function sfxDraw() {
+  if (!soundOn) return;
+  playTone(440, 0, 0.12, 'triangle', 0.15);
+  playTone(440, 0.18, 0.12, 'triangle', 0.15);
+}
 
 // === localStorage persistence ===
 function loadStats() {
@@ -137,6 +186,7 @@ function makeMove(idx) {
   var cells = document.querySelectorAll('.cell');
   cells[idx].textContent = current;
   cells[idx].classList.add('taken', current.toLowerCase());
+  sfxPlace(current);
 
   var winLine = checkWin(current);
   if (winLine) {
@@ -145,9 +195,11 @@ function makeMove(idx) {
     scores[current]++;
     updateScores();
     if (mode === 'cpu') {
-      if (current === 'X') stats.cpuWins++;
-      else stats.cpuLosses++;
+      if (current === 'X') { stats.cpuWins++; sfxWin(); }
+      else { stats.cpuLosses++; sfxLose(); }
       saveStats();
+    } else {
+      sfxWin();
     }
     setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の勝ち!');
     setTimeout(function() { showResult(current); }, 800);
@@ -162,6 +214,7 @@ function makeMove(idx) {
       stats.cpuDraws++;
       saveStats();
     }
+    sfxDraw();
     setStatus('引き分け!');
     setTimeout(function() { showResult(null); }, 800);
     return;
