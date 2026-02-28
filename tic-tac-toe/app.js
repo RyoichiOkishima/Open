@@ -672,9 +672,19 @@ function showResult(winner) {
 }
 
 function continueGame() {
-  resetGame();
-  updateModeLabel();
-  showScreen('screen-game');
+  if (mode === 'cpu') {
+    playerMark = Math.random() < 0.5 ? 'X' : 'O';
+    cpuMark = playerMark === 'X' ? 'O' : 'X';
+    showCoinToss(playerMark, function() {
+      resetGame();
+      updateModeLabel();
+      showScreen('screen-game');
+    });
+  } else {
+    resetGame();
+    updateModeLabel();
+    showScreen('screen-game');
+  }
 }
 
 function checkWin(mark) {
