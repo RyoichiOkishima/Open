@@ -31,7 +31,6 @@ body {
   padding: 24px 16px;
 }
 .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* === Start screen === */
@@ -82,13 +81,6 @@ body {
   transform: translateY(-2px);
 }
 .start-play-btn:active { transform: translateY(0); }
-.nav-link {
-  color: rgba(255,255,255,0.5);
-  text-decoration: none;
-  font-size: 0.85rem;
-  margin-top: 8px;
-}
-.nav-link:hover { color: rgba(255,255,255,0.8); }
 
 /* === Mode / menu buttons === */
 .menu-title {
@@ -124,10 +116,6 @@ body {
   transform: translateY(-2px);
 }
 .menu-btn:active { transform: translateY(0); }
-.menu-btn.selected {
-  background: rgba(255,255,255,0.15);
-  border-color: #fff;
-}
 .menu-btn .icon {
   font-size: 1.6rem;
   width: 36px;
@@ -170,19 +158,83 @@ body {
   font-size: 1.2rem;
   font-weight: 800;
 }
-.header-btn {
+.gear-btn {
   position: absolute;
   top: 50%;
+  right: 12px;
   transform: translateY(-50%);
-  color: #fff;
-  font-size: 0.85rem;
-  opacity: 0.8;
   background: none;
   border: none;
+  color: #fff;
+  font-size: 1.3rem;
   cursor: pointer;
+  opacity: 0.8;
+  padding: 4px;
+  line-height: 1;
 }
-.header-btn:hover { opacity: 1; }
-.header-btn.left { left: 12px; }
+.gear-btn:hover { opacity: 1; }
+
+/* === Pause overlay === */
+.pause-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.pause-overlay.open { display: flex; }
+.pause-menu {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.pause-menu-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #333;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.pause-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  width: 100%;
+  text-align: left;
+}
+.pause-item:hover { background: #e8e8e8; }
+.pause-item .p-icon {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.pause-item.danger { color: #e74c3c; }
+.pause-item.danger:hover { background: #fde8e8; }
+.pause-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 4px 0;
+}
 
 .game-body {
   max-width: 400px;
@@ -251,27 +303,6 @@ body {
   50% { transform: scale(1.08); }
 }
 
-.controls {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.btn {
-  padding: 10px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-}
-.btn:active { transform: scale(0.97); }
-.btn-primary { background: #0f3460; color: #fff; }
-.btn-primary:hover { background: #1a4a7a; }
-.btn-secondary { background: #e0e0e0; color: #333; }
-.btn-secondary:hover { background: #d0d0d0; }
-
 .score-board {
   display: flex;
   gap: 24px;
@@ -284,9 +315,7 @@ body {
 .score-draw { color: #888; }
 
 /* === Result screen === */
-.result-icon {
-  font-size: 4rem;
-}
+.result-icon { font-size: 4rem; }
 .result-text {
   font-family: 'Inter', sans-serif;
   font-size: 2rem;
@@ -371,6 +400,7 @@ body {
   background: transparent;
   color: rgba(255,255,255,0.7);
   border: 2px solid rgba(255,255,255,0.3);
+  text-decoration: none;
 }
 .result-btn-quit:hover {
   border-color: rgba(255,255,255,0.6);
@@ -423,8 +453,10 @@ body {
 <!-- 3. Game -->
 <div class="screen" id="screen-game">
   <div class="header">
-    <button class="header-btn left" onclick="showScreen('screen-mode')">&larr; モード選択</button>
     <h1>Tic-Tac-Toe</h1>
+    <button class="gear-btn" onclick="togglePause()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 00-.48-.41h-3.84a.48.48 0 00-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87a.48.48 0 00.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.61 3.61 0 0112 15.6z"/></svg>
+    </button>
   </div>
   <div class="game-body">
     <div class="mode-label" id="mode-label">vs CPU（ふつう）</div>
@@ -437,6 +469,30 @@ body {
       <span class="mark-x">X</span> の番です
     </div>
     <div class="board" id="board"></div>
+  </div>
+</div>
+
+<!-- Pause overlay -->
+<div class="pause-overlay" id="pause-overlay">
+  <div class="pause-menu">
+    <div class="pause-menu-title">メニュー</div>
+    <button class="pause-item" onclick="togglePause()">
+      <span class="p-icon">▶</span>つづける
+    </button>
+    <div class="pause-divider"></div>
+    <button class="pause-item" onclick="pauseRestart()">
+      <span class="p-icon">🔄</span>最初から
+    </button>
+    <button class="pause-item" onclick="pauseModeSelect()">
+      <span class="p-icon">🎮</span>モード選択
+    </button>
+    <button class="pause-item" onclick="toggleSound()">
+      <span class="p-icon" id="sound-icon">🔊</span><span id="sound-label">音量 ON</span>
+    </button>
+    <div class="pause-divider"></div>
+    <a class="pause-item danger" href="../">
+      <span class="p-icon">🚪</span>やめる
+    </a>
   </div>
 </div>
 
@@ -459,7 +515,7 @@ body {
   </div>
   <div class="result-actions">
     <button class="result-btn result-btn-continue" onclick="continueGame()">つづける</button>
-    <a class="result-btn result-btn-quit" href="../" style="text-decoration:none;">おわる</a>
+    <a class="result-btn result-btn-quit" href="../">おわる</a>
   </div>
 </div>
 
@@ -468,8 +524,9 @@ var board = Array(9).fill('');
 var current = 'X';
 var gameOver = false;
 var mode = 'cpu';
-var difficulty = 'normal'; // easy, normal, hard
+var difficulty = 'normal';
 var scores = { X: 0, O: 0, draw: 0 };
+var soundOn = true;
 
 var WIN_LINES = [
   [0,1,2],[3,4,5],[6,7,8],
@@ -482,6 +539,29 @@ function showScreen(id) {
     s.classList.remove('active');
   });
   document.getElementById(id).classList.add('active');
+}
+
+// Pause menu
+function togglePause() {
+  document.getElementById('pause-overlay').classList.toggle('open');
+}
+
+function pauseRestart() {
+  togglePause();
+  scores = { X: 0, O: 0, draw: 0 };
+  updateScores();
+  resetGame();
+}
+
+function pauseModeSelect() {
+  togglePause();
+  showScreen('screen-mode');
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('sound-icon').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
 }
 
 function startGame(m) {
@@ -589,10 +669,6 @@ function continueGame() {
   showScreen('screen-game');
 }
 
-function quitGame() {
-  showScreen('screen-start');
-}
-
 function setDifficulty(d) {
   difficulty = d;
   updateDifficultyButtons();
@@ -629,13 +705,11 @@ function cpuMove() {
   makeMove(move);
 }
 
-// かんたん: ランダム
 function cpuEasy() {
   var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
   return empty[Math.floor(Math.random() * empty.length)];
 }
 
-// ふつう: 勝利手→防御手→中央→角→ランダム
 function cpuNormal() {
   var move = findWinningMove('O');
   if (move === -1) move = findWinningMove('X');
@@ -651,7 +725,6 @@ function cpuNormal() {
   return move;
 }
 
-// つよい: minimax
 function cpuHard() {
   var bestScore = -Infinity;
   var bestMove = -1;
@@ -669,7 +742,6 @@ function minimax(b, depth, isMax) {
   if (checkWin('O')) return 10 - depth;
   if (checkWin('X')) return depth - 10;
   if (b.every(function(c) { return c; })) return 0;
-
   if (isMax) {
     var best = -Infinity;
     for (var i = 0; i < 9; i++) {
