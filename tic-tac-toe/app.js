@@ -326,6 +326,27 @@ function pauseModeSelect() {
   showScreen('screen-mode');
 }
 
+// === Data reset ===
+function confirmReset() {
+  document.getElementById('confirm-overlay').classList.add('open');
+}
+
+function cancelReset() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+}
+
+function executeReset() {
+  try {
+    localStorage.removeItem('tictactoe_stats');
+    localStorage.removeItem('tictactoe_haptic');
+  } catch(e) {}
+  stats = { cpuWins: 0, cpuLosses: 0, cpuDraws: 0, xp: 0 };
+  winStreak = 0;
+  lastBossLevel = 0;
+  document.getElementById('confirm-overlay').classList.remove('open');
+  document.getElementById('pause-overlay').classList.remove('open');
+}
+
 function toggleSound() {
   soundOn = !soundOn;
   document.getElementById('sound-icon').textContent = soundOn ? '🔊' : '🔇';
@@ -672,17 +693,41 @@ function checkWin(mark) {
 
 // === CPU AI (auto-adjusts to user level) ===
 // Lv1: 1% minimax / 1% strategy / 98% random
-// Lv50: 50% minimax / 50% strategy / 0% random
-// Lv100: 100% minimax (perfect play)
+// Difficulty blend: linear interpolation between breakpoints
+// Lv1:  15/5/80  Lv25: 25/10/65  Lv50: 60/10/30  Lv75: 60/40/0  Lv100: 100/0/0
 // BOSS: level + 20 (capped at 100)
+function lerp(x, x0, x1, y0, y1) {
+  return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+
+function getDifficultyBlend(level) {
+  var bp = [
+    { lv: 1,   mm: 15, st: 5  },
+    { lv: 25,  mm: 25, st: 10 },
+    { lv: 50,  mm: 60, st: 10 },
+    { lv: 75,  mm: 60, st: 40 },
+    { lv: 100, mm: 100, st: 0 }
+  ];
+  if (level <= bp[0].lv) return { mm: bp[0].mm, st: bp[0].st };
+  for (var i = 1; i < bp.length; i++) {
+    if (level <= bp[i].lv) {
+      var mm = lerp(level, bp[i-1].lv, bp[i].lv, bp[i-1].mm, bp[i].mm);
+      var st = lerp(level, bp[i-1].lv, bp[i].lv, bp[i-1].st, bp[i].st);
+      return { mm: mm, st: st };
+    }
+  }
+  return { mm: 100, st: 0 };
+}
+
 function cpuMove() {
   var level = getLevel();
   if (isBossRound) level = Math.min(level + 20, 100);
+  var blend = getDifficultyBlend(level);
   var roll = Math.random() * 100;
   var move;
-  if (roll < level) {
+  if (roll < blend.mm) {
     move = cpuHard();
-  } else if (roll < Math.min(level * 2, 100)) {
+  } else if (roll < blend.mm + blend.st) {
     move = cpuNormal();
   } else {
     move = cpuEasy();

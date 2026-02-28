@@ -100,9 +100,23 @@
       <span class="p-icon" id="haptic-icon">📳</span><span id="haptic-label">振動 ON</span>
     </button>
     <div class="pause-divider"></div>
+    <button class="pause-item danger" onclick="confirmReset()">
+      <span class="p-icon">🗑️</span>データ初期化
+    </button>
     <a class="pause-item danger" href="../">
       <span class="p-icon">🚪</span>おわる
     </a>
+  </div>
+</div>
+
+<!-- Reset confirm overlay -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-text">本当に初期化しますか？<br>経験値・戦績がすべて消えます</div>
+    <div class="confirm-actions">
+      <button class="confirm-btn confirm-yes" onclick="executeReset()">はい</button>
+      <button class="confirm-btn confirm-no" onclick="cancelReset()">いいえ</button>
+    </div>
   </div>
 </div>
 
