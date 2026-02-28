@@ -1,4 +1,33 @@
-var board = Array(9).fill('');
+var BOARD_SIZE = 5;
+var BOARD_CELLS = BOARD_SIZE * BOARD_SIZE;
+var WIN_LENGTH = 3;
+
+function generateWinLines() {
+  var lines = [];
+  for (var r = 0; r < BOARD_SIZE; r++) {
+    for (var c = 0; c <= BOARD_SIZE - WIN_LENGTH; c++) {
+      var h = [];
+      for (var k = 0; k < WIN_LENGTH; k++) h.push(r * BOARD_SIZE + c + k);
+      lines.push(h);
+      var v = [];
+      for (var k = 0; k < WIN_LENGTH; k++) v.push((c + k) * BOARD_SIZE + r);
+      lines.push(v);
+    }
+  }
+  for (var r = 0; r <= BOARD_SIZE - WIN_LENGTH; r++) {
+    for (var c = 0; c <= BOARD_SIZE - WIN_LENGTH; c++) {
+      var d1 = [];
+      for (var k = 0; k < WIN_LENGTH; k++) d1.push((r + k) * BOARD_SIZE + c + k);
+      lines.push(d1);
+      var d2 = [];
+      for (var k = 0; k < WIN_LENGTH; k++) d2.push((r + k) * BOARD_SIZE + (c + WIN_LENGTH - 1 - k));
+      lines.push(d2);
+    }
+  }
+  return lines;
+}
+
+var board = Array(BOARD_CELLS).fill('');
 var current = 'X';
 var gameOver = false;
 var mode = 'cpu';
@@ -11,18 +40,14 @@ var lastBossLevel = 0;
 var soundOn = true;
 var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
-var boardCard = Array(9).fill('');
+var boardCard = Array(BOARD_CELLS).fill('');
 var cards = {
-  X: { normal: 5, super: 1, ultra: 1 },
-  O: { normal: 5, super: 1, ultra: 1 }
+  X: { normal: 7, super: 1, ultra: 1 },
+  O: { normal: 7, super: 1, ultra: 1 }
 };
 var pendingCellIdx = -1;
 
-var WIN_LINES = [
-  [0,1,2],[3,4,5],[6,7,8],
-  [0,3,6],[1,4,7],[2,5,8],
-  [0,4,8],[2,4,6]
-];
+var WIN_LINES = generateWinLines();
 
 var MAX_LEVEL = 100;
 var lastXpGain = 0;
@@ -479,7 +504,7 @@ function updateModeLabel() {
 function initBoard() {
   var el = document.getElementById('board');
   el.innerHTML = '';
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     var cell = document.createElement('button');
     cell.className = 'cell';
     cell.dataset.index = i;
@@ -497,7 +522,7 @@ function canPlace(idx, mark, cardType) {
 }
 
 function canPlaceAny(mark) {
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     if (canPlace(i, mark, 'normal')) return true;
     if (cards[mark].super > 0 && canPlace(i, mark, 'super')) return true;
     if (cards[mark].ultra > 0 && canPlace(i, mark, 'ultra')) return true;
@@ -506,7 +531,7 @@ function canPlaceAny(mark) {
 }
 
 function findCardWinningMove(mark, cardType) {
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     if (!canPlace(i, mark, cardType)) continue;
     var oldMark = board[i];
     var oldCard = boardCard[i];
@@ -868,7 +893,7 @@ function cpuMove() {
 
 function cpuEasy() {
   var empty = [];
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     if (!board[i]) empty.push(i);
   }
   if (!empty.length) return null;
@@ -880,8 +905,10 @@ function cpuNormal() {
   if (cardMove) return cardMove;
   var strategic = cpuStrategicCard();
   if (strategic) return strategic;
-  if (!board[4] && cards[cpuMark].normal > 0) return { idx: 4, card: 'normal' };
-  var corners = [0,2,6,8].filter(function(i) { return !board[i] && cards[cpuMark].normal > 0; });
+  var CENTER = Math.floor(BOARD_CELLS / 2);
+  var CORNERS = [0, BOARD_SIZE - 1, BOARD_CELLS - BOARD_SIZE, BOARD_CELLS - 1];
+  if (!board[CENTER] && cards[cpuMark].normal > 0) return { idx: CENTER, card: 'normal' };
+  var corners = CORNERS.filter(function(i) { return !board[i] && cards[cpuMark].normal > 0; });
   if (corners.length) return { idx: corners[Math.floor(Math.random() * corners.length)], card: 'normal' };
   var empty = board.map(function(v,i) { return (!v && cards[cpuMark].normal > 0) ? i : -1; }).filter(function(i) { return i >= 0; });
   if (!empty.length) return null;
@@ -894,12 +921,15 @@ function cpuHard() {
   var strategic = cpuStrategicCard();
   if (strategic) return strategic;
   // Minimax with card vulnerability awareness
+  var level = getLevel();
+  if (isBossRound) level = Math.min(level + 20, 100);
+  MAX_DEPTH = level < 30 ? 2 : level < 60 ? 3 : level < 80 ? 4 : 5;
   var moves = [];
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     if (board[i] || cards[cpuMark].normal <= 0) continue;
     board[i] = cpuMark;
     boardCard[i] = 'normal';
-    var s = minimax(board, 0, false);
+    var s = minimax(board, 0, false, -Infinity, Infinity);
     var vuln = countCardThreats(playerMark);
     board[i] = '';
     boardCard[i] = '';
@@ -919,7 +949,7 @@ function cpuHard() {
 function lineInfo(line, mark) {
   var opp = mark === 'X' ? 'O' : 'X';
   var my = 0, op = 0, myIdx = [], opIdx = [], emptyIdx = [];
-  for (var j = 0; j < 3; j++) {
+  for (var j = 0; j < line.length; j++) {
     var c = line[j];
     if (board[c] === mark) { my++; myIdx.push(c); }
     else if (board[c] === opp) { op++; opIdx.push(c); }
@@ -1055,8 +1085,9 @@ function cpuStrategicCard() {
   }
 
   // S3: Super - take center from opponent
-  if (cards[cpuMark].super > 0 && board[4] === opp && canPlace(4, cpuMark, 'super')) {
-    return { idx: 4, card: 'super' };
+  var CENTER = Math.floor(BOARD_CELLS / 2);
+  if (cards[cpuMark].super > 0 && board[CENTER] === opp && canPlace(CENTER, cpuMark, 'super')) {
+    return { idx: CENTER, card: 'super' };
   }
 
   // S4: Super - overwrite opponent mark to create 2-in-a-row
@@ -1096,7 +1127,7 @@ function cpuFallbackCard() {
   var validMoves = [];
   for (var t = 0; t < types.length; t++) {
     if (cards[cpuMark][types[t]] <= 0) continue;
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < BOARD_CELLS; i++) {
       if (canPlace(i, cpuMark, types[t])) {
         validMoves.push({ idx: i, card: types[t] });
       }
@@ -1108,33 +1139,63 @@ function cpuFallbackCard() {
   return { idx: 0, card: 'normal' };
 }
 
-function minimax(b, depth, isMax) {
-  if (checkWin(cpuMark)) return 10 - depth;
-  if (checkWin(playerMark)) return depth - 10;
-  if (b.every(function(c) { return c; })) return 0;
+var MAX_DEPTH = 4;
+
+function minimax(b, depth, isMax, alpha, beta) {
+  if (checkWin(cpuMark)) return 1000 - depth;
+  if (checkWin(playerMark)) return depth - 1000;
+  if (depth >= MAX_DEPTH) return evaluate(b);
+  var hasEmpty = false;
+  for (var i = 0; i < BOARD_CELLS; i++) { if (!b[i]) { hasEmpty = true; break; } }
+  if (!hasEmpty) return 0;
+
   if (isMax) {
     var best = -Infinity;
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < BOARD_CELLS; i++) {
       if (b[i]) continue;
       b[i] = cpuMark;
-      best = Math.max(best, minimax(b, depth + 1, false));
+      var s = minimax(b, depth + 1, false, alpha, beta);
       b[i] = '';
+      best = Math.max(best, s);
+      alpha = Math.max(alpha, best);
+      if (beta <= alpha) break;
     }
     return best;
   } else {
     var best = Infinity;
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < BOARD_CELLS; i++) {
       if (b[i]) continue;
       b[i] = playerMark;
-      best = Math.min(best, minimax(b, depth + 1, true));
+      var s = minimax(b, depth + 1, true, alpha, beta);
       b[i] = '';
+      best = Math.min(best, s);
+      beta = Math.min(beta, best);
+      if (beta <= alpha) break;
     }
     return best;
   }
 }
 
+function evaluate(b) {
+  var score = 0;
+  for (var w = 0; w < WIN_LINES.length; w++) {
+    var line = WIN_LINES[w];
+    var cpu = 0, player = 0;
+    for (var j = 0; j < WIN_LENGTH; j++) {
+      if (b[line[j]] === cpuMark) cpu++;
+      else if (b[line[j]] === playerMark) player++;
+    }
+    if (cpu > 0 && player > 0) continue;
+    if (cpu === 2) score += 10;
+    else if (cpu === 1) score += 1;
+    if (player === 2) score -= 10;
+    else if (player === 1) score -= 1;
+  }
+  return score;
+}
+
 function findWinningMove(mark) {
-  for (var i = 0; i < 9; i++) {
+  for (var i = 0; i < BOARD_CELLS; i++) {
     if (board[i]) continue;
     board[i] = mark;
     if (checkWin(mark)) { board[i] = ''; return i; }
@@ -1177,11 +1238,11 @@ function resetGame() {
 }
 
 function setupBoard() {
-  board = Array(9).fill('');
-  boardCard = Array(9).fill('');
+  board = Array(BOARD_CELLS).fill('');
+  boardCard = Array(BOARD_CELLS).fill('');
   cards = {
-    X: { normal: 5, super: 1, ultra: 1 },
-    O: { normal: 5, super: 1, ultra: 1 }
+    X: { normal: 7, super: 1, ultra: 1 },
+    O: { normal: 7, super: 1, ultra: 1 }
   };
   current = 'X';
   gameOver = false;
