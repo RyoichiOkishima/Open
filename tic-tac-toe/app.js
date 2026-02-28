@@ -11,6 +11,12 @@ var lastBossLevel = 0;
 var soundOn = true;
 var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
+var boardCard = Array(9).fill('');
+var cards = {
+  X: { super: 2, ultra: 1 },
+  O: { super: 2, ultra: 1 }
+};
+var selectedCard = 'normal';
 
 var WIN_LINES = [
   [0,1,2],[3,4,5],[6,7,8],
@@ -477,21 +483,100 @@ function initBoard() {
   }
 }
 
+function canPlace(idx, mark, cardType) {
+  if (gameOver) return false;
+  if (cardType === 'normal') return !board[idx];
+  if (cardType === 'super') return boardCard[idx] !== 'ultra';
+  if (cardType === 'ultra') return board[idx] !== '';
+  return false;
+}
+
+function canPlaceAny(mark) {
+  for (var i = 0; i < 9; i++) {
+    if (canPlace(i, mark, 'normal')) return true;
+    if (cards[mark].super > 0 && canPlace(i, mark, 'super')) return true;
+    if (cards[mark].ultra > 0 && canPlace(i, mark, 'ultra')) return true;
+  }
+  return false;
+}
+
+function findCardWinningMove(mark, cardType) {
+  for (var i = 0; i < 9; i++) {
+    if (!canPlace(i, mark, cardType)) continue;
+    var oldMark = board[i];
+    var oldCard = boardCard[i];
+    board[i] = mark;
+    boardCard[i] = cardType;
+    var win = checkWin(mark);
+    board[i] = oldMark;
+    boardCard[i] = oldCard;
+    if (win) return i;
+  }
+  return -1;
+}
+
+function selectCard(type) {
+  if (gameOver) return;
+  if (mode === 'cpu' && current === cpuMark) return;
+  var mark = (mode === 'cpu') ? playerMark : current;
+  if (type !== 'normal' && cards[mark][type] <= 0) return;
+  selectedCard = type;
+  updateCardSelector();
+}
+
+function updateCardSelector() {
+  var mark = (mode === 'cpu') ? playerMark : current;
+  document.getElementById('card-super').textContent = cards[mark].super;
+  document.getElementById('card-ultra').textContent = cards[mark].ultra;
+  var btns = document.querySelectorAll('.card-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var btn = btns[i];
+    var type = btn.dataset.card;
+    btn.classList.remove('active');
+    if (type === selectedCard) btn.classList.add('active');
+    if (type !== 'normal' && cards[mark][type] <= 0) {
+      btn.classList.add('disabled');
+    } else {
+      btn.classList.remove('disabled');
+    }
+  }
+  var selector = document.getElementById('card-selector');
+  if (mode === 'cpu' && current === cpuMark) {
+    selector.classList.add('cpu-turn');
+  } else {
+    selector.classList.remove('cpu-turn');
+  }
+}
+
 function onCellClick(e) {
   var idx = parseInt(e.target.dataset.index);
-  if (board[idx] || gameOver) return;
+  if (gameOver) return;
   if (mode === 'cpu' && current === cpuMark) return;
-  makeMove(idx);
+  if (!canPlace(idx, current, selectedCard)) return;
+  var card = selectedCard;
+  selectedCard = 'normal';
+  makeMove(idx, card);
+  updateCardSelector();
   if (mode === 'cpu' && !gameOver && current === cpuMark) {
     setTimeout(cpuMove, 500);
   }
 }
 
-function makeMove(idx) {
+function makeMove(idx, cardType) {
+  cardType = cardType || 'normal';
+
+  if (cardType !== 'normal') {
+    cards[current][cardType]--;
+  }
+
   board[idx] = current;
+  boardCard[idx] = cardType;
   var cells = document.querySelectorAll('.cell');
+  cells[idx].className = 'cell taken ' + current.toLowerCase();
   cells[idx].textContent = current;
-  cells[idx].classList.add('taken', current.toLowerCase());
+  if (cardType !== 'normal') {
+    cells[idx].classList.add('card-' + cardType);
+  }
   sfxPlace(current);
   haptic();
 
@@ -549,7 +634,8 @@ function makeMove(idx) {
     return;
   }
 
-  if (board.every(function(c) { return c; })) {
+  var nextMark = current === 'X' ? 'O' : 'X';
+  if (!canPlaceAny(nextMark)) {
     gameOver = true;
     stopTimer();
     stopBgm();
@@ -575,7 +661,9 @@ function makeMove(idx) {
     return;
   }
 
-  current = current === 'X' ? 'O' : 'X';
+  current = nextMark;
+  selectedCard = 'normal';
+  updateCardSelector();
   if (mode === 'cpu') {
     var opp = getOpponentLabel();
     setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
@@ -724,38 +812,44 @@ function cpuMove() {
   if (isBossRound) level = Math.min(level + 20, 100);
   var blend = getDifficultyBlend(level);
   var roll = Math.random() * 100;
-  var move;
+  var result;
   if (roll < blend.mm) {
-    move = cpuHard();
+    result = cpuHard();
   } else if (roll < blend.mm + blend.st) {
-    move = cpuNormal();
+    result = cpuNormal();
   } else {
-    move = cpuEasy();
+    result = cpuEasy();
   }
-  makeMove(move);
+  if (!result) {
+    result = cpuFallbackCard();
+  }
+  makeMove(result.idx, result.card);
+  updateCardSelector();
 }
 
 function cpuEasy() {
-  var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
-  return empty[Math.floor(Math.random() * empty.length)];
+  var empty = [];
+  for (var i = 0; i < 9; i++) {
+    if (!board[i]) empty.push(i);
+  }
+  if (!empty.length) return null;
+  return { idx: empty[Math.floor(Math.random() * empty.length)], card: 'normal' };
 }
 
 function cpuNormal() {
-  var move = findWinningMove(cpuMark);
-  if (move === -1) move = findWinningMove(playerMark);
-  if (move === -1 && !board[4]) move = 4;
-  if (move === -1) {
-    var corners = [0,2,6,8].filter(function(i) { return !board[i]; });
-    if (corners.length) move = corners[Math.floor(Math.random() * corners.length)];
-  }
-  if (move === -1) {
-    var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
-    move = empty[Math.floor(Math.random() * empty.length)];
-  }
-  return move;
+  var cardMove = cpuCheckCards();
+  if (cardMove) return cardMove;
+  if (!board[4]) return { idx: 4, card: 'normal' };
+  var corners = [0,2,6,8].filter(function(i) { return !board[i]; });
+  if (corners.length) return { idx: corners[Math.floor(Math.random() * corners.length)], card: 'normal' };
+  var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
+  if (!empty.length) return null;
+  return { idx: empty[Math.floor(Math.random() * empty.length)], card: 'normal' };
 }
 
 function cpuHard() {
+  var cardMove = cpuCheckCards();
+  if (cardMove) return cardMove;
   var bestScore = -Infinity;
   var bestMove = -1;
   for (var i = 0; i < 9; i++) {
@@ -765,7 +859,41 @@ function cpuHard() {
     board[i] = '';
     if (s > bestScore) { bestScore = s; bestMove = i; }
   }
-  return bestMove;
+  if (bestMove === -1) return null;
+  return { idx: bestMove, card: 'normal' };
+}
+
+function cpuCheckCards() {
+  var normalWin = findWinningMove(cpuMark);
+  if (normalWin !== -1) return { idx: normalWin, card: 'normal' };
+  if (cards[cpuMark].super > 0) {
+    var sw = findCardWinningMove(cpuMark, 'super');
+    if (sw !== -1) return { idx: sw, card: 'super' };
+  }
+  if (cards[cpuMark].ultra > 0) {
+    var uw = findCardWinningMove(cpuMark, 'ultra');
+    if (uw !== -1) return { idx: uw, card: 'ultra' };
+  }
+  var block = findWinningMove(playerMark);
+  if (block !== -1) return { idx: block, card: 'normal' };
+  return null;
+}
+
+function cpuFallbackCard() {
+  var types = ['super', 'ultra'];
+  var validMoves = [];
+  for (var t = 0; t < types.length; t++) {
+    if (cards[cpuMark][types[t]] <= 0) continue;
+    for (var i = 0; i < 9; i++) {
+      if (canPlace(i, cpuMark, types[t])) {
+        validMoves.push({ idx: i, card: types[t] });
+      }
+    }
+  }
+  if (validMoves.length) {
+    return validMoves[Math.floor(Math.random() * validMoves.length)];
+  }
+  return { idx: 0, card: 'normal' };
 }
 
 function minimax(b, depth, isMax) {
@@ -838,12 +966,19 @@ function resetGame() {
 
 function setupBoard() {
   board = Array(9).fill('');
+  boardCard = Array(9).fill('');
+  cards = {
+    X: { super: 2, ultra: 1 },
+    O: { super: 2, ultra: 1 }
+  };
+  selectedCard = 'normal';
   current = 'X';
   gameOver = false;
   var lv = getLevel();
   isBossRound = mode === 'cpu' && lv > 0 && lv % 5 === 0 && lastBossLevel < lv;
   if (isBossRound) lastBossLevel = lv;
   initBoard();
+  updateCardSelector();
   var bodyEl = document.querySelector('.game-body');
   if (bodyEl) {
     if (isBossRound) {
@@ -880,6 +1015,23 @@ function setupBoard() {
       setStatus('<span class="mark-x">X</span> の番です');
     }
   }
+}
+
+// === Rules / About overlays ===
+function showRules() {
+  document.getElementById('rules-overlay').classList.add('open');
+}
+
+function hideRules() {
+  document.getElementById('rules-overlay').classList.remove('open');
+}
+
+function showAbout() {
+  document.getElementById('about-overlay').classList.add('open');
+}
+
+function hideAbout() {
+  document.getElementById('about-overlay').classList.remove('open');
 }
 
 initHaptic();
