@@ -462,7 +462,7 @@ function makeMove(idx) {
     updateScores();
     if (mode === 'cpu') {
       lastIsBoss = isBossRound;
-      var drawXp = Math.floor(getXpReward() * 0.5);
+      var drawXp = Math.floor(getXpReward() * 0.2);
       lastBaseXp = drawXp;
       lastStreakBonus = 0;
       lastTimeBonus = 0;
