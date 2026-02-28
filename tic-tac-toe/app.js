@@ -7,6 +7,7 @@ var cpuMark = 'O';
 var scores = { X: 0, O: 0, draw: 0 };
 var winStreak = 0;
 var isBossRound = false;
+var lastBossLevel = 0;
 var soundOn = true;
 var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
@@ -217,6 +218,7 @@ function pauseRestart() {
   togglePause();
   scores = { X: 0, O: 0, draw: 0 };
   winStreak = 0;
+  lastBossLevel = 0;
   updateScores();
   resetGame();
   updateModeLabel();
@@ -642,7 +644,9 @@ function resetGame() {
   board = Array(9).fill('');
   current = 'X';
   gameOver = false;
-  isBossRound = mode === 'cpu' && winStreak > 0 && winStreak % 5 === 0;
+  var lv = getLevel();
+  isBossRound = mode === 'cpu' && lv > 0 && lv % 5 === 0 && lastBossLevel < lv;
+  if (isBossRound) lastBossLevel = lv;
   initBoard();
   stopTimer();
   var bodyEl = document.querySelector('.game-body');
