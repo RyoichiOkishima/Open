@@ -462,6 +462,59 @@ body {
   color: #fff;
 }
 
+/* === Boss intro === */
+.boss-intro-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: radial-gradient(circle, rgba(231,76,60,0.15) 0%, rgba(0,0,0,0.85) 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.boss-intro-overlay.show {
+  display: flex;
+  animation: bossFlash 1.8s ease-out forwards;
+}
+@keyframes bossFlash {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  20%  { background: radial-gradient(circle, rgba(231,76,60,0.4) 0%, rgba(0,0,0,0.9) 100%); }
+  40%  { background: radial-gradient(circle, rgba(231,76,60,0.15) 0%, rgba(0,0,0,0.85) 100%); }
+  100% { opacity: 1; }
+}
+.boss-intro-icon {
+  font-size: 5rem;
+  animation: bossIconPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+@keyframes bossIconPop {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.boss-intro-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e74c3c;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(231,76,60,0.6);
+  animation: bossTextSlide 0.5s ease-out 0.5s both;
+}
+@keyframes bossTextSlide {
+  0%   { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.boss-intro-level {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: rgba(231,76,60,0.7);
+  letter-spacing: 2px;
+  animation: bossTextSlide 0.5s ease-out 0.8s both;
+}
+
 /* === Coin toss === */
 .coin-toss-overlay {
   display: none;

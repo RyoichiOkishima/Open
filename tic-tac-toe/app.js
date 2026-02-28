@@ -234,6 +234,18 @@ function toggleSound() {
   document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
 }
 
+// === Boss intro ===
+function showBossIntro(callback) {
+  var overlay = document.getElementById('boss-intro-overlay');
+  var levelEl = document.getElementById('boss-intro-level');
+  levelEl.textContent = 'Lv.' + Math.min(getLevel() + 20, 100);
+  overlay.classList.add('show');
+  setTimeout(function() {
+    overlay.classList.remove('show');
+    callback();
+  }, 2200);
+}
+
 // === Coin toss ===
 function showCoinToss(mark, callback) {
   var overlay = document.getElementById('coin-toss-overlay');
@@ -633,7 +645,6 @@ function resetGame() {
   isBossRound = mode === 'cpu' && winStreak > 0 && winStreak % 5 === 0;
   initBoard();
   stopTimer();
-  startTimer();
   var bodyEl = document.querySelector('.game-body');
   if (bodyEl) {
     if (isBossRound) {
@@ -643,13 +654,28 @@ function resetGame() {
     }
   }
   updateScores();
-  if (mode === 'cpu') {
-    var opp = getOpponentLabel();
-    setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
-    if (current === cpuMark) {
-      setTimeout(cpuMove, 300);
-    }
+
+  if (isBossRound) {
+    setStatus('');
+    showBossIntro(function() {
+      startTimer();
+      updateModeLabel();
+      var opp = getOpponentLabel();
+      setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
+      if (current === cpuMark) {
+        setTimeout(cpuMove, 300);
+      }
+    });
   } else {
-    setStatus('<span class="mark-x">X</span> の番です');
+    startTimer();
+    if (mode === 'cpu') {
+      var opp = getOpponentLabel();
+      setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
+      if (current === cpuMark) {
+        setTimeout(cpuMove, 300);
+      }
+    } else {
+      setStatus('<span class="mark-x">X</span> の番です');
+    }
   }
 }
