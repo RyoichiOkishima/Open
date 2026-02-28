@@ -142,6 +142,98 @@ function sfxDraw() {
   playTone(440, 0.18, 0.12, 'triangle', 0.15);
 }
 
+// === BGM (Web Audio API synthesis) ===
+var bgmNodes = null;
+var bgmPlaying = false;
+
+function startBgm() {
+  if (!soundOn || bgmPlaying) return;
+  var ctx = getAudioCtx();
+  var masterGain = ctx.createGain();
+  masterGain.gain.value = 0.06;
+  masterGain.connect(ctx.destination);
+
+  // Chord pad: Cmaj7 (C3, E3, G3, B3)
+  var freqs = [130.81, 164.81, 196.00, 246.94];
+  var oscs = [];
+  for (var i = 0; i < freqs.length; i++) {
+    var osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freqs[i];
+    var g = ctx.createGain();
+    g.gain.value = 0.25;
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    oscs.push(osc);
+  }
+
+  // Slow LFO for gentle pulse
+  var lfo = ctx.createOscillator();
+  var lfoGain = ctx.createGain();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.3;
+  lfoGain.gain.value = 0.015;
+  lfo.connect(lfoGain);
+  lfoGain.connect(masterGain.gain);
+  lfo.start();
+
+  bgmNodes = { oscs: oscs, lfo: lfo, master: masterGain };
+  bgmPlaying = true;
+}
+
+function stopBgm() {
+  if (!bgmNodes) return;
+  var now = getAudioCtx().currentTime;
+  bgmNodes.master.gain.linearRampToValueAtTime(0, now + 0.5);
+  var nodes = bgmNodes;
+  bgmNodes = null;
+  bgmPlaying = false;
+  setTimeout(function() {
+    for (var i = 0; i < nodes.oscs.length; i++) {
+      try { nodes.oscs[i].stop(); } catch(e) {}
+    }
+    try { nodes.lfo.stop(); } catch(e) {}
+    try { nodes.master.disconnect(); } catch(e) {}
+  }, 600);
+}
+
+function startBossBgm() {
+  if (!soundOn || bgmPlaying) return;
+  var ctx = getAudioCtx();
+  var masterGain = ctx.createGain();
+  masterGain.gain.value = 0.07;
+  masterGain.connect(ctx.destination);
+
+  // Minor chord: Am (A2, C3, E3) + tritone hint
+  var freqs = [110.00, 130.81, 164.81, 155.56];
+  var oscs = [];
+  for (var i = 0; i < freqs.length; i++) {
+    var osc = ctx.createOscillator();
+    osc.type = i === 3 ? 'sawtooth' : 'sine';
+    osc.frequency.value = freqs[i];
+    var g = ctx.createGain();
+    g.gain.value = i === 3 ? 0.08 : 0.25;
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    oscs.push(osc);
+  }
+
+  // Faster LFO for tension
+  var lfo = ctx.createOscillator();
+  var lfoGain = ctx.createGain();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.8;
+  lfoGain.gain.value = 0.02;
+  lfo.connect(lfoGain);
+  lfoGain.connect(masterGain.gain);
+  lfo.start();
+
+  bgmNodes = { oscs: oscs, lfo: lfo, master: masterGain };
+  bgmPlaying = true;
+}
+
 // === Timer ===
 function startTimer() {
   gameStartTime = Date.now();
@@ -261,6 +353,7 @@ function pauseRestart() {
 function pauseModeSelect() {
   togglePause();
   stopTimer();
+  stopBgm();
   showScreen('screen-mode');
 }
 
@@ -268,6 +361,11 @@ function toggleSound() {
   soundOn = !soundOn;
   document.getElementById('sound-icon').textContent = soundOn ? '🔊' : '🔇';
   document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
+  if (!soundOn) {
+    stopBgm();
+  } else if (!gameOver) {
+    if (isBossRound) { startBossBgm(); } else { startBgm(); }
+  }
 }
 
 // === Death penalty ===
@@ -405,6 +503,7 @@ function makeMove(idx) {
   if (winLine) {
     gameOver = true;
     stopTimer();
+    stopBgm();
     lastElapsed = getElapsedSeconds();
     winLine.forEach(function(i) { cells[i].classList.add('win'); });
     scores[current]++;
@@ -457,6 +556,7 @@ function makeMove(idx) {
   if (board.every(function(c) { return c; })) {
     gameOver = true;
     stopTimer();
+    stopBgm();
     lastElapsed = getElapsedSeconds();
     scores.draw++;
     updateScores();
@@ -722,9 +822,12 @@ function resetGame() {
   }
   updateScores();
 
+  stopBgm();
+
   if (isBossRound) {
     setStatus('');
     showBossIntro(function() {
+      startBossBgm();
       startTimer();
       updateModeLabel();
       var opp = getOpponentLabel();
@@ -734,6 +837,7 @@ function resetGame() {
       }
     });
   } else {
+    startBgm();
     startTimer();
     if (mode === 'cpu') {
       var opp = getOpponentLabel();
