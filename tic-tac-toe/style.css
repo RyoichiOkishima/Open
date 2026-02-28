@@ -462,6 +462,37 @@ body {
   color: #fff;
 }
 
+/* === Death penalty === */
+.death-penalty {
+  animation: deathShake 0.6s ease-in-out 2;
+}
+.death-penalty::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(231, 76, 60, 0.35);
+  pointer-events: none;
+  animation: deathFlash 1.2s ease-out forwards;
+  z-index: 50;
+}
+@keyframes deathShake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-8px); }
+  30% { transform: translateX(8px); }
+  45% { transform: translateX(-6px); }
+  60% { transform: translateX(6px); }
+  75% { transform: translateX(-3px); }
+  90% { transform: translateX(3px); }
+}
+@keyframes deathFlash {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.result-xp.penalty {
+  color: #e74c3c;
+}
+
 /* === Boss intro === */
 .boss-intro-overlay {
   display: none;

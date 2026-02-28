@@ -236,6 +236,16 @@ function toggleSound() {
   document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
 }
 
+// === Death penalty ===
+function showDeathPenalty(callback) {
+  var gameScreen = document.getElementById('screen-game');
+  gameScreen.classList.add('death-penalty');
+  setTimeout(function() {
+    gameScreen.classList.remove('death-penalty');
+    callback();
+  }, 1200);
+}
+
 // === Boss intro ===
 function showBossIntro(callback) {
   var overlay = document.getElementById('boss-intro-overlay');
@@ -378,10 +388,12 @@ function makeMove(idx) {
         stats.cpuWins++;
         sfxWin();
       } else {
-        lastXpGain = 0;
-        lastBaseXp = 0;
+        var penalty = Math.floor(getXpReward() * 0.3);
+        lastBaseXp = -penalty;
         lastStreakBonus = 0;
         lastTimeBonus = 0;
+        lastXpGain = -penalty;
+        stats.xp = Math.max(0, stats.xp - penalty);
         winStreak = 0;
         stats.cpuLosses++;
         sfxLose();
@@ -396,7 +408,11 @@ function makeMove(idx) {
     } else {
       setStatus(getMarkSpan(current) + ' の勝ち!');
     }
-    setTimeout(function() { showResult(current); }, 800);
+    if (mode === 'cpu' && current === cpuMark) {
+      showDeathPenalty(function() { showResult(current); });
+    } else {
+      setTimeout(function() { showResult(current); }, 800);
+    }
     return;
   }
 
@@ -408,10 +424,12 @@ function makeMove(idx) {
     updateScores();
     if (mode === 'cpu') {
       lastIsBoss = isBossRound;
-      lastXpGain = 0;
-      lastBaseXp = 0;
+      var drawXp = Math.floor(getXpReward() * 0.5);
+      lastBaseXp = drawXp;
       lastStreakBonus = 0;
       lastTimeBonus = 0;
+      lastXpGain = drawXp;
+      stats.xp += drawXp;
       winStreak = 0;
       stats.cpuDraws++;
       saveStats();
@@ -485,9 +503,15 @@ function showResult(winner) {
     levelSection.classList.add('visible');
     if (lastXpGain > 0) {
       xpEl.textContent = '+' + lastXpGain + ' XP';
+      xpEl.className = 'result-xp';
+      xpEl.style.display = '';
+    } else if (lastXpGain < 0) {
+      xpEl.textContent = lastXpGain + ' XP';
+      xpEl.className = 'result-xp penalty';
       xpEl.style.display = '';
     } else {
       xpEl.style.display = 'none';
+      xpEl.className = 'result-xp';
     }
     if ((lastStreakBonus > 0 || lastTimeBonus > 0 || lastIsBoss) && lastXpGain > 0) {
       var parts = [];
