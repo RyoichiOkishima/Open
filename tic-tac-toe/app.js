@@ -15,6 +15,26 @@ var WIN_LINES = [
 var LEVEL_THRESHOLDS = [0, 2, 5, 10, 15, 25, 35, 50, 70, 100];
 var audioCtx = null;
 
+// === Haptic feedback ===
+function haptic() {
+  if (!soundOn) return;
+  if (navigator.vibrate) {
+    navigator.vibrate(10);
+    return;
+  }
+  try {
+    var el = document.createElement('input');
+    el.type = 'checkbox';
+    el.setAttribute('switch', '');
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    el.style.pointerEvents = 'none';
+    document.body.appendChild(el);
+    el.click();
+    el.remove();
+  } catch(e) {}
+}
+
 // === Sound effects (Web Audio API) ===
 function getAudioCtx() {
   if (!audioCtx) {
@@ -187,6 +207,7 @@ function makeMove(idx) {
   cells[idx].textContent = current;
   cells[idx].classList.add('taken', current.toLowerCase());
   sfxPlace(current);
+  haptic();
 
   var winLine = checkWin(current);
   if (winLine) {
