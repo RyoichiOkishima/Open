@@ -147,6 +147,15 @@ body {
   margin-top: 8px;
 }
 .back-btn:hover { color: rgba(255,255,255,0.8); }
+.cache-clear-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-top: 16px;
+}
+.cache-clear-btn:hover { color: rgba(255,255,255,0.5); }
 
 /* === Game screen === */
 #screen-game {
@@ -695,8 +704,10 @@ body {
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s;
 }
+.card-btn:hover { background: rgba(255,255,255,0.15); }
 .card-btn.disabled {
   opacity: 0.3;
 }
@@ -835,14 +846,116 @@ body {
   animation: ultraPlace 0.6s ease-out;
 }
 @keyframes superPlace {
-  0%   { box-shadow: 0 0 0 rgba(241,196,15,0); transform: scale(0.9); }
-  30%  { box-shadow: 0 0 24px rgba(241,196,15,0.8); transform: scale(1.1); }
+  0%   { box-shadow: 0 0 0 rgba(241,196,15,0); transform: scale(0.8); }
+  20%  { box-shadow: 0 0 30px rgba(241,196,15,0.9); transform: scale(1.15); }
+  50%  { box-shadow: 0 0 20px rgba(241,196,15,0.6); transform: scale(1.05); }
   100% { box-shadow: 0 0 8px #f1c40f; transform: scale(1); }
 }
 @keyframes ultraPlace {
-  0%   { box-shadow: 0 0 0 rgba(231,76,60,0); transform: scale(0.9); }
-  30%  { box-shadow: 0 0 30px rgba(231,76,60,0.9); transform: scale(1.15); }
+  0%   { box-shadow: 0 0 0 rgba(231,76,60,0); transform: scale(0.7); }
+  15%  { box-shadow: 0 0 40px rgba(231,76,60,1); transform: scale(1.2); }
+  30%  { box-shadow: 0 0 25px rgba(231,76,60,0.7); transform: scale(1.1); }
+  60%  { box-shadow: 0 0 15px rgba(231,76,60,0.5); transform: scale(1.03); }
   100% { box-shadow: 0 0 12px #e74c3c; transform: scale(1); }
+}
+.cell.card-place.card-super { animation: superPlace 0.8s ease-out; }
+.cell.card-place.card-ultra { animation: ultraPlace 0.8s ease-out; }
+
+/* === Shockwave effect === */
+.shockwave {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: 60;
+}
+.shockwave-super {
+  border: 3px solid rgba(241,196,15,0.8);
+  animation: shockwaveExpand 0.7s ease-out forwards;
+}
+.shockwave-ultra {
+  border: 4px solid rgba(231,76,60,0.9);
+  animation: shockwaveExpand 0.8s ease-out forwards;
+}
+@keyframes shockwaveExpand {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(8); opacity: 0; }
+}
+
+/* === Card flash effect === */
+.card-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 55;
+}
+.card-flash-super {
+  animation: flashSuper 0.5s ease-out forwards;
+}
+.card-flash-ultra {
+  animation: flashUltra 0.6s ease-out forwards;
+}
+@keyframes flashSuper {
+  0%   { background: rgba(241,196,15,0.25); }
+  100% { background: transparent; }
+}
+@keyframes flashUltra {
+  0%   { background: rgba(231,76,60,0.35); }
+  30%  { background: rgba(231,76,60,0.15); }
+  100% { background: transparent; }
+}
+
+/* === Card info overlay === */
+.card-info-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+.card-info-overlay.open { display: flex; }
+.card-info-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  width: 260px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card-info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.card-info-icon {
+  font-size: 2rem;
+}
+.card-info-titles {
+  display: flex;
+  flex-direction: column;
+}
+.card-info-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #333;
+}
+.card-info-count {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: 600;
+}
+.card-info-desc {
+  font-size: 0.88rem;
+  color: #555;
+  line-height: 1.7;
 }
 
 /* === Info overlays (Rules / About) === */

@@ -48,6 +48,7 @@
   <button class="start-play-btn" onclick="showScreen('screen-mode')">START</button>
   <button class="back-btn" onclick="showRules()">あそびかた</button>
   <a href="../" class="back-btn">おわる</a>
+  <button class="cache-clear-btn" onclick="clearCache()">キャッシュクリア</button>
 </div>
 
 <!-- 2. Mode select -->
@@ -94,10 +95,10 @@
     </div>
     <div class="card-selector" id="card-selector">
       <div class="card-btn" data-card="normal">
-        <span class="card-icon">🃏</span><span class="card-count" id="card-normal">5</span>
+        <span class="card-icon">🃏</span><span class="card-count" id="card-normal">11</span>
       </div>
       <div class="card-btn" data-card="super">
-        <span class="card-icon">⚡</span><span class="card-count" id="card-super">1</span>
+        <span class="card-icon">⚡</span><span class="card-count" id="card-super">3</span>
       </div>
       <div class="card-btn" data-card="ultra">
         <span class="card-icon">🔥</span><span class="card-count" id="card-ultra">1</span>
@@ -134,9 +135,9 @@
     <button class="pause-item danger" onclick="confirmReset()">
       <span class="p-icon">🗑️</span>データ初期化
     </button>
-    <a class="pause-item danger" href="../">
-      <span class="p-icon">🚪</span>おわる
-    </a>
+    <button class="pause-item" onclick="pauseToTop()">
+      <span class="p-icon">🏠</span>TOPへ
+    </button>
   </div>
 </div>
 
@@ -207,6 +208,21 @@
   </div>
 </div>
 
+<!-- Card info overlay -->
+<div class="card-info-overlay" id="card-info-overlay" onclick="hideCardInfo()">
+  <div class="card-info-box" onclick="event.stopPropagation()">
+    <div class="card-info-header">
+      <span class="card-info-icon" id="card-info-icon"></span>
+      <div class="card-info-titles">
+        <span class="card-info-name" id="card-info-name"></span>
+        <span class="card-info-count" id="card-info-count"></span>
+      </div>
+    </div>
+    <div class="card-info-desc" id="card-info-desc"></div>
+    <button class="info-close-btn" onclick="hideCardInfo()">とじる</button>
+  </div>
+</div>
+
 <!-- Rules overlay -->
 <div class="info-overlay" id="rules-overlay">
   <div class="info-box">
@@ -224,7 +240,7 @@
       </div>
       <div class="info-card-row">
         <span class="info-card-icon">🔥</span>
-        <div><strong>ウルトラ</strong>（先手1枚/後手2枚）<br>マークがあるマスに上書きできます。置いたマスは⚡で上書きされなくなります</div>
+        <div><strong>ウルトラ</strong>（先手1枚/後手2枚）<br>マークがあるマスに上書きできます。置いたマスはどのカードでも上書きできません</div>
       </div>
       <p class="info-note">カードは毎ラウンドリセットされます</p>
     </div>

@@ -149,6 +149,21 @@ function sfxDraw() {
   playTone(440, 0.18, 0.12, 'triangle', 0.15);
 }
 
+function sfxSuper() {
+  if (!soundOn) return;
+  playTone(880, 0, 0.08, 'sine', 0.18);
+  playTone(1320, 0.06, 0.12, 'sine', 0.15);
+  playTone(1760, 0.12, 0.15, 'triangle', 0.1);
+}
+
+function sfxUltra() {
+  if (!soundOn) return;
+  playTone(220, 0, 0.1, 'sawtooth', 0.12);
+  playTone(440, 0.08, 0.12, 'sine', 0.18);
+  playTone(880, 0.15, 0.15, 'sine', 0.2);
+  playTone(1760, 0.22, 0.2, 'triangle', 0.12);
+}
+
 // === BGM (Web Audio API looping arpeggio) ===
 var bgmTimer = null;
 var bgmPlaying = false;
@@ -362,6 +377,13 @@ function pauseModeSelect() {
   showScreen('screen-mode');
 }
 
+function pauseToTop() {
+  togglePause();
+  stopTimer();
+  stopBgm();
+  showScreen('screen-start');
+}
+
 // === Data reset ===
 function confirmReset() {
   document.getElementById('confirm-overlay').classList.add('open');
@@ -381,6 +403,15 @@ function executeReset() {
   lastBossLevel = 0;
   document.getElementById('confirm-overlay').classList.remove('open');
   document.getElementById('pause-overlay').classList.remove('open');
+}
+
+function clearCache() {
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      names.forEach(function(name) { caches.delete(name); });
+    });
+  }
+  location.reload(true);
 }
 
 function toggleSound() {
@@ -489,11 +520,7 @@ function updateModeLabel() {
   if (mode === 'cpu') {
     var label = 'vs ' + getOpponentLabel() + ' (あなた: ' + playerMark + ')';
     document.getElementById('mode-label').textContent = label;
-    if (isBossRound) {
-      levelEl.textContent = 'BOSS Lv.' + Math.min(getLevel() + 20, 100);
-    } else {
-      levelEl.textContent = 'Lv.' + getLevel();
-    }
+    levelEl.textContent = 'Lv.' + getLevel();
     levelEl.style.display = '';
   } else {
     document.getElementById('mode-label').textContent = '2人対戦';
@@ -517,7 +544,7 @@ function canPlace(idx, mark, cardType) {
   if (gameOver) return false;
   if (cardType === 'normal') return !board[idx] && cards[mark].normal > 0;
   if (cardType === 'super') return boardCard[idx] !== 'ultra' && boardCard[idx] !== 'super';
-  if (cardType === 'ultra') return board[idx] !== '';
+  if (cardType === 'ultra') return board[idx] !== '' && boardCard[idx] !== 'ultra';
   return false;
 }
 
@@ -639,10 +666,13 @@ function makeMove(idx, cardType) {
     badge.textContent = cardType === 'super' ? '⚡' : '🔥';
     cells[idx].appendChild(badge);
     cells[idx].classList.add('card-place');
-    setTimeout(function() { cells[idx].classList.remove('card-place'); }, 600);
+    setTimeout(function() { cells[idx].classList.remove('card-place'); }, 800);
+    createShockwave(cells[idx], cardType);
+    createFlash(cardType);
   }
-  sfxPlace(current);
-  haptic();
+  if (cardType === 'super') { sfxSuper(); hapticStrong(); }
+  else if (cardType === 'ultra') { sfxUltra(); hapticHeavy(); }
+  else { sfxPlace(current); haptic(); }
 
   var winLine = checkWin(current);
   if (winLine) {
@@ -1309,5 +1339,64 @@ function showAbout() {
 function hideAbout() {
   document.getElementById('about-overlay').classList.remove('open');
 }
+
+// === Card info ===
+var cardInfoData = {
+  normal: { icon: '\u{1F0CF}', name: 'ノーマル', desc: '空いているマスに置けます。' },
+  super:  { icon: '\u26A1', name: 'スーパー', desc: '相手のマークがあるマスにも上書きできます。ただし⚡や🔥で置かれたマスには上書きできません。' },
+  ultra:  { icon: '\u{1F525}', name: 'ウルトラ', desc: 'マークがあるマスに上書きできます。🔥で置いたマスはどのカードでも上書きできません。' }
+};
+
+function showCardInfo(type) {
+  var info = cardInfoData[type];
+  var mark = (mode === 'cpu') ? playerMark : current;
+  var count = cards[mark][type];
+  document.getElementById('card-info-icon').textContent = info.icon;
+  document.getElementById('card-info-name').textContent = info.name;
+  document.getElementById('card-info-desc').textContent = info.desc;
+  document.getElementById('card-info-count').textContent = '残り ' + count + ' 枚';
+  document.getElementById('card-info-overlay').classList.add('open');
+}
+
+function hideCardInfo() {
+  document.getElementById('card-info-overlay').classList.remove('open');
+}
+
+// === Shockwave / Flash effects ===
+function createShockwave(cellEl, type) {
+  var rect = cellEl.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2;
+  var cy = rect.top + rect.height / 2;
+  var wave = document.createElement('div');
+  wave.className = 'shockwave shockwave-' + type;
+  wave.style.left = cx + 'px';
+  wave.style.top = cy + 'px';
+  document.body.appendChild(wave);
+  setTimeout(function() { wave.remove(); }, 800);
+  if (type === 'ultra') {
+    setTimeout(function() {
+      var wave2 = document.createElement('div');
+      wave2.className = 'shockwave shockwave-ultra';
+      wave2.style.left = cx + 'px';
+      wave2.style.top = cy + 'px';
+      document.body.appendChild(wave2);
+      setTimeout(function() { wave2.remove(); }, 800);
+    }, 150);
+  }
+}
+
+function createFlash(type) {
+  var flash = document.createElement('div');
+  flash.className = 'card-flash card-flash-' + type;
+  document.body.appendChild(flash);
+  setTimeout(function() { flash.remove(); }, 700);
+}
+
+// === Init ===
+document.querySelectorAll('.card-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    showCardInfo(btn.dataset.card);
+  });
+});
 
 initHaptic();
