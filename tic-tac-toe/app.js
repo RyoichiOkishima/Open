@@ -639,6 +639,7 @@ function makeMove(idx, cardType) {
         hapticStrong();
       } else {
         var penalty = Math.floor(getXpReward() * 0.3);
+        if (isBossRound) penalty *= 5;
         lastBaseXp = -penalty;
         lastStreakBonus = 0;
         lastTimeBonus = 0;
@@ -887,17 +888,25 @@ function cpuHard() {
   if (cardMove) return cardMove;
   var strategic = cpuStrategicCard();
   if (strategic) return strategic;
-  var bestScore = -Infinity;
-  var bestMove = -1;
+  // Minimax with card vulnerability awareness
+  var moves = [];
   for (var i = 0; i < 9; i++) {
     if (board[i] || cards[cpuMark].normal <= 0) continue;
     board[i] = cpuMark;
+    boardCard[i] = 'normal';
     var s = minimax(board, 0, false);
+    var vuln = countCardThreats(playerMark);
     board[i] = '';
-    if (s > bestScore) { bestScore = s; bestMove = i; }
+    boardCard[i] = '';
+    moves.push({ idx: i, score: s, vuln: vuln });
   }
-  if (bestMove === -1) return null;
-  return { idx: bestMove, card: 'normal' };
+  if (!moves.length) return null;
+  // Prefer non-vulnerable moves, then highest minimax score
+  moves.sort(function(a, b) {
+    if (a.vuln !== b.vuln) return a.vuln - b.vuln;
+    return b.score - a.score;
+  });
+  return { idx: moves[0].idx, card: 'normal' };
 }
 
 // --- CPU card intelligence ---
@@ -927,27 +936,77 @@ function cpuCheckCards() {
     if (uw !== -1) return { idx: uw, card: 'ultra' };
   }
 
-  // === P2: Block opponent's win (all card types) ===
+  // === P2: Block opponent's win — line-breaking + durable blocking ===
+  var threats = [];
   var nb = findWinningMove(playerMark);
-  if (nb !== -1) return { idx: nb, card: 'normal' };
+  if (nb !== -1) threats.push(nb);
   if (cards[playerMark].super > 0) {
     var osw = findCardWinningMove(playerMark, 'super');
-    if (osw !== -1) {
-      var b1 = bestBlockCard(osw);
-      if (b1) return b1;
-    }
+    if (osw !== -1 && threats.indexOf(osw) === -1) threats.push(osw);
   }
   if (cards[playerMark].ultra > 0) {
     var ouw = findCardWinningMove(playerMark, 'ultra');
-    if (ouw !== -1) {
-      var b2 = bestBlockCard(ouw);
-      if (b2) return b2;
+    if (ouw !== -1 && threats.indexOf(ouw) === -1) threats.push(ouw);
+  }
+  if (threats.length > 0) {
+    // Priority 1: Break threat line (overwrite opponent's mark to destroy 2-in-a-row)
+    for (var t = 0; t < threats.length; t++) {
+      var lb = breakThreatLine(threats[t]);
+      if (lb) return lb;
+    }
+    // Priority 2: Durable block at completion cell (Ultra preferred if opponent has overwrite cards)
+    for (var t = 0; t < threats.length; t++) {
+      var db = durableBlockCard(threats[t]);
+      if (db) return db;
     }
   }
   return null;
 }
 
-function bestBlockCard(idx) {
+// Count immediate winning card threats for a given mark
+function countCardThreats(mark) {
+  var threats = 0;
+  if (findWinningMove(mark) !== -1) threats++;
+  if (cards[mark].super > 0 && findCardWinningMove(mark, 'super') !== -1) threats++;
+  if (cards[mark].ultra > 0 && findCardWinningMove(mark, 'ultra') !== -1) threats++;
+  return threats;
+}
+
+// Break a threat line by overwriting one of opponent's marks (more permanent than blocking completion cell)
+function breakThreatLine(completionIdx) {
+  for (var w = 0; w < WIN_LINES.length; w++) {
+    var line = WIN_LINES[w];
+    if (line.indexOf(completionIdx) === -1) continue;
+    var li = lineInfo(line, cpuMark);
+    if (li.op < 2) continue;
+    // Try Ultra first (protected from Super overwrite), then Super
+    for (var pass = 0; pass < 2; pass++) {
+      var ct = pass === 0 ? 'ultra' : 'super';
+      if (cards[cpuMark][ct] <= 0) continue;
+      for (var k = 0; k < li.opIdx.length; k++) {
+        var target = li.opIdx[k];
+        if (!canPlace(target, cpuMark, ct)) continue;
+        // Safety: verify this doesn't open a NEW immediate winning threat
+        var oldMark = board[target];
+        var oldCard = boardCard[target];
+        board[target] = cpuMark;
+        boardCard[target] = ct;
+        var safe = countCardThreats(playerMark) === 0;
+        board[target] = oldMark;
+        boardCard[target] = oldCard;
+        if (safe) return { idx: target, card: ct };
+      }
+    }
+  }
+  return null;
+}
+
+// Block completion cell with the most durable card available
+function durableBlockCard(idx) {
+  var playerHasOverwrite = cards[playerMark].super > 0 || cards[playerMark].ultra > 0;
+  // If player can overwrite Normal blocks, prefer Ultra to make block harder to break
+  if (playerHasOverwrite && cards[cpuMark].ultra > 0 && canPlace(idx, cpuMark, 'ultra'))
+    return { idx: idx, card: 'ultra' };
   if (canPlace(idx, cpuMark, 'normal') && cards[cpuMark].normal > 0)
     return { idx: idx, card: 'normal' };
   if (cards[cpuMark].ultra > 0 && canPlace(idx, cpuMark, 'ultra'))
@@ -960,8 +1019,8 @@ function bestBlockCard(idx) {
 function cpuStrategicCard() {
   var opp = playerMark;
 
-  // S1: Ultra defense - protect our 2-in-a-row from opponent's super
-  if (cards[cpuMark].ultra > 0 && cards[opp].super > 0) {
+  // S1: Ultra defense - protect our 2-in-a-row from opponent's super/ultra
+  if (cards[cpuMark].ultra > 0 && (cards[opp].super > 0 || cards[opp].ultra > 0)) {
     for (var w = 0; w < WIN_LINES.length; w++) {
       var li = lineInfo(WIN_LINES[w], cpuMark);
       if (li.my === 2 && li.op === 0) {
