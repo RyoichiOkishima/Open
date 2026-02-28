@@ -44,7 +44,7 @@
     <div class="preview-cell">X</div>
   </div>
   <div class="logo">Tic-Tac-Toe</div>
-  <div class="logo-sub">4つ並べたら勝ち</div>
+  <div class="logo-sub">4つ並べたら勝ち!</div>
   <button class="start-play-btn" onclick="showScreen('screen-mode')">START</button>
   <button class="back-btn" onclick="showRules()">あそびかた</button>
   <a href="../" class="back-btn">おわる</a>
@@ -95,13 +95,13 @@
     </div>
     <div class="card-selector" id="card-selector">
       <div class="card-btn" data-card="normal">
-        <span class="card-icon">🃏</span><span class="card-count" id="card-normal">11</span>
+        <span class="card-icon">🃏</span><span class="card-count" id="card-normal">8</span>
       </div>
       <div class="card-btn" data-card="super">
         <span class="card-icon">⚡</span><span class="card-count" id="card-super">3</span>
       </div>
-      <div class="card-btn" data-card="ultra">
-        <span class="card-icon">🔥</span><span class="card-count" id="card-ultra">1</span>
+      <div class="card-btn" data-card="queen" id="card-special-btn">
+        <span class="card-icon" id="card-special-icon">♛</span><span class="card-count" id="card-special">1</span>
       </div>
     </div>
     <div class="board" id="board"></div>
@@ -232,15 +232,19 @@
       <div class="info-section-title">カードについて</div>
       <div class="info-card-row">
         <span class="info-card-icon">🃏</span>
-        <div><strong>ノーマル</strong>（各11枚）<br>空きマスに置けます</div>
+        <div><strong>ノーマル</strong>（各8枚）<br>空きマスに置けます</div>
       </div>
       <div class="info-card-row">
         <span class="info-card-icon">⚡</span>
-        <div><strong>スーパー</strong>（各3枚）<br>どこでも置けます。ただし⚡/🔥のマスには置けません</div>
+        <div><strong>スーパー</strong>（各3枚）<br>どこでも置けます。ただし⚡/♛/♚のマスには置けません</div>
       </div>
       <div class="info-card-row">
-        <span class="info-card-icon">🔥</span>
-        <div><strong>ウルトラ</strong>（先手1枚/後手2枚）<br>マークがあるマスに上書きできます。置いたマスはどのカードでも上書きできません</div>
+        <span class="info-card-icon">♛</span>
+        <div><strong>クイーン</strong>（先手1枚）<br>マークがあるマスに上書きできます。置いたマスは上書きできません</div>
+      </div>
+      <div class="info-card-row">
+        <span class="info-card-icon">♚</span>
+        <div><strong>キング</strong>（後手1枚）<br>どこにでも置けます。置いたマスは上書きできません</div>
       </div>
       <p class="info-note">カードは毎ラウンドリセットされます</p>
     </div>

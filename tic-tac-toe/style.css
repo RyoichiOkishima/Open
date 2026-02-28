@@ -814,18 +814,27 @@ body {
 .cell.card-super {
   box-shadow: 0 0 8px #f1c40f;
 }
-.cell.card-ultra {
-  box-shadow: 0 0 12px #e74c3c;
-  border: 2px solid #e74c3c;
+.cell.card-queen {
+  box-shadow: 0 0 10px #9b59b6;
+  border: 2px solid #9b59b6;
+}
+.cell.card-king {
+  box-shadow: 0 0 10px #f39c12;
+  border: 2px solid #f39c12;
 }
 .cell.card-super.win {
   box-shadow: 0 0 8px #f1c40f;
   background: #fff9c4;
 }
-.cell.card-ultra.win {
-  box-shadow: 0 0 12px #e74c3c;
-  background: #fff9c4;
-  border: 2px solid #e74c3c;
+.cell.card-queen.win {
+  box-shadow: 0 0 10px #9b59b6;
+  background: #f3e5f5;
+  border: 2px solid #9b59b6;
+}
+.cell.card-king.win {
+  box-shadow: 0 0 10px #f39c12;
+  background: #fff8e1;
+  border: 2px solid #f39c12;
 }
 
 /* Card badge on cell */
@@ -842,24 +851,30 @@ body {
 .cell.card-place.card-super {
   animation: superPlace 0.6s ease-out;
 }
-.cell.card-place.card-ultra {
-  animation: ultraPlace 0.6s ease-out;
+.cell.card-place.card-queen {
+  animation: queenPlace 0.7s ease-out;
+}
+.cell.card-place.card-king {
+  animation: kingPlace 0.7s ease-out;
 }
 @keyframes superPlace {
-  0%   { box-shadow: 0 0 0 rgba(241,196,15,0); transform: scale(0.8); }
-  20%  { box-shadow: 0 0 30px rgba(241,196,15,0.9); transform: scale(1.15); }
-  50%  { box-shadow: 0 0 20px rgba(241,196,15,0.6); transform: scale(1.05); }
+  0%   { box-shadow: 0 0 0 rgba(241,196,15,0); transform: scale(0.85); }
+  25%  { box-shadow: 0 0 24px rgba(241,196,15,0.8); transform: scale(1.12); }
+  50%  { box-shadow: 0 0 14px rgba(241,196,15,0.5); transform: scale(1.04); }
   100% { box-shadow: 0 0 8px #f1c40f; transform: scale(1); }
 }
-@keyframes ultraPlace {
-  0%   { box-shadow: 0 0 0 rgba(231,76,60,0); transform: scale(0.7); }
-  15%  { box-shadow: 0 0 40px rgba(231,76,60,1); transform: scale(1.2); }
-  30%  { box-shadow: 0 0 25px rgba(231,76,60,0.7); transform: scale(1.1); }
-  60%  { box-shadow: 0 0 15px rgba(231,76,60,0.5); transform: scale(1.03); }
-  100% { box-shadow: 0 0 12px #e74c3c; transform: scale(1); }
+@keyframes queenPlace {
+  0%   { box-shadow: 0 0 0 rgba(155,89,182,0); transform: scale(0.8); }
+  20%  { box-shadow: 0 0 30px rgba(155,89,182,0.9); transform: scale(1.15); }
+  50%  { box-shadow: 0 0 18px rgba(155,89,182,0.5); transform: scale(1.05); }
+  100% { box-shadow: 0 0 10px #9b59b6; transform: scale(1); }
 }
-.cell.card-place.card-super { animation: superPlace 0.8s ease-out; }
-.cell.card-place.card-ultra { animation: ultraPlace 0.8s ease-out; }
+@keyframes kingPlace {
+  0%   { box-shadow: 0 0 0 rgba(243,156,18,0); transform: scale(0.8); }
+  20%  { box-shadow: 0 0 30px rgba(243,156,18,0.9); transform: scale(1.15); }
+  50%  { box-shadow: 0 0 18px rgba(243,156,18,0.5); transform: scale(1.05); }
+  100% { box-shadow: 0 0 10px #f39c12; transform: scale(1); }
+}
 
 /* === Shockwave effect === */
 .shockwave {
@@ -875,9 +890,13 @@ body {
   border: 3px solid rgba(241,196,15,0.8);
   animation: shockwaveExpand 0.7s ease-out forwards;
 }
-.shockwave-ultra {
-  border: 4px solid rgba(231,76,60,0.9);
-  animation: shockwaveExpand 0.8s ease-out forwards;
+.shockwave-queen {
+  border: 3px solid rgba(155,89,182,0.8);
+  animation: shockwaveExpand 0.7s ease-out forwards;
+}
+.shockwave-king {
+  border: 3px solid rgba(243,156,18,0.8);
+  animation: shockwaveExpand 0.7s ease-out forwards;
 }
 @keyframes shockwaveExpand {
   0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
@@ -894,16 +913,22 @@ body {
 .card-flash-super {
   animation: flashSuper 0.5s ease-out forwards;
 }
-.card-flash-ultra {
-  animation: flashUltra 0.6s ease-out forwards;
+.card-flash-queen {
+  animation: flashQueen 0.5s ease-out forwards;
+}
+.card-flash-king {
+  animation: flashKing 0.5s ease-out forwards;
 }
 @keyframes flashSuper {
   0%   { background: rgba(241,196,15,0.25); }
   100% { background: transparent; }
 }
-@keyframes flashUltra {
-  0%   { background: rgba(231,76,60,0.35); }
-  30%  { background: rgba(231,76,60,0.15); }
+@keyframes flashQueen {
+  0%   { background: rgba(155,89,182,0.25); }
+  100% { background: transparent; }
+}
+@keyframes flashKing {
+  0%   { background: rgba(243,156,18,0.25); }
   100% { background: transparent; }
 }
 

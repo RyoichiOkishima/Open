@@ -42,8 +42,8 @@ var hapticOn = loadHapticSetting();
 var stats = migrateStats(loadStats());
 var boardCard = Array(BOARD_CELLS).fill('');
 var cards = {
-  X: { normal: 11, super: 3, ultra: 1 },
-  O: { normal: 11, super: 3, ultra: 2 }
+  X: { normal: 8, super: 3, queen: 1 },
+  O: { normal: 8, super: 3, king: 1 }
 };
 var pendingCellIdx = -1;
 
@@ -156,12 +156,19 @@ function sfxSuper() {
   playTone(1760, 0.12, 0.15, 'triangle', 0.1);
 }
 
-function sfxUltra() {
+function sfxQueen() {
   if (!soundOn) return;
-  playTone(220, 0, 0.1, 'sawtooth', 0.12);
-  playTone(440, 0.08, 0.12, 'sine', 0.18);
-  playTone(880, 0.15, 0.15, 'sine', 0.2);
-  playTone(1760, 0.22, 0.2, 'triangle', 0.12);
+  playTone(660, 0, 0.1, 'sine', 0.18);
+  playTone(880, 0.08, 0.12, 'sine', 0.16);
+  playTone(1320, 0.16, 0.18, 'triangle', 0.12);
+}
+
+function sfxKing() {
+  if (!soundOn) return;
+  playTone(220, 0, 0.08, 'sawtooth', 0.1);
+  playTone(440, 0.06, 0.1, 'sine', 0.18);
+  playTone(660, 0.14, 0.15, 'sine', 0.16);
+  playTone(880, 0.22, 0.2, 'triangle', 0.1);
 }
 
 // === BGM (Web Audio API looping arpeggio) ===
@@ -546,19 +553,25 @@ function initBoard() {
   }
 }
 
+function getSpecialCard(mark) {
+  return mark === 'X' ? 'queen' : 'king';
+}
+
 function canPlace(idx, mark, cardType) {
   if (gameOver) return false;
   if (cardType === 'normal') return !board[idx] && cards[mark].normal > 0;
-  if (cardType === 'super') return boardCard[idx] !== 'ultra' && boardCard[idx] !== 'super';
-  if (cardType === 'ultra') return board[idx] !== '' && boardCard[idx] !== 'ultra';
+  if (cardType === 'super') return cards[mark].super > 0 && boardCard[idx] !== 'queen' && boardCard[idx] !== 'king' && boardCard[idx] !== 'super';
+  if (cardType === 'queen') return cards[mark].queen > 0 && board[idx] !== '' && boardCard[idx] !== 'queen' && boardCard[idx] !== 'king';
+  if (cardType === 'king') return cards[mark].king > 0 && boardCard[idx] !== 'queen' && boardCard[idx] !== 'king';
   return false;
 }
 
 function canPlaceAny(mark) {
+  var sp = getSpecialCard(mark);
   for (var i = 0; i < BOARD_CELLS; i++) {
     if (canPlace(i, mark, 'normal')) return true;
     if (cards[mark].super > 0 && canPlace(i, mark, 'super')) return true;
-    if (cards[mark].ultra > 0 && canPlace(i, mark, 'ultra')) return true;
+    if (cards[mark][sp] > 0 && canPlace(i, mark, sp)) return true;
   }
   return false;
 }
@@ -580,9 +593,13 @@ function findCardWinningMove(mark, cardType) {
 
 function updateCardSelector() {
   var mark = (mode === 'cpu') ? playerMark : current;
+  var sp = getSpecialCard(mark);
   document.getElementById('card-normal').textContent = cards[mark].normal;
   document.getElementById('card-super').textContent = cards[mark].super;
-  document.getElementById('card-ultra').textContent = cards[mark].ultra;
+  document.getElementById('card-special').textContent = cards[mark][sp];
+  var specialBtn = document.getElementById('card-special-btn');
+  specialBtn.dataset.card = sp;
+  document.getElementById('card-special-icon').textContent = sp === 'queen' ? '\u265B' : '\u265A';
   var btns = document.querySelectorAll('.card-btn');
   for (var i = 0; i < btns.length; i++) {
     var btn = btns[i];
@@ -604,13 +621,15 @@ function updateCardSelector() {
 function showCardPopup(idx) {
   pendingCellIdx = idx;
   var mark = current;
+  var sp = getSpecialCard(mark);
   var container = document.getElementById('card-popup-options');
   container.innerHTML = '';
-  var types = ['normal', 'super', 'ultra'];
+  var types = ['normal', 'super', sp];
   var info = {
-    normal: { icon: '🃏', name: 'ノーマル', desc: '残り ' + cards[mark].normal + ' 枚' },
-    super:  { icon: '⚡', name: 'スーパー', desc: '残り ' + cards[mark].super + ' 枚' },
-    ultra:  { icon: '🔥', name: 'ウルトラ', desc: '残り ' + cards[mark].ultra + ' 枚' }
+    normal: { icon: '\u{1F0CF}', name: 'ノーマル', desc: '残り ' + cards[mark].normal + ' 枚' },
+    super:  { icon: '\u26A1', name: 'スーパー', desc: '残り ' + cards[mark].super + ' 枚' },
+    queen:  { icon: '\u265B', name: 'クイーン', desc: '残り ' + cards[mark].queen + ' 枚' },
+    king:   { icon: '\u265A', name: 'キング', desc: '残り ' + cards[mark].king + ' 枚' }
   };
   var anyAvailable = false;
   for (var i = 0; i < types.length; i++) {
@@ -669,7 +688,8 @@ function makeMove(idx, cardType) {
     cells[idx].classList.add('card-' + cardType);
     var badge = document.createElement('span');
     badge.className = 'cell-badge';
-    badge.textContent = cardType === 'super' ? '⚡' : '🔥';
+    var badgeIcons = { super: '\u26A1', queen: '\u265B', king: '\u265A' };
+    badge.textContent = badgeIcons[cardType] || '';
     cells[idx].appendChild(badge);
     cells[idx].classList.add('card-place');
     setTimeout(function() { cells[idx].classList.remove('card-place'); }, 800);
@@ -677,7 +697,8 @@ function makeMove(idx, cardType) {
     createFlash(cardType);
   }
   if (cardType === 'super') { sfxSuper(); hapticStrong(); }
-  else if (cardType === 'ultra') { sfxUltra(); hapticHeavy(); }
+  else if (cardType === 'queen') { sfxQueen(); hapticStrong(); }
+  else if (cardType === 'king') { sfxKing(); hapticHeavy(); }
   else { sfxPlace(current); haptic(); }
 
   var winLine = checkWin(current);
@@ -997,16 +1018,18 @@ function lineInfo(line, mark) {
 }
 
 function cpuCheckCards() {
-  // === P1: Win (normal > super > ultra) ===
+  var cpuSp = getSpecialCard(cpuMark);
+  var plSp = getSpecialCard(playerMark);
+  // === P1: Win (normal > super > special) ===
   var nw = findWinningMove(cpuMark);
   if (nw !== -1) return { idx: nw, card: 'normal' };
   if (cards[cpuMark].super > 0) {
     var sw = findCardWinningMove(cpuMark, 'super');
     if (sw !== -1) return { idx: sw, card: 'super' };
   }
-  if (cards[cpuMark].ultra > 0) {
-    var uw = findCardWinningMove(cpuMark, 'ultra');
-    if (uw !== -1) return { idx: uw, card: 'ultra' };
+  if (cards[cpuMark][cpuSp] > 0) {
+    var spw = findCardWinningMove(cpuMark, cpuSp);
+    if (spw !== -1) return { idx: spw, card: cpuSp };
   }
 
   // === P2: Block opponent's win — line-breaking + durable blocking ===
@@ -1017,9 +1040,9 @@ function cpuCheckCards() {
     var osw = findCardWinningMove(playerMark, 'super');
     if (osw !== -1 && threats.indexOf(osw) === -1) threats.push(osw);
   }
-  if (cards[playerMark].ultra > 0) {
-    var ouw = findCardWinningMove(playerMark, 'ultra');
-    if (ouw !== -1 && threats.indexOf(ouw) === -1) threats.push(ouw);
+  if (cards[playerMark][plSp] > 0) {
+    var opw = findCardWinningMove(playerMark, plSp);
+    if (opw !== -1 && threats.indexOf(opw) === -1) threats.push(opw);
   }
   if (threats.length > 0) {
     // Priority 1: Break threat line (overwrite opponent's mark to destroy 2-in-a-row)
@@ -1027,7 +1050,7 @@ function cpuCheckCards() {
       var lb = breakThreatLine(threats[t]);
       if (lb) return lb;
     }
-    // Priority 2: Durable block at completion cell (Ultra preferred if opponent has overwrite cards)
+    // Priority 2: Durable block at completion cell (special preferred if opponent has overwrite cards)
     for (var t = 0; t < threats.length; t++) {
       var db = durableBlockCard(threats[t]);
       if (db) return db;
@@ -1038,23 +1061,26 @@ function cpuCheckCards() {
 
 // Count immediate winning card threats for a given mark
 function countCardThreats(mark) {
+  var sp = getSpecialCard(mark);
   var threats = 0;
   if (findWinningMove(mark) !== -1) threats++;
   if (cards[mark].super > 0 && findCardWinningMove(mark, 'super') !== -1) threats++;
-  if (cards[mark].ultra > 0 && findCardWinningMove(mark, 'ultra') !== -1) threats++;
+  if (cards[mark][sp] > 0 && findCardWinningMove(mark, sp) !== -1) threats++;
   return threats;
 }
 
 // Break a threat line by overwriting one of opponent's marks (more permanent than blocking completion cell)
 function breakThreatLine(completionIdx) {
+  var cpuSp = getSpecialCard(cpuMark);
   for (var w = 0; w < WIN_LINES.length; w++) {
     var line = WIN_LINES[w];
     if (line.indexOf(completionIdx) === -1) continue;
     var li = lineInfo(line, cpuMark);
     if (li.op < 2) continue;
-    // Try Ultra first (protected from Super overwrite), then Super
-    for (var pass = 0; pass < 2; pass++) {
-      var ct = pass === 0 ? 'ultra' : 'super';
+    // Try special card first (protected), then Super
+    var tryCards = [cpuSp, 'super'];
+    for (var pass = 0; pass < tryCards.length; pass++) {
+      var ct = tryCards[pass];
       if (cards[cpuMark][ct] <= 0) continue;
       for (var k = 0; k < li.opIdx.length; k++) {
         var target = li.opIdx[k];
@@ -1076,14 +1102,16 @@ function breakThreatLine(completionIdx) {
 
 // Block completion cell with the most durable card available
 function durableBlockCard(idx) {
-  var playerHasOverwrite = cards[playerMark].super > 0 || cards[playerMark].ultra > 0;
-  // If player can overwrite Normal blocks, prefer Ultra to make block harder to break
-  if (playerHasOverwrite && cards[cpuMark].ultra > 0 && canPlace(idx, cpuMark, 'ultra'))
-    return { idx: idx, card: 'ultra' };
+  var cpuSp = getSpecialCard(cpuMark);
+  var plSp = getSpecialCard(playerMark);
+  var playerHasOverwrite = cards[playerMark].super > 0 || cards[playerMark][plSp] > 0;
+  // If player can overwrite Normal blocks, prefer special card to make block harder to break
+  if (playerHasOverwrite && cards[cpuMark][cpuSp] > 0 && canPlace(idx, cpuMark, cpuSp))
+    return { idx: idx, card: cpuSp };
   if (canPlace(idx, cpuMark, 'normal') && cards[cpuMark].normal > 0)
     return { idx: idx, card: 'normal' };
-  if (cards[cpuMark].ultra > 0 && canPlace(idx, cpuMark, 'ultra'))
-    return { idx: idx, card: 'ultra' };
+  if (cards[cpuMark][cpuSp] > 0 && canPlace(idx, cpuMark, cpuSp))
+    return { idx: idx, card: cpuSp };
   if (cards[cpuMark].super > 0 && canPlace(idx, cpuMark, 'super'))
     return { idx: idx, card: 'super' };
   return null;
@@ -1091,39 +1119,46 @@ function durableBlockCard(idx) {
 
 function cpuStrategicCard() {
   var opp = playerMark;
+  var cpuSp = getSpecialCard(cpuMark);
+  var plSp = getSpecialCard(playerMark);
 
-  // S1: Ultra defense - protect our 2-in-a-row from opponent's super/ultra
-  if (cards[cpuMark].ultra > 0 && (cards[opp].super > 0 || cards[opp].ultra > 0)) {
+  // S1: Special defense - protect our 2-in-a-row from opponent's super/special
+  if (cards[cpuMark][cpuSp] > 0 && (cards[opp].super > 0 || cards[opp][plSp] > 0)) {
     for (var w = 0; w < WIN_LINES.length; w++) {
       var li = lineInfo(WIN_LINES[w], cpuMark);
       if (li.my === 2 && li.op === 0) {
         for (var k = 0; k < li.myIdx.length; k++) {
           var mi = li.myIdx[k];
-          if (boardCard[mi] !== 'ultra' && canPlace(mi, cpuMark, 'ultra')) {
-            return { idx: mi, card: 'ultra' };
+          if (boardCard[mi] !== 'queen' && boardCard[mi] !== 'king' && canPlace(mi, cpuMark, cpuSp)) {
+            return { idx: mi, card: cpuSp };
           }
         }
       }
     }
   }
 
-  // S2: Ultra offense - break opponent's 2-in-a-row by overwriting one mark
-  if (cards[cpuMark].ultra > 0) {
+  // S2: Special offense - break opponent's 2-in-a-row by overwriting one mark
+  if (cards[cpuMark][cpuSp] > 0) {
     for (var w = 0; w < WIN_LINES.length; w++) {
       var li = lineInfo(WIN_LINES[w], cpuMark);
       if (li.op === 2 && li.my === 0) {
         for (var k = 0; k < li.opIdx.length; k++) {
           var oi = li.opIdx[k];
-          if (canPlace(oi, cpuMark, 'ultra')) {
-            return { idx: oi, card: 'ultra' };
+          if (canPlace(oi, cpuMark, cpuSp)) {
+            return { idx: oi, card: cpuSp };
           }
         }
       }
     }
   }
 
-  // S3: Super - take center from opponent
+  // S2.5: King on empty center (King can place on empty cells)
   var CENTER = Math.floor(BOARD_CELLS / 2);
+  if (cpuSp === 'king' && cards[cpuMark].king > 0 && !board[CENTER] && canPlace(CENTER, cpuMark, 'king')) {
+    return { idx: CENTER, card: 'king' };
+  }
+
+  // S3: Super - take center from opponent
   if (cards[cpuMark].super > 0 && board[CENTER] === opp && canPlace(CENTER, cpuMark, 'super')) {
     return { idx: CENTER, card: 'super' };
   }
@@ -1138,12 +1173,10 @@ function cpuStrategicCard() {
         for (var k = 0; k < li.opIdx.length; k++) {
           var target = li.opIdx[k];
           if (!canPlace(target, cpuMark, 'super')) continue;
-          // Score: how many lines benefit from this overwrite
           var score = 0;
           for (var w2 = 0; w2 < WIN_LINES.length; w2++) {
             if (WIN_LINES[w2].indexOf(target) === -1) continue;
             var li2 = lineInfo(WIN_LINES[w2], cpuMark);
-            // After overwrite this cell becomes ours
             if (li2.my === 1 && li2.op <= 1) score += 3;
             if (li2.my === 0 && li2.op <= 1) score += 1;
           }
@@ -1161,7 +1194,8 @@ function cpuFallbackCard() {
   // Try strategic card use as last resort
   var strategic = cpuStrategicCard();
   if (strategic) return strategic;
-  var types = ['super', 'ultra'];
+  var cpuSp = getSpecialCard(cpuMark);
+  var types = ['super', cpuSp];
   var validMoves = [];
   for (var t = 0; t < types.length; t++) {
     if (cards[cpuMark][types[t]] <= 0) continue;
@@ -1281,8 +1315,8 @@ function setupBoard() {
   board = Array(BOARD_CELLS).fill('');
   boardCard = Array(BOARD_CELLS).fill('');
   cards = {
-    X: { normal: 11, super: 3, ultra: 1 },
-    O: { normal: 11, super: 3, ultra: 2 }
+    X: { normal: 8, super: 3, queen: 1 },
+    O: { normal: 8, super: 3, king: 1 }
   };
   current = 'X';
   gameOver = false;
@@ -1349,14 +1383,20 @@ function hideAbout() {
 // === Card info ===
 var cardInfoData = {
   normal: { icon: '\u{1F0CF}', name: 'ノーマル', desc: '空いているマスに置けます。' },
-  super:  { icon: '\u26A1', name: 'スーパー', desc: '相手のマークがあるマスにも上書きできます。ただし⚡や🔥で置かれたマスには上書きできません。' },
-  ultra:  { icon: '\u{1F525}', name: 'ウルトラ', desc: 'マークがあるマスに上書きできます。🔥で置いたマスはどのカードでも上書きできません。' }
+  super:  { icon: '\u26A1', name: 'スーパー', desc: '相手のマークがあるマスにも上書きできます。ただし\u26A1/\u265B/\u265Aで置かれたマスには上書きできません。' },
+  queen:  { icon: '\u265B', name: 'クイーン', desc: 'マークがあるマスに上書きできます。\u265Bで置いたマスはどのカードでも上書きできません。先手専用カードです。' },
+  king:   { icon: '\u265A', name: 'キング', desc: 'どこにでも置けます。\u265Aで置いたマスはどのカードでも上書きできません。後手専用カードです。' }
 };
 
 function showCardInfo(type) {
-  var info = cardInfoData[type];
   var mark = (mode === 'cpu') ? playerMark : current;
-  var count = cards[mark][type];
+  // If clicking the special slot, resolve to correct type
+  if (type === 'queen' || type === 'king') {
+    type = getSpecialCard(mark);
+  }
+  var info = cardInfoData[type];
+  if (!info) return;
+  var count = cards[mark][type] || 0;
   document.getElementById('card-info-icon').textContent = info.icon;
   document.getElementById('card-info-name').textContent = info.name;
   document.getElementById('card-info-desc').textContent = info.desc;
@@ -1379,16 +1419,6 @@ function createShockwave(cellEl, type) {
   wave.style.top = cy + 'px';
   document.body.appendChild(wave);
   setTimeout(function() { wave.remove(); }, 800);
-  if (type === 'ultra') {
-    setTimeout(function() {
-      var wave2 = document.createElement('div');
-      wave2.className = 'shockwave shockwave-ultra';
-      wave2.style.left = cx + 'px';
-      wave2.style.top = cy + 'px';
-      document.body.appendChild(wave2);
-      setTimeout(function() { wave2.remove(); }, 800);
-    }, 150);
-  }
 }
 
 function createFlash(type) {
@@ -1404,5 +1434,6 @@ document.querySelectorAll('.card-btn').forEach(function(btn) {
     showCardInfo(btn.dataset.card);
   });
 });
+updateCardSelector();
 
 initHaptic();
