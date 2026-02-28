@@ -256,6 +256,13 @@ body {
   color: rgba(255,255,255,0.7);
   letter-spacing: 1px;
 }
+.timer {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+}
 .status {
   font-size: 1.2rem;
   font-weight: bold;
@@ -329,6 +336,10 @@ body {
   color: #fff;
   text-align: center;
 }
+.result-time {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+}
 .result-score {
   display: flex;
   gap: 24px;
@@ -348,6 +359,18 @@ body {
   width: 280px;
 }
 .level-section.visible { display: flex; }
+.result-xp {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #2ecc71;
+  letter-spacing: 1px;
+}
+.result-bonus {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f39c12;
+}
 .level-display {
   display: flex;
   align-items: baseline;
@@ -386,6 +409,19 @@ body {
   font-size: 0.75rem;
   color: rgba(255,255,255,0.4);
   margin-top: 4px;
+}
+
+/* === BOSS round === */
+.game-body.boss .mode-label {
+  color: #e74c3c;
+  font-weight: 700;
+}
+.game-body.boss .level-indicator {
+  color: #e74c3c;
+}
+.game-body.boss .board {
+  box-shadow: 0 4px 24px rgba(231, 76, 60, 0.5);
+  background: rgba(231, 76, 60, 0.25);
 }
 
 .result-actions {
