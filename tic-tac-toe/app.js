@@ -30,8 +30,26 @@ var gameStartTime = 0;
 var timerInterval = null;
 
 // === Haptic feedback ===
+var hapticEl = null;
+
 function loadHapticSetting() {
   try { return localStorage.getItem('tictactoe_haptic') !== 'off'; } catch(e) { return true; }
+}
+
+function initHaptic() {
+  if (navigator.vibrate) return;
+  // iOS: persistent off-screen switch checkbox
+  hapticEl = document.createElement('input');
+  hapticEl.type = 'checkbox';
+  hapticEl.setAttribute('switch', '');
+  hapticEl.style.position = 'fixed';
+  hapticEl.style.top = '-100px';
+  hapticEl.style.left = '-100px';
+  hapticEl.style.width = '1px';
+  hapticEl.style.height = '1px';
+  hapticEl.style.opacity = '0.01';
+  hapticEl.style.pointerEvents = 'none';
+  document.body.appendChild(hapticEl);
 }
 
 function toggleHaptic() {
@@ -39,25 +57,41 @@ function toggleHaptic() {
   try { localStorage.setItem('tictactoe_haptic', hapticOn ? 'on' : 'off'); } catch(e) {}
   document.getElementById('haptic-icon').textContent = hapticOn ? '📳' : '📴';
   document.getElementById('haptic-label').textContent = hapticOn ? '振動 ON' : '振動 OFF';
+  if (hapticOn) haptic();
 }
 
 function haptic() {
   if (!hapticOn) return;
   if (navigator.vibrate) {
-    navigator.vibrate(10);
+    navigator.vibrate(30);
     return;
   }
-  try {
-    var el = document.createElement('input');
-    el.type = 'checkbox';
-    el.setAttribute('switch', '');
-    el.style.position = 'fixed';
-    el.style.opacity = '0';
-    el.style.pointerEvents = 'none';
-    document.body.appendChild(el);
-    el.click();
-    el.remove();
-  } catch(e) {}
+  if (hapticEl) hapticEl.click();
+}
+
+function hapticStrong() {
+  if (!hapticOn) return;
+  if (navigator.vibrate) {
+    navigator.vibrate([40, 30, 40]);
+    return;
+  }
+  if (hapticEl) {
+    hapticEl.click();
+    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 80);
+  }
+}
+
+function hapticHeavy() {
+  if (!hapticOn) return;
+  if (navigator.vibrate) {
+    navigator.vibrate([60, 40, 60, 40, 60]);
+    return;
+  }
+  if (hapticEl) {
+    hapticEl.click();
+    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 80);
+    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 160);
+  }
 }
 
 // === Sound effects (Web Audio API) ===
@@ -252,6 +286,7 @@ function showBossIntro(callback) {
   var levelEl = document.getElementById('boss-intro-level');
   levelEl.textContent = 'Lv.' + Math.min(getLevel() + 20, 100);
   overlay.classList.add('show');
+  hapticHeavy();
   setTimeout(function() {
     overlay.classList.remove('show');
     callback();
@@ -387,6 +422,7 @@ function makeMove(idx) {
         stats.xp += lastXpGain;
         stats.cpuWins++;
         sfxWin();
+        hapticStrong();
       } else {
         var penalty = Math.floor(getXpReward() * 0.3);
         lastBaseXp = -penalty;
@@ -397,10 +433,12 @@ function makeMove(idx) {
         winStreak = 0;
         stats.cpuLosses++;
         sfxLose();
+        hapticHeavy();
       }
       saveStats();
     } else {
       sfxWin();
+      hapticStrong();
     }
     if (mode === 'cpu') {
       var opp = getOpponentLabel();
@@ -435,6 +473,7 @@ function makeMove(idx) {
       saveStats();
     }
     sfxDraw();
+    hapticStrong();
     setStatus('引き分け!');
     setTimeout(function() { showResult(null); }, 800);
     return;
@@ -707,3 +746,5 @@ function resetGame() {
     }
   }
 }
+
+initHaptic();
