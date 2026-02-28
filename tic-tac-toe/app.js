@@ -872,10 +872,12 @@ function cpuEasy() {
 function cpuNormal() {
   var cardMove = cpuCheckCards();
   if (cardMove) return cardMove;
-  if (!board[4]) return { idx: 4, card: 'normal' };
-  var corners = [0,2,6,8].filter(function(i) { return !board[i]; });
+  var strategic = cpuStrategicCard();
+  if (strategic) return strategic;
+  if (!board[4] && cards[cpuMark].normal > 0) return { idx: 4, card: 'normal' };
+  var corners = [0,2,6,8].filter(function(i) { return !board[i] && cards[cpuMark].normal > 0; });
   if (corners.length) return { idx: corners[Math.floor(Math.random() * corners.length)], card: 'normal' };
-  var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
+  var empty = board.map(function(v,i) { return (!v && cards[cpuMark].normal > 0) ? i : -1; }).filter(function(i) { return i >= 0; });
   if (!empty.length) return null;
   return { idx: empty[Math.floor(Math.random() * empty.length)], card: 'normal' };
 }
@@ -883,10 +885,12 @@ function cpuNormal() {
 function cpuHard() {
   var cardMove = cpuCheckCards();
   if (cardMove) return cardMove;
+  var strategic = cpuStrategicCard();
+  if (strategic) return strategic;
   var bestScore = -Infinity;
   var bestMove = -1;
   for (var i = 0; i < 9; i++) {
-    if (board[i]) continue;
+    if (board[i] || cards[cpuMark].normal <= 0) continue;
     board[i] = cpuMark;
     var s = minimax(board, 0, false);
     board[i] = '';
@@ -896,9 +900,24 @@ function cpuHard() {
   return { idx: bestMove, card: 'normal' };
 }
 
+// --- CPU card intelligence ---
+
+function lineInfo(line, mark) {
+  var opp = mark === 'X' ? 'O' : 'X';
+  var my = 0, op = 0, myIdx = [], opIdx = [], emptyIdx = [];
+  for (var j = 0; j < 3; j++) {
+    var c = line[j];
+    if (board[c] === mark) { my++; myIdx.push(c); }
+    else if (board[c] === opp) { op++; opIdx.push(c); }
+    else { emptyIdx.push(c); }
+  }
+  return { my: my, op: op, myIdx: myIdx, opIdx: opIdx, emptyIdx: emptyIdx };
+}
+
 function cpuCheckCards() {
-  var normalWin = findWinningMove(cpuMark);
-  if (normalWin !== -1) return { idx: normalWin, card: 'normal' };
+  // === P1: Win (normal > super > ultra) ===
+  var nw = findWinningMove(cpuMark);
+  if (nw !== -1) return { idx: nw, card: 'normal' };
   if (cards[cpuMark].super > 0) {
     var sw = findCardWinningMove(cpuMark, 'super');
     if (sw !== -1) return { idx: sw, card: 'super' };
@@ -907,12 +926,108 @@ function cpuCheckCards() {
     var uw = findCardWinningMove(cpuMark, 'ultra');
     if (uw !== -1) return { idx: uw, card: 'ultra' };
   }
-  var block = findWinningMove(playerMark);
-  if (block !== -1) return { idx: block, card: 'normal' };
+
+  // === P2: Block opponent's win (all card types) ===
+  var nb = findWinningMove(playerMark);
+  if (nb !== -1) return { idx: nb, card: 'normal' };
+  if (cards[playerMark].super > 0) {
+    var osw = findCardWinningMove(playerMark, 'super');
+    if (osw !== -1) {
+      var b1 = bestBlockCard(osw);
+      if (b1) return b1;
+    }
+  }
+  if (cards[playerMark].ultra > 0) {
+    var ouw = findCardWinningMove(playerMark, 'ultra');
+    if (ouw !== -1) {
+      var b2 = bestBlockCard(ouw);
+      if (b2) return b2;
+    }
+  }
+  return null;
+}
+
+function bestBlockCard(idx) {
+  if (canPlace(idx, cpuMark, 'normal') && cards[cpuMark].normal > 0)
+    return { idx: idx, card: 'normal' };
+  if (cards[cpuMark].ultra > 0 && canPlace(idx, cpuMark, 'ultra'))
+    return { idx: idx, card: 'ultra' };
+  if (cards[cpuMark].super > 0 && canPlace(idx, cpuMark, 'super'))
+    return { idx: idx, card: 'super' };
+  return null;
+}
+
+function cpuStrategicCard() {
+  var opp = playerMark;
+
+  // S1: Ultra defense - protect our 2-in-a-row from opponent's super
+  if (cards[cpuMark].ultra > 0 && cards[opp].super > 0) {
+    for (var w = 0; w < WIN_LINES.length; w++) {
+      var li = lineInfo(WIN_LINES[w], cpuMark);
+      if (li.my === 2 && li.op === 0) {
+        for (var k = 0; k < li.myIdx.length; k++) {
+          var mi = li.myIdx[k];
+          if (boardCard[mi] !== 'ultra' && canPlace(mi, cpuMark, 'ultra')) {
+            return { idx: mi, card: 'ultra' };
+          }
+        }
+      }
+    }
+  }
+
+  // S2: Ultra offense - break opponent's 2-in-a-row by overwriting one mark
+  if (cards[cpuMark].ultra > 0) {
+    for (var w = 0; w < WIN_LINES.length; w++) {
+      var li = lineInfo(WIN_LINES[w], cpuMark);
+      if (li.op === 2 && li.my === 0) {
+        for (var k = 0; k < li.opIdx.length; k++) {
+          var oi = li.opIdx[k];
+          if (canPlace(oi, cpuMark, 'ultra')) {
+            return { idx: oi, card: 'ultra' };
+          }
+        }
+      }
+    }
+  }
+
+  // S3: Super - take center from opponent
+  if (cards[cpuMark].super > 0 && board[4] === opp && canPlace(4, cpuMark, 'super')) {
+    return { idx: 4, card: 'super' };
+  }
+
+  // S4: Super - overwrite opponent mark to create 2-in-a-row
+  if (cards[cpuMark].super > 0) {
+    var bestScore = 0;
+    var bestIdx = -1;
+    for (var w = 0; w < WIN_LINES.length; w++) {
+      var li = lineInfo(WIN_LINES[w], cpuMark);
+      if (li.my === 1 && li.op >= 1) {
+        for (var k = 0; k < li.opIdx.length; k++) {
+          var target = li.opIdx[k];
+          if (!canPlace(target, cpuMark, 'super')) continue;
+          // Score: how many lines benefit from this overwrite
+          var score = 0;
+          for (var w2 = 0; w2 < WIN_LINES.length; w2++) {
+            if (WIN_LINES[w2].indexOf(target) === -1) continue;
+            var li2 = lineInfo(WIN_LINES[w2], cpuMark);
+            // After overwrite this cell becomes ours
+            if (li2.my === 1 && li2.op <= 1) score += 3;
+            if (li2.my === 0 && li2.op <= 1) score += 1;
+          }
+          if (score > bestScore) { bestScore = score; bestIdx = target; }
+        }
+      }
+    }
+    if (bestIdx !== -1) return { idx: bestIdx, card: 'super' };
+  }
+
   return null;
 }
 
 function cpuFallbackCard() {
+  // Try strategic card use as last resort
+  var strategic = cpuStrategicCard();
+  if (strategic) return strategic;
   var types = ['super', 'ultra'];
   var validMoves = [];
   for (var t = 0; t < types.length; t++) {
