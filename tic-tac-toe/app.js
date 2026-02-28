@@ -181,7 +181,10 @@ function stopBgm() {
 }
 
 // === Timer ===
+var pausedElapsed = 0;
+
 function startTimer() {
+  pausedElapsed = 0;
   gameStartTime = Date.now();
   updateTimerDisplay();
   timerInterval = setInterval(updateTimerDisplay, 1000);
@@ -194,8 +197,21 @@ function stopTimer() {
   }
 }
 
+function pauseTimer() {
+  if (!timerInterval) return;
+  pausedElapsed += (Date.now() - gameStartTime) / 1000;
+  clearInterval(timerInterval);
+  timerInterval = null;
+}
+
+function resumeTimer() {
+  if (timerInterval) return;
+  gameStartTime = Date.now();
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+}
+
 function getElapsedSeconds() {
-  return (Date.now() - gameStartTime) / 1000;
+  return pausedElapsed + (Date.now() - gameStartTime) / 1000;
 }
 
 function updateTimerDisplay() {
@@ -283,7 +299,14 @@ function showScreen(id) {
 
 // === Pause menu ===
 function togglePause() {
-  document.getElementById('pause-overlay').classList.toggle('open');
+  var overlay = document.getElementById('pause-overlay');
+  var opening = !overlay.classList.contains('open');
+  overlay.classList.toggle('open');
+  if (opening) {
+    pauseTimer();
+  } else {
+    if (!gameOver) resumeTimer();
+  }
 }
 
 function pauseRestart() {
