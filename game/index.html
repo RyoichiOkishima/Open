@@ -68,7 +68,8 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
   gap: 6px;
   width: 300px;
   height: 300px;
@@ -87,6 +88,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   transition: background 0.15s, transform 0.1s;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
