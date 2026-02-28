@@ -420,21 +420,7 @@ function startGame(m) {
   mode = m;
   scores = { X: 0, O: 0, draw: 0 };
   winStreak = 0;
-  if (mode === 'cpu') {
-    playerMark = Math.random() < 0.5 ? 'X' : 'O';
-    cpuMark = playerMark === 'X' ? 'O' : 'X';
-    showCoinToss(playerMark, function() {
-      updateScores();
-      resetGame();
-      updateModeLabel();
-      showScreen('screen-game');
-    });
-  } else {
-    updateScores();
-    resetGame();
-    updateModeLabel();
-    showScreen('screen-game');
-  }
+  resetGame();
 }
 
 function getOpponentLabel() {
@@ -671,19 +657,7 @@ function showResult(winner) {
 }
 
 function continueGame() {
-  if (mode === 'cpu') {
-    playerMark = Math.random() < 0.5 ? 'X' : 'O';
-    cpuMark = playerMark === 'X' ? 'O' : 'X';
-    showCoinToss(playerMark, function() {
-      resetGame();
-      updateModeLabel();
-      showScreen('screen-game');
-    });
-  } else {
-    resetGame();
-    updateModeLabel();
-    showScreen('screen-game');
-  }
+  resetGame();
 }
 
 function checkWin(mark) {
@@ -803,6 +777,21 @@ function updateScores() {
 }
 
 function resetGame() {
+  stopBgm();
+  stopTimer();
+
+  if (mode === 'cpu') {
+    playerMark = Math.random() < 0.5 ? 'X' : 'O';
+    cpuMark = playerMark === 'X' ? 'O' : 'X';
+    showCoinToss(playerMark, function() {
+      setupBoard();
+    });
+  } else {
+    setupBoard();
+  }
+}
+
+function setupBoard() {
   board = Array(9).fill('');
   current = 'X';
   gameOver = false;
@@ -810,7 +799,6 @@ function resetGame() {
   isBossRound = mode === 'cpu' && lv > 0 && lv % 5 === 0 && lastBossLevel < lv;
   if (isBossRound) lastBossLevel = lv;
   initBoard();
-  stopTimer();
   var bodyEl = document.querySelector('.game-body');
   if (bodyEl) {
     if (isBossRound) {
@@ -820,15 +808,14 @@ function resetGame() {
     }
   }
   updateScores();
-
-  stopBgm();
+  updateModeLabel();
+  showScreen('screen-game');
 
   if (isBossRound) {
     setStatus('');
     showBossIntro(function() {
       startBossBgm();
       startTimer();
-      updateModeLabel();
       var opp = getOpponentLabel();
       setStatus(current === playerMark ? 'あなたの番です' : opp + 'の番です');
       if (current === cpuMark) {
