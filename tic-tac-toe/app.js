@@ -4,6 +4,7 @@ var gameOver = false;
 var mode = 'cpu';
 var scores = { X: 0, O: 0, draw: 0 };
 var soundOn = true;
+var hapticOn = loadHapticSetting();
 var stats = loadStats();
 
 var WIN_LINES = [
@@ -16,8 +17,19 @@ var LEVEL_THRESHOLDS = [0, 2, 5, 10, 15, 25, 35, 50, 70, 100];
 var audioCtx = null;
 
 // === Haptic feedback ===
+function loadHapticSetting() {
+  try { return localStorage.getItem('tictactoe_haptic') !== 'off'; } catch(e) { return true; }
+}
+
+function toggleHaptic() {
+  hapticOn = !hapticOn;
+  try { localStorage.setItem('tictactoe_haptic', hapticOn ? 'on' : 'off'); } catch(e) {}
+  document.getElementById('haptic-icon').textContent = hapticOn ? '📳' : '📴';
+  document.getElementById('haptic-label').textContent = hapticOn ? '振動 ON' : '振動 OFF';
+}
+
 function haptic() {
-  if (!soundOn) return;
+  if (!hapticOn) return;
   if (navigator.vibrate) {
     navigator.vibrate(10);
     return;
