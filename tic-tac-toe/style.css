@@ -687,13 +687,13 @@ body {
 .card-btn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 14px;
+  gap: 6px;
+  padding: 8px 16px;
   border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
+  border-radius: 10px;
   background: rgba(255,255,255,0.08);
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s;
 }
@@ -788,11 +788,11 @@ body {
   margin-top: 1px;
 }
 .card-icon {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
 }
 .card-count {
   font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 800;
 }
 
