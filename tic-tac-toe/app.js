@@ -30,29 +30,24 @@ var gameStartTime = 0;
 var timerInterval = null;
 
 // === Haptic feedback ===
-var hapticEl = null;
+var hapticSupported = !!navigator.vibrate;
 
 function loadHapticSetting() {
   try { return localStorage.getItem('tictactoe_haptic') !== 'off'; } catch(e) { return true; }
 }
 
 function initHaptic() {
-  if (navigator.vibrate) return;
-  // iOS: persistent off-screen switch checkbox
-  hapticEl = document.createElement('input');
-  hapticEl.type = 'checkbox';
-  hapticEl.setAttribute('switch', '');
-  hapticEl.style.position = 'fixed';
-  hapticEl.style.top = '-100px';
-  hapticEl.style.left = '-100px';
-  hapticEl.style.width = '1px';
-  hapticEl.style.height = '1px';
-  hapticEl.style.opacity = '0.01';
-  hapticEl.style.pointerEvents = 'none';
-  document.body.appendChild(hapticEl);
+  var btn = document.querySelector('.pause-item[onclick="toggleHaptic()"]');
+  if (!hapticSupported && btn) {
+    btn.style.opacity = '0.4';
+    btn.style.pointerEvents = 'none';
+    document.getElementById('haptic-label').textContent = '振動 非対応';
+    document.getElementById('haptic-icon').textContent = '📴';
+  }
 }
 
 function toggleHaptic() {
+  if (!hapticSupported) return;
   hapticOn = !hapticOn;
   try { localStorage.setItem('tictactoe_haptic', hapticOn ? 'on' : 'off'); } catch(e) {}
   document.getElementById('haptic-icon').textContent = hapticOn ? '📳' : '📴';
@@ -61,37 +56,18 @@ function toggleHaptic() {
 }
 
 function haptic() {
-  if (!hapticOn) return;
-  if (navigator.vibrate) {
-    navigator.vibrate(30);
-    return;
-  }
-  if (hapticEl) hapticEl.click();
+  if (!hapticOn || !hapticSupported) return;
+  navigator.vibrate(30);
 }
 
 function hapticStrong() {
-  if (!hapticOn) return;
-  if (navigator.vibrate) {
-    navigator.vibrate([40, 30, 40]);
-    return;
-  }
-  if (hapticEl) {
-    hapticEl.click();
-    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 80);
-  }
+  if (!hapticOn || !hapticSupported) return;
+  navigator.vibrate([40, 30, 40]);
 }
 
 function hapticHeavy() {
-  if (!hapticOn) return;
-  if (navigator.vibrate) {
-    navigator.vibrate([60, 40, 60, 40, 60]);
-    return;
-  }
-  if (hapticEl) {
-    hapticEl.click();
-    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 80);
-    setTimeout(function() { if (hapticEl) hapticEl.click(); }, 160);
-  }
+  if (!hapticOn || !hapticSupported) return;
+  navigator.vibrate([60, 40, 60, 40, 60]);
 }
 
 // === Sound effects (Web Audio API) ===
