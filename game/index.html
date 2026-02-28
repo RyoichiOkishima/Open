@@ -17,43 +17,154 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
+/* === Start screen === */
+.start-screen {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 24px 16px;
+  animation: fadeIn 0.5s ease;
+}
+.start-screen .logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+}
+.start-screen .logo-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: -20px;
+}
+.start-screen .preview-board {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(3, 60px);
+  gap: 4px;
+  opacity: 0.3;
+}
+.start-screen .preview-cell {
+  background: rgba(255,255,255,0.15);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+}
+.start-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 260px;
+}
+.start-btn {
+  padding: 14px 24px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.start-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+}
+.start-btn:active { transform: translateY(0); }
+.start-btn .icon {
+  font-size: 1.4rem;
+  width: 32px;
+  text-align: center;
+}
+.start-btn .label-main { display: block; }
+.start-btn .label-sub {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+.start-back {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+.start-back:hover { color: rgba(255,255,255,0.8); }
+
+/* === Game screen === */
+.game-screen {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+.game-screen.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .header {
   width: 100%;
   background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
   color: #fff;
   text-align: center;
-  padding: 20px 16px;
+  padding: 16px;
+  position: relative;
 }
 .header h1 {
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  letter-spacing: 0.5px;
 }
-.header p {
-  margin-top: 4px;
-  font-size: 0.85rem;
-  opacity: 0.8;
-}
-.back-link {
+.header-btn {
   position: absolute;
-  top: 20px;
-  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #fff;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.8;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
-.back-link:hover { opacity: 1; }
+.header-btn:hover { opacity: 1; }
+.header-btn.left { left: 12px; }
+.header-btn.right { right: 12px; }
 
 .container {
   max-width: 400px;
   width: 100%;
-  padding: 24px 16px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+}
+
+.mode-label {
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: 500;
 }
 
 .status {
@@ -95,12 +206,8 @@ body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-.cell:hover:not(.taken) {
-  background: #f0f0f0;
-}
-.cell:active:not(.taken) {
-  transform: scale(0.95);
-}
+.cell:hover:not(.taken) { background: #f0f0f0; }
+.cell:active:not(.taken) { transform: scale(0.95); }
 .cell.taken { cursor: default; }
 .cell.x { color: #e74c3c; }
 .cell.o { color: #3498db; }
@@ -131,20 +238,10 @@ body {
   transition: background 0.15s, transform 0.1s;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primary {
-  background: #0f3460;
-  color: #fff;
-}
+.btn-primary { background: #0f3460; color: #fff; }
 .btn-primary:hover { background: #1a4a7a; }
-.btn-secondary {
-  background: #e0e0e0;
-  color: #333;
-}
+.btn-secondary { background: #e0e0e0; color: #333; }
 .btn-secondary:hover { background: #d0d0d0; }
-.btn-secondary.active {
-  background: #0f3460;
-  color: #fff;
-}
 
 .score-board {
   display: flex;
@@ -156,42 +253,70 @@ body {
 .score-x { color: #e74c3c; }
 .score-o { color: #3498db; }
 .score-draw { color: #888; }
-
-.mode-toggle {
-  display: flex;
-  gap: 8px;
-}
 </style>
 </head>
 <body>
 
-<div class="header" style="position: relative;">
-  <a href="../" class="back-link">&larr; Top</a>
-  <h1>三目並べ</h1>
-  <p>3つ並べたら勝ち</p>
+<!-- Start screen -->
+<div class="start-screen" id="screen-start">
+  <div class="preview-board">
+    <div class="preview-cell">X</div>
+    <div class="preview-cell"></div>
+    <div class="preview-cell">O</div>
+    <div class="preview-cell"></div>
+    <div class="preview-cell">X</div>
+    <div class="preview-cell"></div>
+    <div class="preview-cell">O</div>
+    <div class="preview-cell"></div>
+    <div class="preview-cell">X</div>
+  </div>
+  <div class="logo">三目並べ</div>
+  <div class="logo-sub">3つ並べたら勝ち</div>
+  <div class="start-menu">
+    <button class="start-btn" onclick="startGame('cpu')">
+      <span class="icon">🤖</span>
+      <span>
+        <span class="label-main">ひとりで遊ぶ</span>
+        <span class="label-sub">CPUと対戦</span>
+      </span>
+    </button>
+    <button class="start-btn" onclick="startGame('human')">
+      <span class="icon">👥</span>
+      <span>
+        <span class="label-main">ふたりで遊ぶ</span>
+        <span class="label-sub">交互に入力</span>
+      </span>
+    </button>
+  </div>
+  <a href="../" class="start-back">&larr; トップに戻る</a>
 </div>
 
-<div class="container">
-  <div class="mode-toggle">
-    <button class="btn btn-secondary active" id="btn-vs-cpu" onclick="setMode('cpu')">vs CPU</button>
-    <button class="btn btn-secondary" id="btn-vs-human" onclick="setMode('human')">2人対戦</button>
+<!-- Game screen -->
+<div class="game-screen" id="screen-game">
+  <div class="header">
+    <button class="header-btn left" onclick="backToStart()">&larr; 戻る</button>
+    <h1>三目並べ</h1>
   </div>
 
-  <div class="score-board">
-    <div class="score-x">X: <span id="score-x">0</span></div>
-    <div class="score-draw">引分: <span id="score-draw">0</span></div>
-    <div class="score-o">O: <span id="score-o">0</span></div>
-  </div>
+  <div class="container">
+    <div class="mode-label" id="mode-label">vs CPU</div>
 
-  <div class="status" id="status">
-    <span class="mark-x">X</span> の番です
-  </div>
+    <div class="score-board">
+      <div class="score-x">X: <span id="score-x">0</span></div>
+      <div class="score-draw">引分: <span id="score-draw">0</span></div>
+      <div class="score-o">O: <span id="score-o">0</span></div>
+    </div>
 
-  <div class="board" id="board"></div>
+    <div class="status" id="status">
+      <span class="mark-x">X</span> の番です
+    </div>
 
-  <div class="controls">
-    <button class="btn btn-primary" onclick="resetGame()">もう一度</button>
-    <button class="btn btn-secondary" onclick="resetAll()">スコアリセット</button>
+    <div class="board" id="board"></div>
+
+    <div class="controls">
+      <button class="btn btn-primary" onclick="resetGame()">もう一度</button>
+      <button class="btn btn-secondary" onclick="resetAll()">スコアリセット</button>
+    </div>
   </div>
 </div>
 
@@ -199,7 +324,7 @@ body {
 var board = Array(9).fill('');
 var current = 'X';
 var gameOver = false;
-var mode = 'cpu'; // 'cpu' or 'human'
+var mode = 'cpu';
 var scores = { X: 0, O: 0, draw: 0 };
 
 var WIN_LINES = [
@@ -207,6 +332,19 @@ var WIN_LINES = [
   [0,3,6],[1,4,7],[2,5,8],
   [0,4,8],[2,4,6]
 ];
+
+function startGame(m) {
+  mode = m;
+  document.getElementById('mode-label').textContent = m === 'cpu' ? 'vs CPU' : '2人対戦';
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-game').classList.add('active');
+  resetAll();
+}
+
+function backToStart() {
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-start').style.display = '';
+}
 
 function initBoard() {
   var el = document.getElementById('board');
@@ -269,18 +407,13 @@ function checkWin(mark) {
 }
 
 function cpuMove() {
-  // 1. 勝てるなら勝つ
   var move = findWinningMove('O');
-  // 2. 相手が勝ちそうなら防ぐ
   if (move === -1) move = findWinningMove('X');
-  // 3. 中央が空いていれば取る
   if (move === -1 && !board[4]) move = 4;
-  // 4. 角を取る
   if (move === -1) {
     var corners = [0,2,6,8].filter(function(i) { return !board[i]; });
     if (corners.length) move = corners[Math.floor(Math.random() * corners.length)];
   }
-  // 5. 残りからランダム
   if (move === -1) {
     var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
     move = empty[Math.floor(Math.random() * empty.length)];
@@ -321,15 +454,6 @@ function resetAll() {
   updateScores();
   resetGame();
 }
-
-function setMode(m) {
-  mode = m;
-  document.getElementById('btn-vs-cpu').classList.toggle('active', m === 'cpu');
-  document.getElementById('btn-vs-human').classList.toggle('active', m === 'human');
-  resetGame();
-}
-
-initBoard();
 </script>
 </body>
 </html>
