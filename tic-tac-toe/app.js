@@ -142,96 +142,66 @@ function sfxDraw() {
   playTone(440, 0.18, 0.12, 'triangle', 0.15);
 }
 
-// === BGM (Web Audio API synthesis) ===
-var bgmNodes = null;
+// === BGM (Web Audio API looping arpeggio) ===
+var bgmTimer = null;
 var bgmPlaying = false;
+var bgmGain = null;
+
+function bgmLoop(notes, tempo, vol) {
+  if (bgmPlaying) return;
+  var ctx = getAudioCtx();
+  bgmGain = ctx.createGain();
+  bgmGain.gain.value = vol;
+  bgmGain.connect(ctx.destination);
+  bgmPlaying = true;
+  var step = 0;
+  var beatMs = (60 / tempo) * 1000;
+
+  function tick() {
+    if (!bgmPlaying) return;
+    var note = notes[step % notes.length];
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    var t = ctx.currentTime;
+    osc.type = 'sine';
+    osc.frequency.value = note;
+    g.gain.setValueAtTime(1, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + beatMs / 1200);
+    osc.connect(g);
+    g.connect(bgmGain);
+    osc.start(t);
+    osc.stop(t + beatMs / 1000 + 0.05);
+    step++;
+    bgmTimer = setTimeout(tick, beatMs);
+  }
+  tick();
+}
 
 function startBgm() {
   if (!soundOn || bgmPlaying) return;
-  var ctx = getAudioCtx();
-  var masterGain = ctx.createGain();
-  masterGain.gain.value = 0.06;
-  masterGain.connect(ctx.destination);
-
-  // Chord pad: Cmaj7 (C3, E3, G3, B3)
-  var freqs = [130.81, 164.81, 196.00, 246.94];
-  var oscs = [];
-  for (var i = 0; i < freqs.length; i++) {
-    var osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freqs[i];
-    var g = ctx.createGain();
-    g.gain.value = 0.25;
-    osc.connect(g);
-    g.connect(masterGain);
-    osc.start();
-    oscs.push(osc);
-  }
-
-  // Slow LFO for gentle pulse
-  var lfo = ctx.createOscillator();
-  var lfoGain = ctx.createGain();
-  lfo.type = 'sine';
-  lfo.frequency.value = 0.3;
-  lfoGain.gain.value = 0.015;
-  lfo.connect(lfoGain);
-  lfoGain.connect(masterGain.gain);
-  lfo.start();
-
-  bgmNodes = { oscs: oscs, lfo: lfo, master: masterGain };
-  bgmPlaying = true;
-}
-
-function stopBgm() {
-  if (!bgmNodes) return;
-  var now = getAudioCtx().currentTime;
-  bgmNodes.master.gain.linearRampToValueAtTime(0, now + 0.5);
-  var nodes = bgmNodes;
-  bgmNodes = null;
-  bgmPlaying = false;
-  setTimeout(function() {
-    for (var i = 0; i < nodes.oscs.length; i++) {
-      try { nodes.oscs[i].stop(); } catch(e) {}
-    }
-    try { nodes.lfo.stop(); } catch(e) {}
-    try { nodes.master.disconnect(); } catch(e) {}
-  }, 600);
+  // C major pentatonic arpeggio (C4 E4 G4 C5 G4 E4)
+  var notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+  bgmLoop(notes, 100, 0.06);
 }
 
 function startBossBgm() {
   if (!soundOn || bgmPlaying) return;
-  var ctx = getAudioCtx();
-  var masterGain = ctx.createGain();
-  masterGain.gain.value = 0.07;
-  masterGain.connect(ctx.destination);
+  // A minor pattern (A3 C4 E4 A4 E4 C4 B3 E4)
+  var notes = [220.00, 261.63, 329.63, 440.00, 329.63, 261.63, 246.94, 329.63];
+  bgmLoop(notes, 140, 0.07);
+}
 
-  // Minor chord: Am (A2, C3, E3) + tritone hint
-  var freqs = [110.00, 130.81, 164.81, 155.56];
-  var oscs = [];
-  for (var i = 0; i < freqs.length; i++) {
-    var osc = ctx.createOscillator();
-    osc.type = i === 3 ? 'sawtooth' : 'sine';
-    osc.frequency.value = freqs[i];
-    var g = ctx.createGain();
-    g.gain.value = i === 3 ? 0.08 : 0.25;
-    osc.connect(g);
-    g.connect(masterGain);
-    osc.start();
-    oscs.push(osc);
+function stopBgm() {
+  if (!bgmPlaying) return;
+  bgmPlaying = false;
+  if (bgmTimer) { clearTimeout(bgmTimer); bgmTimer = null; }
+  if (bgmGain) {
+    var g = bgmGain;
+    var now = getAudioCtx().currentTime;
+    g.gain.linearRampToValueAtTime(0, now + 0.3);
+    setTimeout(function() { try { g.disconnect(); } catch(e) {} }, 400);
+    bgmGain = null;
   }
-
-  // Faster LFO for tension
-  var lfo = ctx.createOscillator();
-  var lfoGain = ctx.createGain();
-  lfo.type = 'sine';
-  lfo.frequency.value = 0.8;
-  lfoGain.gain.value = 0.02;
-  lfo.connect(lfoGain);
-  lfoGain.connect(masterGain.gain);
-  lfo.start();
-
-  bgmNodes = { oscs: oscs, lfo: lfo, master: masterGain };
-  bgmPlaying = true;
 }
 
 // === Timer ===
