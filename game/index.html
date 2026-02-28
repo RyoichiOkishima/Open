@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三目並べ - Okishima</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.header {
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #fff;
+  text-align: center;
+  padding: 20px 16px;
+}
+.header h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.header p {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+.back-link {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+.back-link:hover { opacity: 1; }
+
+.container {
+  max-width: 400px;
+  width: 100%;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.status {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  min-height: 1.5em;
+  text-align: center;
+}
+.status .mark-x { color: #e74c3c; }
+.status .mark-o { color: #3498db; }
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: 300px;
+  height: 300px;
+  background: #333;
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.cell {
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 3rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.cell:hover:not(.taken) {
+  background: #f0f0f0;
+}
+.cell:active:not(.taken) {
+  transform: scale(0.95);
+}
+.cell.taken { cursor: default; }
+.cell.x { color: #e74c3c; }
+.cell.o { color: #3498db; }
+.cell.win {
+  animation: pulse 0.6s ease-in-out;
+  background: #fff9c4;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: #0f3460;
+  color: #fff;
+}
+.btn-primary:hover { background: #1a4a7a; }
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}
+.btn-secondary:hover { background: #d0d0d0; }
+.btn-secondary.active {
+  background: #0f3460;
+  color: #fff;
+}
+
+.score-board {
+  display: flex;
+  gap: 24px;
+  font-size: 1rem;
+  color: #555;
+}
+.score-board span { font-weight: 600; }
+.score-x { color: #e74c3c; }
+.score-o { color: #3498db; }
+.score-draw { color: #888; }
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="header" style="position: relative;">
+  <a href="../" class="back-link">&larr; Top</a>
+  <h1>三目並べ</h1>
+  <p>3つ並べたら勝ち</p>
+</div>
+
+<div class="container">
+  <div class="mode-toggle">
+    <button class="btn btn-secondary active" id="btn-vs-cpu" onclick="setMode('cpu')">vs CPU</button>
+    <button class="btn btn-secondary" id="btn-vs-human" onclick="setMode('human')">2人対戦</button>
+  </div>
+
+  <div class="score-board">
+    <div class="score-x">X: <span id="score-x">0</span></div>
+    <div class="score-draw">引分: <span id="score-draw">0</span></div>
+    <div class="score-o">O: <span id="score-o">0</span></div>
+  </div>
+
+  <div class="status" id="status">
+    <span class="mark-x">X</span> の番です
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="controls">
+    <button class="btn btn-primary" onclick="resetGame()">もう一度</button>
+    <button class="btn btn-secondary" onclick="resetAll()">スコアリセット</button>
+  </div>
+</div>
+
+<script>
+var board = Array(9).fill('');
+var current = 'X';
+var gameOver = false;
+var mode = 'cpu'; // 'cpu' or 'human'
+var scores = { X: 0, O: 0, draw: 0 };
+
+var WIN_LINES = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+
+function initBoard() {
+  var el = document.getElementById('board');
+  el.innerHTML = '';
+  for (var i = 0; i < 9; i++) {
+    var cell = document.createElement('button');
+    cell.className = 'cell';
+    cell.dataset.index = i;
+    cell.addEventListener('click', onCellClick);
+    el.appendChild(cell);
+  }
+}
+
+function onCellClick(e) {
+  var idx = parseInt(e.target.dataset.index);
+  if (board[idx] || gameOver) return;
+  if (mode === 'cpu' && current === 'O') return;
+  makeMove(idx);
+  if (mode === 'cpu' && !gameOver && current === 'O') {
+    setTimeout(cpuMove, 300);
+  }
+}
+
+function makeMove(idx) {
+  board[idx] = current;
+  var cells = document.querySelectorAll('.cell');
+  cells[idx].textContent = current;
+  cells[idx].classList.add('taken', current.toLowerCase());
+
+  var winLine = checkWin(current);
+  if (winLine) {
+    gameOver = true;
+    winLine.forEach(function(i) { cells[i].classList.add('win'); });
+    scores[current]++;
+    updateScores();
+    setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の勝ち!');
+    return;
+  }
+
+  if (board.every(function(c) { return c; })) {
+    gameOver = true;
+    scores.draw++;
+    updateScores();
+    setStatus('引き分け!');
+    return;
+  }
+
+  current = current === 'X' ? 'O' : 'X';
+  setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の番です');
+}
+
+function checkWin(mark) {
+  for (var i = 0; i < WIN_LINES.length; i++) {
+    var l = WIN_LINES[i];
+    if (board[l[0]] === mark && board[l[1]] === mark && board[l[2]] === mark) {
+      return l;
+    }
+  }
+  return null;
+}
+
+function cpuMove() {
+  // 1. 勝てるなら勝つ
+  var move = findWinningMove('O');
+  // 2. 相手が勝ちそうなら防ぐ
+  if (move === -1) move = findWinningMove('X');
+  // 3. 中央が空いていれば取る
+  if (move === -1 && !board[4]) move = 4;
+  // 4. 角を取る
+  if (move === -1) {
+    var corners = [0,2,6,8].filter(function(i) { return !board[i]; });
+    if (corners.length) move = corners[Math.floor(Math.random() * corners.length)];
+  }
+  // 5. 残りからランダム
+  if (move === -1) {
+    var empty = board.map(function(v,i) { return v ? -1 : i; }).filter(function(i) { return i >= 0; });
+    move = empty[Math.floor(Math.random() * empty.length)];
+  }
+  makeMove(move);
+}
+
+function findWinningMove(mark) {
+  for (var i = 0; i < 9; i++) {
+    if (board[i]) continue;
+    board[i] = mark;
+    if (checkWin(mark)) { board[i] = ''; return i; }
+    board[i] = '';
+  }
+  return -1;
+}
+
+function setStatus(html) {
+  document.getElementById('status').innerHTML = html;
+}
+
+function updateScores() {
+  document.getElementById('score-x').textContent = scores.X;
+  document.getElementById('score-o').textContent = scores.O;
+  document.getElementById('score-draw').textContent = scores.draw;
+}
+
+function resetGame() {
+  board = Array(9).fill('');
+  current = 'X';
+  gameOver = false;
+  initBoard();
+  setStatus('<span class="mark-x">X</span> の番です');
+}
+
+function resetAll() {
+  scores = { X: 0, O: 0, draw: 0 };
+  updateScores();
+  resetGame();
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-vs-cpu').classList.toggle('active', m === 'cpu');
+  document.getElementById('btn-vs-human').classList.toggle('active', m === 'human');
+  resetGame();
+}
+
+initBoard();
+</script>
+</body>
+</html>
