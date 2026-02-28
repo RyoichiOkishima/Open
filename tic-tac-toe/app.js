@@ -16,7 +16,7 @@ var cards = {
   X: { super: 2, ultra: 1 },
   O: { super: 2, ultra: 1 }
 };
-var selectedCard = 'normal';
+var pendingCellIdx = -1;
 
 var WIN_LINES = [
   [0,1,2],[3,4,5],[6,7,8],
@@ -515,15 +515,6 @@ function findCardWinningMove(mark, cardType) {
   return -1;
 }
 
-function selectCard(type) {
-  if (gameOver) return;
-  if (mode === 'cpu' && current === cpuMark) return;
-  var mark = (mode === 'cpu') ? playerMark : current;
-  if (type !== 'normal' && cards[mark][type] <= 0) return;
-  selectedCard = type;
-  updateCardSelector();
-}
-
 function updateCardSelector() {
   var mark = (mode === 'cpu') ? playerMark : current;
   document.getElementById('card-super').textContent = cards[mark].super;
@@ -532,8 +523,6 @@ function updateCardSelector() {
   for (var i = 0; i < btns.length; i++) {
     var btn = btns[i];
     var type = btn.dataset.card;
-    btn.classList.remove('active');
-    if (type === selectedCard) btn.classList.add('active');
     if (type !== 'normal' && cards[mark][type] <= 0) {
       btn.classList.add('disabled');
     } else {
@@ -548,18 +537,68 @@ function updateCardSelector() {
   }
 }
 
-function onCellClick(e) {
-  var idx = parseInt(e.target.dataset.index);
-  if (gameOver) return;
-  if (mode === 'cpu' && current === cpuMark) return;
-  if (!canPlace(idx, current, selectedCard)) return;
-  var card = selectedCard;
-  selectedCard = 'normal';
-  makeMove(idx, card);
+function showCardPopup(idx, options) {
+  pendingCellIdx = idx;
+  var mark = current;
+  var container = document.getElementById('card-popup-options');
+  container.innerHTML = '';
+  var info = {
+    normal: { icon: '🃏', name: 'ノーマル', desc: '空きマスに配置' },
+    super:  { icon: '⚡', name: 'スーパー', desc: '残り ' + cards[mark].super + ' 枚' },
+    ultra:  { icon: '🔥', name: 'ウルトラ', desc: '残り ' + cards[mark].ultra + ' 枚' }
+  };
+  for (var i = 0; i < options.length; i++) {
+    var type = options[i];
+    var d = info[type];
+    var btn = document.createElement('button');
+    btn.className = 'card-popup-opt';
+    btn.dataset.card = type;
+    btn.innerHTML = '<span class="cp-icon">' + d.icon + '</span>' +
+      '<span class="cp-info"><span class="cp-name">' + d.name + '</span>' +
+      '<span class="cp-desc">' + d.desc + '</span></span>';
+    btn.addEventListener('click', onCardPopupSelect);
+    container.appendChild(btn);
+  }
+  document.getElementById('card-popup-overlay').classList.add('open');
+}
+
+function onCardPopupSelect(e) {
+  var cardType = e.currentTarget.dataset.card;
+  var idx = pendingCellIdx;
+  hideCardPopup();
+  makeMove(idx, cardType);
   updateCardSelector();
   if (mode === 'cpu' && !gameOver && current === cpuMark) {
     setTimeout(cpuMove, 500);
   }
+}
+
+function hideCardPopup() {
+  document.getElementById('card-popup-overlay').classList.remove('open');
+  pendingCellIdx = -1;
+}
+
+function onCellClick(e) {
+  var idx = parseInt(e.target.dataset.index);
+  if (gameOver) return;
+  if (mode === 'cpu' && current === cpuMark) return;
+
+  var mark = current;
+  var options = [];
+  if (canPlace(idx, mark, 'normal')) options.push('normal');
+  if (cards[mark].super > 0 && canPlace(idx, mark, 'super')) options.push('super');
+  if (cards[mark].ultra > 0 && canPlace(idx, mark, 'ultra')) options.push('ultra');
+
+  if (options.length === 0) return;
+  if (options.length === 1) {
+    makeMove(idx, options[0]);
+    updateCardSelector();
+    if (mode === 'cpu' && !gameOver && current === cpuMark) {
+      setTimeout(cpuMove, 500);
+    }
+    return;
+  }
+  showCardPopup(idx, options);
 }
 
 function makeMove(idx, cardType) {
@@ -662,7 +701,6 @@ function makeMove(idx, cardType) {
   }
 
   current = nextMark;
-  selectedCard = 'normal';
   updateCardSelector();
   if (mode === 'cpu') {
     var opp = getOpponentLabel();
@@ -971,7 +1009,6 @@ function setupBoard() {
     X: { super: 2, ultra: 1 },
     O: { super: 2, ultra: 1 }
   };
-  selectedCard = 'normal';
   current = 'X';
   gameOver = false;
   var lv = getLevel();

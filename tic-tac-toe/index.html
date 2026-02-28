@@ -77,15 +77,15 @@
       <span class="mark-x">X</span> の番です
     </div>
     <div class="card-selector" id="card-selector">
-      <button class="card-btn active" data-card="normal" onclick="selectCard('normal')">
-        <span class="card-icon">🃏</span><span class="card-count"></span>
-      </button>
-      <button class="card-btn" data-card="super" onclick="selectCard('super')">
+      <div class="card-btn" data-card="normal">
+        <span class="card-icon">🃏</span><span class="card-count">&infin;</span>
+      </div>
+      <div class="card-btn" data-card="super">
         <span class="card-icon">⚡</span><span class="card-count" id="card-super">2</span>
-      </button>
-      <button class="card-btn" data-card="ultra" onclick="selectCard('ultra')">
+      </div>
+      <div class="card-btn" data-card="ultra">
         <span class="card-icon">🔥</span><span class="card-count" id="card-ultra">1</span>
-      </button>
+      </div>
     </div>
     <div class="board" id="board"></div>
   </div>
@@ -181,6 +181,14 @@
     </div>
   </div>
   <div class="coin-result" id="coin-result"></div>
+</div>
+
+<!-- Card popup overlay -->
+<div class="card-popup-overlay" id="card-popup-overlay" onclick="hideCardPopup()">
+  <div class="card-popup" onclick="event.stopPropagation()">
+    <div class="card-popup-title">カードをえらぶ</div>
+    <div class="card-popup-options" id="card-popup-options"></div>
+  </div>
 </div>
 
 <!-- Rules overlay -->
