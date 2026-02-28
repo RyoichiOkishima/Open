@@ -25,6 +25,20 @@ body {
   overflow: hidden;
 }
 .screen.active { display: flex; animation: fadeIn 0.3s ease; }
+.screen { position: relative; }
+.screen-gear-btn {
+  position: absolute;
+  top: 16px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 4px;
+  line-height: 1;
+}
+.screen-gear-btn:hover { opacity: 1; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* === Start screen === */
