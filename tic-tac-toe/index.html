@@ -61,7 +61,8 @@
     </button>
   </div>
   <div class="game-body">
-    <div class="mode-label" id="mode-label">vs CPU（ふつう）</div>
+    <div class="mode-label" id="mode-label">vs CPU</div>
+    <div class="level-indicator" id="level-indicator">Lv.1</div>
     <div class="score-board">
       <div class="score-x">X: <span id="score-x">0</span></div>
       <div class="score-draw">引分: <span id="score-draw">0</span></div>
@@ -107,13 +108,16 @@
     <div class="rd">引分: <span id="rs-draw">0</span></div>
     <div class="ro">O: <span id="rs-o">0</span></div>
   </div>
-  <div class="difficulty-section" id="difficulty-section">
-    <div class="difficulty-label">CPU の強さ</div>
-    <div class="difficulty-group">
-      <button class="diff-btn" onclick="setDifficulty('easy')">かんたん</button>
-      <button class="diff-btn selected" onclick="setDifficulty('normal')">ふつう</button>
-      <button class="diff-btn" onclick="setDifficulty('hard')">つよい</button>
+  <div class="level-section" id="level-section">
+    <div class="level-display">
+      <span class="level-label">LEVEL</span>
+      <span class="level-num" id="result-level">1</span>
     </div>
+    <div class="level-bar-wrap">
+      <div class="level-bar" id="result-bar"></div>
+    </div>
+    <div class="level-info" id="result-info"></div>
+    <div class="level-record" id="result-record"></div>
   </div>
   <div class="result-actions">
     <button class="result-btn result-btn-continue" onclick="continueGame()">つづける</button>

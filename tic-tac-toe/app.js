@@ -2,9 +2,9 @@ var board = Array(9).fill('');
 var current = 'X';
 var gameOver = false;
 var mode = 'cpu';
-var difficulty = 'normal';
 var scores = { X: 0, O: 0, draw: 0 };
 var soundOn = true;
+var stats = loadStats();
 
 var WIN_LINES = [
   [0,1,2],[3,4,5],[6,7,8],
@@ -12,6 +12,52 @@ var WIN_LINES = [
   [0,4,8],[2,4,6]
 ];
 
+var LEVEL_THRESHOLDS = [0, 2, 5, 10, 15, 25, 35, 50, 70, 100];
+
+// === localStorage persistence ===
+function loadStats() {
+  try {
+    var saved = localStorage.getItem('tictactoe_stats');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return { cpuWins: 0, cpuLosses: 0, cpuDraws: 0 };
+}
+
+function saveStats() {
+  try {
+    localStorage.setItem('tictactoe_stats', JSON.stringify(stats));
+  } catch(e) {}
+}
+
+// === Level system ===
+function getLevel() {
+  var wins = stats.cpuWins;
+  for (var i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (wins >= LEVEL_THRESHOLDS[i]) return i + 1;
+  }
+  return 1;
+}
+
+function getLevelProgress() {
+  var level = getLevel();
+  if (level > LEVEL_THRESHOLDS.length) return { percent: 100, remaining: 0 };
+  if (level >= LEVEL_THRESHOLDS.length) return { percent: 100, remaining: 0 };
+  var cur = stats.cpuWins - LEVEL_THRESHOLDS[level - 1];
+  var needed = LEVEL_THRESHOLDS[level] - LEVEL_THRESHOLDS[level - 1];
+  return {
+    percent: Math.floor((cur / needed) * 100),
+    remaining: LEVEL_THRESHOLDS[level] - stats.cpuWins
+  };
+}
+
+function getCpuDifficulty() {
+  var level = getLevel();
+  if (level <= 2) return 'easy';
+  if (level <= 5) return 'normal';
+  return 'hard';
+}
+
+// === Screen navigation ===
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(function(s) {
     s.classList.remove('active');
@@ -19,7 +65,7 @@ function showScreen(id) {
   document.getElementById(id).classList.add('active');
 }
 
-// Pause menu
+// === Pause menu ===
 function togglePause() {
   document.getElementById('pause-overlay').classList.toggle('open');
 }
@@ -42,26 +88,26 @@ function toggleSound() {
   document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
 }
 
+// === Game ===
 function startGame(m) {
   mode = m;
-  difficulty = 'normal';
   scores = { X: 0, O: 0, draw: 0 };
   updateScores();
   updateModeLabel();
-  updateDifficultyButtons();
   resetGame();
   showScreen('screen-game');
 }
 
 function updateModeLabel() {
-  var label = '';
+  var levelEl = document.getElementById('level-indicator');
   if (mode === 'cpu') {
-    var diffNames = { easy: 'かんたん', normal: 'ふつう', hard: 'つよい' };
-    label = 'vs CPU（' + diffNames[difficulty] + '）';
+    document.getElementById('mode-label').textContent = 'vs CPU';
+    levelEl.textContent = 'Lv.' + getLevel();
+    levelEl.style.display = '';
   } else {
-    label = '2人対戦';
+    document.getElementById('mode-label').textContent = '2人対戦';
+    levelEl.style.display = 'none';
   }
-  document.getElementById('mode-label').textContent = label;
 }
 
 function initBoard() {
@@ -98,6 +144,11 @@ function makeMove(idx) {
     winLine.forEach(function(i) { cells[i].classList.add('win'); });
     scores[current]++;
     updateScores();
+    if (mode === 'cpu') {
+      if (current === 'X') stats.cpuWins++;
+      else stats.cpuLosses++;
+      saveStats();
+    }
     setStatus('<span class="mark-' + current.toLowerCase() + '">' + current + '</span> の勝ち!');
     setTimeout(function() { showResult(current); }, 800);
     return;
@@ -107,6 +158,10 @@ function makeMove(idx) {
     gameOver = true;
     scores.draw++;
     updateScores();
+    if (mode === 'cpu') {
+      stats.cpuDraws++;
+      saveStats();
+    }
     setStatus('引き分け!');
     setTimeout(function() { showResult(null); }, 800);
     return;
@@ -132,11 +187,25 @@ function showResult(winner) {
   document.getElementById('rs-x').textContent = scores.X;
   document.getElementById('rs-o').textContent = scores.O;
   document.getElementById('rs-draw').textContent = scores.draw;
-  var diffSection = document.getElementById('difficulty-section');
+
+  var levelSection = document.getElementById('level-section');
   if (mode === 'cpu') {
-    diffSection.classList.add('visible');
+    levelSection.classList.add('visible');
+    var level = getLevel();
+    var progress = getLevelProgress();
+    document.getElementById('result-level').textContent = level;
+    document.getElementById('result-bar').style.width = progress.percent + '%';
+    if (progress.remaining > 0) {
+      document.getElementById('result-info').textContent =
+        '次のレベルまで あと' + progress.remaining + '勝';
+    } else {
+      document.getElementById('result-info').textContent = 'MAX LEVEL!';
+    }
+    var total = stats.cpuWins + stats.cpuLosses + stats.cpuDraws;
+    document.getElementById('result-record').textContent =
+      '通算 ' + total + '戦 ' + stats.cpuWins + '勝 ' + stats.cpuLosses + '敗 ' + stats.cpuDraws + '分';
   } else {
-    diffSection.classList.remove('visible');
+    levelSection.classList.remove('visible');
   }
   showScreen('screen-result');
 }
@@ -145,19 +214,6 @@ function continueGame() {
   updateModeLabel();
   resetGame();
   showScreen('screen-game');
-}
-
-function setDifficulty(d) {
-  difficulty = d;
-  updateDifficultyButtons();
-}
-
-function updateDifficultyButtons() {
-  var btns = document.querySelectorAll('.diff-btn');
-  var levels = ['easy', 'normal', 'hard'];
-  btns.forEach(function(btn, i) {
-    btn.classList.toggle('selected', levels[i] === difficulty);
-  });
 }
 
 function checkWin(mark) {
@@ -170,12 +226,13 @@ function checkWin(mark) {
   return null;
 }
 
-// === CPU AI ===
+// === CPU AI (auto-adjusts to user level) ===
 function cpuMove() {
+  var diff = getCpuDifficulty();
   var move;
-  if (difficulty === 'easy') {
+  if (diff === 'easy') {
     move = cpuEasy();
-  } else if (difficulty === 'hard') {
+  } else if (diff === 'hard') {
     move = cpuHard();
   } else {
     move = cpuNormal();
