@@ -457,3 +457,69 @@ body {
   border-color: rgba(255,255,255,0.6);
   color: #fff;
 }
+
+/* === Coin toss === */
+.coin-toss-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.coin-toss-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+.coin-toss-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 2px;
+}
+.coin {
+  width: 120px;
+  height: 120px;
+  perspective: 600px;
+}
+.coin-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.coin-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  backface-visibility: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.coin-front {
+  background: linear-gradient(135deg, #fff, #e0e0e0);
+  color: #e74c3c;
+}
+.coin-back {
+  background: linear-gradient(135deg, #e0e0e0, #fff);
+  color: #3498db;
+  transform: rotateY(180deg);
+}
+.coin-result {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  min-height: 1.5em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.coin-result.visible { opacity: 1; }

@@ -234,6 +234,41 @@ function toggleSound() {
   document.getElementById('sound-label').textContent = soundOn ? '音量 ON' : '音量 OFF';
 }
 
+// === Coin toss ===
+function showCoinToss(mark, callback) {
+  var overlay = document.getElementById('coin-toss-overlay');
+  var inner = document.getElementById('coin-inner');
+  var label = document.getElementById('coin-toss-label');
+  var result = document.getElementById('coin-result');
+
+  label.textContent = 'コイントス...';
+  result.textContent = '';
+  result.classList.remove('visible');
+  inner.style.transition = 'none';
+  inner.style.transform = 'rotateY(0deg)';
+
+  overlay.classList.add('show');
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      inner.style.transition = 'transform 2s cubic-bezier(0.22, 1, 0.36, 1)';
+      // X = front face (0deg), O = back face (180deg)
+      var deg = mark === 'X' ? 1080 : 1260;
+      inner.style.transform = 'rotateY(' + deg + 'deg)';
+    });
+  });
+
+  setTimeout(function() {
+    result.textContent = 'あなたは ' + mark + ' !';
+    result.classList.add('visible');
+  }, 2200);
+
+  setTimeout(function() {
+    overlay.classList.remove('show');
+    callback();
+  }, 3200);
+}
+
 // === Game ===
 function startGame(m) {
   mode = m;
@@ -242,11 +277,18 @@ function startGame(m) {
   if (mode === 'cpu') {
     playerMark = Math.random() < 0.5 ? 'X' : 'O';
     cpuMark = playerMark === 'X' ? 'O' : 'X';
+    showCoinToss(playerMark, function() {
+      updateScores();
+      resetGame();
+      updateModeLabel();
+      showScreen('screen-game');
+    });
+  } else {
+    updateScores();
+    resetGame();
+    updateModeLabel();
+    showScreen('screen-game');
   }
-  updateScores();
-  resetGame();
-  updateModeLabel();
-  showScreen('screen-game');
 }
 
 function getOpponentLabel() {
