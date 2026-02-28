@@ -486,7 +486,7 @@ function initBoard() {
 function canPlace(idx, mark, cardType) {
   if (gameOver) return false;
   if (cardType === 'normal') return !board[idx] && cards[mark].normal > 0;
-  if (cardType === 'super') return boardCard[idx] !== 'ultra';
+  if (cardType === 'super') return boardCard[idx] !== 'ultra' && boardCard[idx] !== 'super';
   if (cardType === 'ultra') return board[idx] !== '';
   return false;
 }
@@ -604,6 +604,12 @@ function makeMove(idx, cardType) {
   cells[idx].textContent = current;
   if (cardType !== 'normal') {
     cells[idx].classList.add('card-' + cardType);
+    var badge = document.createElement('span');
+    badge.className = 'cell-badge';
+    badge.textContent = cardType === 'super' ? '⚡' : '🔥';
+    cells[idx].appendChild(badge);
+    cells[idx].classList.add('card-place');
+    setTimeout(function() { cells[idx].classList.remove('card-place'); }, 600);
   }
   sfxPlace(current);
   haptic();

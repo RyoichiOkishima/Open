@@ -797,6 +797,9 @@ body {
 }
 
 /* === Card cell effects === */
+.cell {
+  position: relative;
+}
 .cell.card-super {
   box-shadow: 0 0 8px #f1c40f;
 }
@@ -812,6 +815,34 @@ body {
   box-shadow: 0 0 12px #e74c3c;
   background: #fff9c4;
   border: 2px solid #e74c3c;
+}
+
+/* Card badge on cell */
+.cell-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: clamp(0.55rem, 2.5vw, 0.75rem);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Placement effect */
+.cell.card-place.card-super {
+  animation: superPlace 0.6s ease-out;
+}
+.cell.card-place.card-ultra {
+  animation: ultraPlace 0.6s ease-out;
+}
+@keyframes superPlace {
+  0%   { box-shadow: 0 0 0 rgba(241,196,15,0); transform: scale(0.9); }
+  30%  { box-shadow: 0 0 24px rgba(241,196,15,0.8); transform: scale(1.1); }
+  100% { box-shadow: 0 0 8px #f1c40f; transform: scale(1); }
+}
+@keyframes ultraPlace {
+  0%   { box-shadow: 0 0 0 rgba(231,76,60,0); transform: scale(0.9); }
+  30%  { box-shadow: 0 0 30px rgba(231,76,60,0.9); transform: scale(1.15); }
+  100% { box-shadow: 0 0 12px #e74c3c; transform: scale(1); }
 }
 
 /* === Info overlays (Rules / About) === */
