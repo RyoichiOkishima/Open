@@ -310,6 +310,9 @@ function togglePause() {
   overlay.classList.toggle('open');
   if (opening) {
     pauseTimer();
+    var inGame = document.getElementById('screen-game').classList.contains('active');
+    document.getElementById('pause-close-icon').textContent = inGame ? '▶' : '✕';
+    document.getElementById('pause-close-label').textContent = inGame ? 'つづける' : '閉じる';
   } else {
     if (!gameOver) resumeTimer();
   }

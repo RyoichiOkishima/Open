@@ -95,8 +95,8 @@
 <div class="pause-overlay" id="pause-overlay">
   <div class="pause-menu">
     <div class="pause-menu-title">メニュー</div>
-    <button class="pause-item" onclick="togglePause()">
-      <span class="p-icon">▶</span>つづける
+    <button class="pause-item" id="pause-close-btn" onclick="togglePause()">
+      <span class="p-icon" id="pause-close-icon">▶</span><span id="pause-close-label">つづける</span>
     </button>
     <div class="pause-divider"></div>
     <button class="pause-item" onclick="pauseRestart()">
